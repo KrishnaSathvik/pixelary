@@ -61,6 +61,7 @@ function AppPage() {
   const [result, setResult] = useState<PromptResult | null>(null);
   const [saving, setSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { seed } = Route.useSearch();
 
   const generate = async (overrideInput?: string) => {
     const userInput = (overrideInput ?? input).trim();
