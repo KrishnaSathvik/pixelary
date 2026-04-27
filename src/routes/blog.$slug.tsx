@@ -3,9 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
-  Calendar,
-  Clock,
-  Sparkles,
   ThumbsUp,
   ThumbsDown,
   Twitter,
@@ -14,7 +11,7 @@ import {
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { posts, getPostBySlug, getRelatedPosts, CATEGORY_COLORS } from "@/data/posts";
+import { getPostBySlug, getRelatedPosts } from "@/data/posts";
 import { renderMarkdown } from "@/lib/markdown";
 import { toast } from "sonner";
 
@@ -38,10 +35,7 @@ export const Route = createFileRoute("/blog/$slug")({
       datePublished: post.published,
       dateModified: post.published,
       author: { "@type": "Organization", name: post.author },
-      publisher: {
-        "@type": "Organization",
-        name: "Promptcraft",
-      },
+      publisher: { "@type": "Organization", name: "Promptcraft" },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
     };
     return {
@@ -69,12 +63,15 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function PostNotFound() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
-      <main className="mx-auto max-w-2xl px-4 py-24 text-center">
-        <h1 className="text-3xl font-bold">Post not found</h1>
-        <p className="mt-2 text-muted-foreground">That article doesn't exist.</p>
-        <Link to="/blog" className="mt-6 inline-block">
+      <main className="mx-auto max-w-2xl px-6 py-32 text-center">
+        <p className="eyebrow">Error · 404</p>
+        <h1 className="mt-4 text-display-md">Post not found</h1>
+        <p className="mt-3 text-body-md text-[color:var(--text-secondary)]">
+          That article doesn’t exist.
+        </p>
+        <Link to="/blog" className="mt-8 inline-block">
           <Button variant="outline">Back to blog</Button>
         </Link>
       </main>
@@ -92,8 +89,10 @@ function formatDate(d: string) {
 
 function PostPage() {
   const { post } = Route.useLoaderData();
-  const gradient = CATEGORY_COLORS[post.category] ?? "from-muted to-muted/30";
-  const related = useMemo(() => getRelatedPosts(post.slug, post.category, 2), [post.slug, post.category]);
+  const related = useMemo(
+    () => getRelatedPosts(post.slug, post.category, 2),
+    [post.slug, post.category]
+  );
 
   const { nodes, headings } = useMemo(() => renderMarkdown(post.content), [post.content]);
 
@@ -121,63 +120,64 @@ function PostPage() {
 
   const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Thanks! We'll be in touch soon.");
+    toast.success("Thanks! We’ll be in touch soon.");
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
 
-      <article className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <article className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12">
         <Link
           to="/blog"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-mono-sm text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" /> Back to blog
         </Link>
 
-        {/* Header */}
-        <header className="mt-6 max-w-3xl">
-          <span className="inline-flex items-center rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
-            {post.category}
-          </span>
-          <h1 className="mt-4 font-serif text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl">
-            {post.title}
-          </h1>
-          <p className="mt-4 font-serif text-xl italic font-light text-muted-foreground">
-            {post.subtitle}
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-amber-gradient text-xs font-bold text-primary-foreground">
-              P
+        {/* Header — narrow column, no hero image */}
+        <header className="mt-10 max-w-[680px]">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
+              {post.category}
             </span>
-            <span className="font-medium text-foreground">{post.author}</span>
-            <span className="opacity-50">·</span>
-            <span className="inline-flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" />
-              {post.read_time}
-            </span>
-            <span className="opacity-50">·</span>
-            <span className="inline-flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5" />
+            <span className="text-[color:var(--text-quaternary)]">·</span>
+            <span className="font-mono text-[12px] tabular-nums text-[color:var(--text-tertiary)]">
               {formatDate(post.published)}
             </span>
+            <span className="text-[color:var(--text-quaternary)]">·</span>
+            <span className="font-mono text-[12px] tabular-nums text-[color:var(--text-tertiary)]">
+              {post.read_time}
+            </span>
+          </div>
+
+          <h1 className="mt-6 text-display-lg text-[color:var(--text-primary)]">
+            {post.title}
+          </h1>
+          <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
+            {post.subtitle}
+          </p>
+
+          <div className="mt-8 flex items-center gap-3 pt-6 border-t border-[color:var(--border-subtle)]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[12px] font-semibold leading-none">
+              P
+            </span>
+            <div>
+              <p className="text-body-sm font-medium text-[color:var(--text-primary)]">
+                {post.author}
+              </p>
+              <p className="text-mono-sm text-[color:var(--text-tertiary)]">Promptcraft team</p>
+            </div>
           </div>
         </header>
 
-        {/* Hero gradient block */}
-        <div
-          className={`mt-8 h-40 rounded-2xl bg-gradient-to-br ${gradient} sm:h-56`}
-          aria-hidden="true"
-        />
-
         {/* Mobile TOC */}
         {headings.length > 0 && (
-          <div className="mt-8 lg:hidden">
+          <div className="mt-10 lg:hidden">
             <button
               type="button"
               onClick={() => setTocOpen((v) => !v)}
-              className="flex w-full items-center justify-between rounded-lg border border-border/60 bg-card px-4 py-3 text-sm font-medium"
+              className="flex w-full items-center justify-between rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-4 py-3 text-body-sm font-medium"
             >
               <span>On this page</span>
               <ArrowRight
@@ -185,13 +185,13 @@ function PostPage() {
               />
             </button>
             {tocOpen && (
-              <ul className="mt-2 space-y-1 rounded-lg border border-border/60 bg-card p-4 text-sm">
+              <ul className="mt-2 space-y-1 rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-4 text-body-sm">
                 {headings.map((h) => (
                   <li key={h.id} className={h.level === 3 ? "pl-3" : ""}>
                     <a
                       href={`#${h.id}`}
                       onClick={() => setTocOpen(false)}
-                      className="block py-1 text-muted-foreground hover:text-foreground"
+                      className="block py-1 text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
                     >
                       {h.text}
                     </a>
@@ -203,30 +203,25 @@ function PostPage() {
         )}
 
         {/* Content + sticky TOC */}
-        <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_280px]">
+        <div className="mt-12 grid gap-16 lg:grid-cols-[680px_240px] lg:justify-between">
           <div className="min-w-0 max-w-[680px]">
             <div className="prose-content">{nodes}</div>
           </div>
 
           <aside className="hidden lg:block">
-            <div className="sticky top-24 space-y-6">
+            <div className="sticky top-24 space-y-8">
               {headings.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    On this page
-                  </h4>
-                  <ul className="mt-3 space-y-2 border-l border-border/60 text-sm">
+                  <p className="eyebrow">On this page</p>
+                  <ul className="mt-4 space-y-px border-l border-[color:var(--border-subtle)]">
                     {headings.map((h) => (
-                      <li
-                        key={h.id}
-                        className={h.level === 3 ? "pl-6" : "pl-3"}
-                      >
+                      <li key={h.id} className={h.level === 3 ? "pl-3" : ""}>
                         <a
                           href={`#${h.id}`}
-                          className={`block border-l-2 -ml-px py-1 pl-3 transition-colors ${
+                          className={`block border-l-2 -ml-px py-1.5 pl-3 font-mono text-[12px] tracking-[0.04em] uppercase transition-colors ${
                             activeId === h.id
-                              ? "border-primary text-foreground font-medium"
-                              : "border-transparent text-muted-foreground hover:text-foreground"
+                              ? "border-[color:var(--accent)] text-[color:var(--text-primary)]"
+                              : "border-transparent text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
                           }`}
                         >
                           {h.text}
@@ -237,44 +232,37 @@ function PostPage() {
                 </div>
               )}
 
-              <div className="rounded-2xl border border-primary/40 bg-amber-gradient p-5 text-primary-foreground shadow-amber-glow">
-                <Sparkles className="h-5 w-5" />
-                <h4 className="mt-2 text-base font-bold">Try Promptcraft</h4>
-                <p className="mt-1 text-xs opacity-90">
+              <div className="border-l-2 border-[color:var(--accent)] pl-4">
+                <p className="eyebrow">Try Promptcraft</p>
+                <p className="mt-2 text-body-sm text-[color:var(--text-secondary)]">
                   Generate prompts that follow every rule in this article.
                 </p>
                 <Link to="/app" className="mt-3 inline-block">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="bg-background text-foreground hover:bg-background/90"
-                  >
-                    Open generator
-                  </Button>
+                  <Button size="sm">Open generator</Button>
                 </Link>
               </div>
             </div>
           </aside>
         </div>
 
-        {/* Bottom blocks */}
-        <div className="mt-20 max-w-[680px] space-y-12">
-          {/* Author bio */}
-          <div className="flex items-start gap-4 rounded-2xl border border-border/60 bg-card p-6">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-gradient text-base font-bold text-primary-foreground">
+        {/* Bottom blocks — narrow column */}
+        <div className="mt-24 max-w-[680px] space-y-12">
+          {/* Author */}
+          <div className="flex items-start gap-4 border-t border-[color:var(--border-subtle)] pt-8">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[14px] font-semibold leading-none">
               P
             </span>
             <div className="flex-1">
-              <h4 className="font-semibold text-foreground">{post.author}</h4>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h4 className="text-heading-sm">{post.author}</h4>
+              <p className="mt-1.5 text-body-md text-[color:var(--text-secondary)]">
                 The Promptcraft team ships AI image prompt tooling. We obsess over what works in
                 production — not what looks good in a demo.
               </p>
-              <div className="mt-3 flex gap-3 text-muted-foreground">
-                <a href="#" className="hover:text-foreground" aria-label="Twitter">
+              <div className="mt-3 flex gap-3 text-[color:var(--text-tertiary)]">
+                <a href="#" className="hover:text-[color:var(--text-primary)]" aria-label="Twitter">
                   <Twitter className="h-4 w-4" />
                 </a>
-                <a href="#" className="hover:text-foreground" aria-label="GitHub">
+                <a href="#" className="hover:text-[color:var(--text-primary)]" aria-label="GitHub">
                   <Github className="h-4 w-4" />
                 </a>
               </div>
@@ -282,8 +270,10 @@ function PostPage() {
           </div>
 
           {/* Feedback */}
-          <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-card p-6">
-            <span className="text-sm font-medium text-foreground">Was this useful?</span>
+          <div className="flex items-center justify-between rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-5">
+            <span className="text-body-sm font-medium text-[color:var(--text-primary)]">
+              Was this useful?
+            </span>
             <div className="flex gap-2">
               <Button
                 variant={feedback === "up" ? "default" : "outline"}
@@ -300,7 +290,7 @@ function PostPage() {
                 size="sm"
                 onClick={() => {
                   setFeedback("down");
-                  toast("Thanks — we'll keep improving.");
+                  toast("Thanks — we’ll keep improving.");
                 }}
               >
                 <ThumbsDown className="h-4 w-4" />
@@ -309,15 +299,22 @@ function PostPage() {
           </div>
 
           {/* Big CTA */}
-          <div className="rounded-2xl bg-amber-gradient p-8 text-center text-primary-foreground shadow-amber-glow">
-            <h3 className="font-serif text-2xl font-bold">
-              Generate your own polished prompts in seconds
+          <div className="border border-[color:var(--accent)] bg-[color:var(--accent)] text-[color:var(--accent-text)] p-10 text-center rounded-md">
+            <p className="font-mono text-[11px] font-medium tracking-[0.1em] uppercase text-[color:var(--accent-text)]/60">
+              Generate yours
+            </p>
+            <h3 className="mt-3 text-heading-lg">
+              Generate polished prompts in seconds.
             </h3>
-            <p className="mt-2 text-sm opacity-90">
+            <p className="mt-3 text-body-md text-[color:var(--accent-text)]/75">
               Paste a rough idea. Get back a structured prompt that ships.
             </p>
-            <Link to="/app" className="mt-5 inline-block">
-              <Button size="lg" className="bg-background text-foreground hover:bg-background/90">
+            <Link to="/app" className="mt-6 inline-block">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="bg-[color:var(--accent-text)] text-[color:var(--accent)] hover:bg-[color:var(--bg-subtle)] border-transparent"
+              >
                 Open Promptcraft <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
             </Link>
@@ -326,12 +323,10 @@ function PostPage() {
           {/* Newsletter */}
           <form
             onSubmit={handleNewsletter}
-            className="rounded-2xl border border-border/60 bg-card p-6"
+            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6"
           >
-            <h4 className="font-serif text-lg font-bold text-foreground">
-              Get new articles in your inbox
-            </h4>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <h4 className="text-heading-sm">Get new articles in your inbox</h4>
+            <p className="mt-1.5 text-body-sm text-[color:var(--text-secondary)]">
               One short email when we publish something new. No spam.
             </p>
             <div className="mt-4 flex gap-2">
@@ -343,22 +338,24 @@ function PostPage() {
           {/* Related posts */}
           {related.length > 0 && (
             <div>
-              <h4 className="font-serif text-2xl font-bold text-foreground">More in {post.category}</h4>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <p className="eyebrow">More in {post.category}</p>
+              <div className="mt-4 grid gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)] sm:grid-cols-2">
                 {related.map((r) => (
                   <Link
                     key={r.slug}
                     to="/blog/$slug"
                     params={{ slug: r.slug }}
-                    className="group rounded-2xl border border-border/60 bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary/60"
+                    className="group block bg-[color:var(--bg-elevated)] p-6 hover:bg-[color:var(--bg-subtle)] transition-colors"
                   >
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                    <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
                       {r.category}
                     </span>
-                    <h5 className="mt-3 font-serif text-lg font-bold leading-snug text-foreground line-clamp-2 group-hover:text-primary">
+                    <h5 className="mt-3 text-heading-sm text-[color:var(--text-primary)] group-hover:underline underline-offset-4">
                       {r.title}
                     </h5>
-                    <p className="mt-2 text-xs text-muted-foreground line-clamp-2">{r.excerpt}</p>
+                    <p className="mt-2 text-body-sm text-[color:var(--text-secondary)] line-clamp-2">
+                      {r.excerpt}
+                    </p>
                   </Link>
                 ))}
               </div>

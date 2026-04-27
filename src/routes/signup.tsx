@@ -67,7 +67,7 @@ function SignupPage() {
         onClick={handleGoogle}
         disabled={googleLoading}
         variant="outline"
-        className="w-full gap-2 h-11 bg-card border-border/60"
+        className="w-full gap-2 h-11"
       >
         {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
         Continue with Google
@@ -78,21 +78,23 @@ function SignupPage() {
       <form onSubmit={handleEmail} className="space-y-4">
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-card border-border/60 mt-1.5" />
+          <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5" />
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="bg-card border-border/60 mt-1.5" />
-          <p className="text-xs text-muted-foreground mt-1">At least 6 characters</p>
+          <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" />
+          <p className="text-mono-sm text-[color:var(--text-tertiary)] mt-1.5">At least 6 characters</p>
         </div>
-        <Button type="submit" disabled={loading} className="w-full h-11 bg-amber-gradient text-primary-foreground hover:opacity-90 shadow-amber-glow">
+        <Button type="submit" disabled={loading} className="w-full h-11">
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create account"}
         </Button>
       </form>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center text-body-sm text-[color:var(--text-secondary)]">
         Already have an account?{" "}
-        <Link to="/login" className="text-primary hover:underline font-medium">Log in</Link>
+        <Link to="/login" className="text-[color:var(--text-primary)] underline underline-offset-4 font-medium">
+          Log in
+        </Link>
       </p>
     </AuthShell>
   );
