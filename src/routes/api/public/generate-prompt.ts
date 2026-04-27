@@ -247,6 +247,34 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                   safeClose();
                   return;
                 }
+                // Strip Midjourney/SD CLI flags — Promptcraft targets GPT Image 2,
+                // which doesn't use --ar/--style/--v/etc. Belt-and-suspenders sanitize.
+                const stripCliFlags = (s: string): string =>
+                  s
+                    .replace(/\s*--ar\s+\S+/gi, "")
+                    .replace(/\s*--style\s+\S+/gi, "")
+                    .replace(/\s*--v\s+\d+(?:\.\d+)?/gi, "")
+                    .replace(/\s*--niji\s+\d+/gi, "")
+                    .replace(/\s*--stylize\s+\d+/gi, "")
+                    .replace(/\s*--s\s+\d+/gi, "")
+                    .replace(/\s*--quality\s+\S+/gi, "")
+                    .replace(/\s*--q\s+\S+/gi, "")
+                    .replace(/\s*--chaos\s+\d+/gi, "")
+                    .replace(/\s*--c\s+\d+/gi, "")
+                    .replace(/\s*--seed\s+\d+/gi, "")
+                    .replace(/\s*--weird\s+\d+/gi, "")
+                    .replace(/\s*--tile\b/gi, "")
+                    .replace(/\s*--no\s+\S+/gi, "")
+                    .trim();
+                if (finalResult && typeof finalResult === "object") {
+                  const fr = finalResult as Record<string, unknown>;
+                  if (typeof fr.prompt === "string") fr.prompt = stripCliFlags(fr.prompt);
+                  if (Array.isArray(fr.prompts)) {
+                    fr.prompts = fr.prompts.map((p) =>
+                      typeof p === "string" ? stripCliFlags(p) : p,
+                    );
+                  }
+                }
                 send("done", finalResult);
                 safeClose();
               } catch (err) {
