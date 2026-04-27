@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Sparkles, Layers, ShieldCheck, Copy, ArrowRight, Github } from "lucide-react";
+import { ArrowRight, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 
@@ -22,128 +22,168 @@ const EXAMPLE_OUTPUT = `Lone hiker in dust-coated trail boots and a sun-faded ol
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
 
-      {/* HERO */}
+      {/* HERO — the only place the dot grid appears */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-hero-mesh pointer-events-none" />
-        <div className="relative mx-auto max-w-5xl px-6 pt-24 pb-20 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
-            <Sparkles className="h-3 w-3 text-primary" />
-            Built for OpenAI's GPT Image 2
-          </div>
-          <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight">
-            Turn rough ideas into{" "}
-            <span className="bg-amber-gradient bg-clip-text text-transparent">pro-grade</span>{" "}
-            image prompts
+        <div className="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true" />
+        <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 pt-24 sm:pt-32 pb-20 sm:pb-28 text-center">
+          <p className="eyebrow">Prompt Engine — V1</p>
+          <h1 className="mt-6 text-display-xl mx-auto max-w-4xl text-[color:var(--text-primary)]">
+            Turn rough ideas into pro-grade image prompts.
           </h1>
-          <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Built on the convergent techniques used by the top 1% of prompt engineers — distilled into one fast, opinionated tool.
+          <p className="mx-auto mt-6 max-w-2xl text-body-lg text-[color:var(--text-secondary)]">
+            Built on the convergent techniques used by the top 1% of prompt engineers — distilled
+            into one fast, opinionated tool for OpenAI’s GPT Image 2.
           </p>
+
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/app">
-              <Button size="lg" className="bg-amber-gradient text-primary-foreground hover:opacity-90 shadow-amber-glow gap-2 h-12 px-6 text-base">
-                Try it free
+              <Button size="lg" className="gap-2">
+                Open generator
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link
-              to="/examples/{-$id}"
-              params={{ id: undefined }}
-              className="text-sm text-muted-foreground hover:text-foreground transition"
-            >
-              See examples →
+            <Link to="/examples/{-$id}" params={{ id: undefined }}>
+              <Button size="lg" variant="ghost">Browse examples</Button>
             </Link>
           </div>
-          <p className="mt-6 text-xs text-muted-foreground">No signup required to try.</p>
+
+          <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
+            No signup required to try ·{" "}
+            <kbd className="font-mono">⌘&nbsp;K</kbd> opens the app
+          </p>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="border-t border-[color:var(--border-subtle)]">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
+          <div className="max-w-2xl mb-16">
+            <p className="eyebrow">How it works</p>
+            <h2 className="mt-4 text-display-md">Three steps. Zero ceremony.</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)]">
+            <Step
+              n="01"
+              title="Paste a rough idea"
+              body="Four words is enough. The vaguer your input, the more our prompt engine has to flex."
+            />
+            <Step
+              n="02"
+              title="We pick the structure"
+              body="Auto-detected category — poster, infographic, cinematic scene — gets its own template."
+            />
+            <Step
+              n="03"
+              title="Copy and ship"
+              body="Production-grade prompt. Drop into ChatGPT, the OpenAI API, or fal.ai unchanged."
+            />
+          </div>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard
-            icon={<Layers className="h-5 w-5" />}
-            title="8 Categories"
-            body="Posters, UI mockups, cinematic scenes, infographics, edits — each gets its own structural template."
-          />
-          <FeatureCard
-            icon={<ShieldCheck className="h-5 w-5" />}
-            title="Self-checking output"
-            body="Anti-fluff filter strips forbidden adjectives like 'stunning' and 'ultra-detailed' before delivery."
-          />
-          <FeatureCard
-            icon={<Copy className="h-5 w-5" />}
-            title="Copy-ready format"
-            body="One-click paste into ChatGPT, the OpenAI API, or fal.ai. No reformatting required."
-          />
+      <section className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-subtle)]">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
+          <div className="max-w-2xl mb-16">
+            <p className="eyebrow">Why it works</p>
+            <h2 className="mt-4 text-display-md">Convergent techniques, one tool.</h2>
+            <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
+              We analyzed 200+ prompts from the top of X, GitHub, and the OpenAI cookbook. The
+              patterns that actually shipped — distilled into eight category templates.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <FeatureCard
+              tag="01 · CATEGORIES"
+              title="Eight templates"
+              body="Posters, UI mockups, cinematic scenes, infographics, edits — each gets its own structural template."
+            />
+            <FeatureCard
+              tag="02 · GUARDRAILS"
+              title="Self-checking output"
+              body="Anti-fluff filter strips forbidden adjectives like “stunning” and “ultra-detailed” before delivery."
+            />
+            <FeatureCard
+              tag="03 · PORTABLE"
+              title="Copy-ready format"
+              body="One-click paste into ChatGPT, the OpenAI API, or fal.ai. No reformatting required."
+            />
+          </div>
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
-      <section className="mx-auto max-w-4xl px-6 py-12 text-center">
-        <p className="text-sm uppercase tracking-widest text-muted-foreground">Distilled from</p>
-        <p className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight">
-          200+ prompts analyzed from X, GitHub, and the OpenAI cookbook
-        </p>
-      </section>
+      {/* BEFORE / AFTER */}
+      <section id="example" className="border-t border-[color:var(--border-subtle)]">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
+          <div className="max-w-2xl mb-16">
+            <p className="eyebrow">Before / after</p>
+            <h2 className="mt-4 text-display-md">A four-word idea, stacked.</h2>
+          </div>
 
-      {/* EXAMPLE */}
-      <section id="example" className="mx-auto max-w-5xl px-6 py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Before / After</h2>
-          <p className="mt-3 text-muted-foreground">A four-word idea becomes a stacked, production-grade prompt.</p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="rounded-xl border border-border/60 bg-card p-6 shadow-soft">
-            <div className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Input</div>
-            <p className="font-mono text-sm text-foreground">{EXAMPLE_INPUT}</p>
-            <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-              4 words • no detail
+          <div className="grid md:grid-cols-2 gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)]">
+            <div className="bg-[color:var(--bg-elevated)] p-8 sm:p-10">
+              <p className="eyebrow">Input</p>
+              <p className="mt-5 font-mono text-[15px] text-[color:var(--text-primary)]">
+                {EXAMPLE_INPUT}
+              </p>
+              <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
+                4 words · no detail
+              </p>
+            </div>
+            <div className="bg-[color:var(--code-bg)] p-8 sm:p-10">
+              <p className="eyebrow">Output</p>
+              <p className="mt-5 font-mono text-[13px] leading-[1.7] text-[color:var(--code-text)] whitespace-pre-wrap">
+                {EXAMPLE_OUTPUT}
+              </p>
+              <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
+                Cinematic Scene · 8 constraints stacked
+              </p>
             </div>
           </div>
-          <div className="rounded-xl border border-primary/30 bg-card p-6 shadow-amber-glow">
-            <div className="text-xs uppercase tracking-widest text-primary mb-3 flex items-center gap-2">
-              <Sparkles className="h-3 w-3" /> Output
-            </div>
-            <p className="font-mono text-xs text-foreground/90 leading-relaxed">{EXAMPLE_OUTPUT}</p>
-            <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-              CINEMATIC SCENE • 8 constraints stacked
-            </div>
+
+          <div className="mt-16 text-center">
+            <Link to="/app">
+              <Button size="lg" className="gap-2">
+                Generate your first prompt
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
-        </div>
-        <div className="mt-12 text-center">
-          <Link to="/app">
-            <Button size="lg" className="bg-amber-gradient text-primary-foreground hover:opacity-90 shadow-amber-glow gap-2">
-              Generate your first prompt
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-border/60 mt-12">
-        <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-gradient">
-              <Sparkles className="h-3 w-3 text-primary-foreground" />
+      <footer className="border-t border-[color:var(--border-subtle)]">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[11px] font-semibold">
+              P
             </span>
-            Promptcraft © {new Date().getFullYear()}
+            <span className="text-mono-sm text-[color:var(--text-tertiary)]">
+              Promptcraft © {new Date().getFullYear()}
+            </span>
           </div>
-          <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link to="/app" className="hover:text-foreground transition">Generator</Link>
-            <Link to="/login" className="hover:text-foreground transition">Log in</Link>
+          <nav className="flex items-center gap-2 text-mono-sm text-[color:var(--text-tertiary)]">
+            <Link to="/app" className="hover:text-[color:var(--text-primary)] transition">Generator</Link>
+            <span aria-hidden>·</span>
+            <Link to="/examples/{-$id}" params={{ id: undefined }} className="hover:text-[color:var(--text-primary)] transition">Examples</Link>
+            <span aria-hidden>·</span>
+            <Link to="/blog" className="hover:text-[color:var(--text-primary)] transition">Blog</Link>
+            <span aria-hidden>·</span>
+            <Link to="/login" className="hover:text-[color:var(--text-primary)] transition">Log in</Link>
+            <span aria-hidden>·</span>
             <a
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground transition flex items-center gap-1.5"
+              className="hover:text-[color:var(--text-primary)] transition inline-flex items-center gap-1"
             >
-              <Github className="h-3.5 w-3.5" /> GitHub
+              <Github className="h-3 w-3" /> GitHub
             </a>
           </nav>
         </div>
@@ -152,14 +192,26 @@ function LandingPage() {
   );
 }
 
-function FeatureCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
+function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <div className="rounded-xl border border-border/60 bg-card p-6 shadow-soft hover:border-primary/40 transition-colors">
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4">
-        {icon}
-      </div>
-      <h3 className="font-semibold text-lg mb-2">{title}</h3>
-      <p className="text-sm text-muted-foreground leading-relaxed">{body}</p>
+    <div className="bg-[color:var(--bg)] p-8 sm:p-10">
+      <p className="font-mono text-[13px] font-medium tracking-[0.06em] text-[color:var(--text-tertiary)]">
+        {n}
+      </p>
+      <h3 className="mt-5 text-heading-sm text-[color:var(--text-primary)]">{title}</h3>
+      <p className="mt-3 text-body-md text-[color:var(--text-secondary)]">{body}</p>
     </div>
+  );
+}
+
+function FeatureCard({ tag, title, body }: { tag: string; title: string; body: string }) {
+  return (
+    <article className="bg-[color:var(--bg-elevated)] border border-[color:var(--border-subtle)] p-7 transition-[box-shadow,border-color] duration-200 ease-out hover:border-[color:var(--border-default)] hover:shadow-sm-card">
+      <p className="font-mono text-[11px] font-medium tracking-[0.08em] text-[color:var(--text-tertiary)]">
+        {tag}
+      </p>
+      <h3 className="mt-5 text-heading-sm text-[color:var(--text-primary)]">{title}</h3>
+      <p className="mt-3 text-body-md text-[color:var(--text-secondary)]">{body}</p>
+    </article>
   );
 }
