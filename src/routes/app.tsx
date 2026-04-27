@@ -347,7 +347,7 @@ function LoadingState() {
   );
 }
 
-function CodeBlock({ text }: { text: string }) {
+function CodeBlock({ text, streaming = false }: { text: string; streaming?: boolean }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     await navigator.clipboard.writeText(text);
@@ -359,14 +359,19 @@ function CodeBlock({ text }: { text: string }) {
     <div className="relative group">
       <pre className="rounded-xl bg-[var(--code-bg)] text-[var(--code-fg)] p-5 pr-14 text-sm font-mono leading-relaxed whitespace-pre-wrap overflow-x-auto border border-border/40 shadow-soft">
         {text}
+        {streaming && (
+          <span className="inline-block w-2 h-4 -mb-0.5 ml-0.5 bg-primary/80 animate-pulse align-middle" />
+        )}
       </pre>
-      <button
-        onClick={handleCopy}
-        className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-card/80 hover:bg-card border border-border/60 text-muted-foreground hover:text-foreground transition backdrop-blur"
-        aria-label="Copy"
-      >
-        {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
-      </button>
+      {!streaming && (
+        <button
+          onClick={handleCopy}
+          className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-card/80 hover:bg-card border border-border/60 text-muted-foreground hover:text-foreground transition backdrop-blur"
+          aria-label="Copy"
+        >
+          {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+        </button>
+      )}
     </div>
   );
 }
