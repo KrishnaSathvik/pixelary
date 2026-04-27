@@ -97,9 +97,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
     <div className="min-h-screen bg-[color:var(--bg)] flex flex-col">
       <div className="px-6 lg:px-12 py-6">
         <Link to="/" className="inline-flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[13px] font-semibold leading-none">
-            P
-          </span>
+          <img src={logo} alt="Promptcraft" width={28} height={28} className="h-7 w-7 dark:invert" />
           <span className="text-[15px] font-semibold tracking-tight">Promptcraft</span>
         </Link>
       </div>
