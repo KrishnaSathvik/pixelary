@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Copy, Check, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import { examples, EXAMPLE_CATEGORIES, type Example } from "@/data/examples";
@@ -177,14 +177,11 @@ function ExamplesPage() {
       </section>
 
       {/* DRAWER */}
-      <Sheet open={!!selected} onOpenChange={(open) => !open && closeDrawer()}>
-        <SheetContent
-          side="right"
-          className="w-full sm:max-w-[640px] bg-[color:var(--bg)] border-l border-[color:var(--border-subtle)] p-0 overflow-y-auto"
-        >
+      <Dialog open={!!selected} onOpenChange={(open: boolean) => !open && closeDrawer()}>
+        <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-y-auto bg-[color:var(--bg)] border border-[color:var(--border-subtle)] p-0">
           {selected && <ExampleDrawerContent example={selected} />}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -236,12 +233,12 @@ function ExampleDrawerContent({ example }: { example: Example }) {
 
   return (
     <div className="flex flex-col">
-      <SheetHeader className="px-8 pt-7 pb-5 border-b border-[color:var(--border-subtle)] sticky top-0 bg-[color:var(--bg)]/95 backdrop-blur z-10">
+      <DialogHeader className="px-8 pt-7 pb-5 border-b border-[color:var(--border-subtle)] sticky top-0 bg-[color:var(--bg)]/95 backdrop-blur z-10">
         <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
           {example.category}
         </span>
-        <SheetTitle className="sr-only">Example: {example.user_input}</SheetTitle>
-      </SheetHeader>
+        <DialogTitle className="sr-only">Example: {example.user_input}</DialogTitle>
+      </DialogHeader>
 
       <div className="px-8 py-8 space-y-8">
         <div>
