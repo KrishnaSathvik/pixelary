@@ -80,6 +80,7 @@ function formatDate(d: string) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
