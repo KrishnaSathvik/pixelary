@@ -100,8 +100,13 @@ RULE 8 — VISUAL SUMMARY:
 If input contains any of: "summarize this PDF," "from this spreadsheet," "based on the attached document," "executive summary as image," "one-pager," "visual abstract," "data visualization from"
 → Classify as VISUAL SUMMARY.
 
+RULE 8.5 — CINEMATIC OVERRIDE:
+If input begins with or contains "cinematic shot of," "cinematic still of," "movie scene of," "film still of," "movie still of," or explicitly requests "cinematic" framing/lighting/composition
+→ Classify as CHARACTER SHEET / CINEMATIC SCENE.
+This override takes precedence over Rule 9 — an explicit cinematic signal always wins over domain detection (e.g., "cinematic shot of a wedding" or "cinematic shot of a man eating noodles" → CINEMATIC, not INTERIOR/FOOD/FASHION).
+
 RULE 9 — INTERIOR/ARCH/FOOD/FASHION:
-If input is specifically about interior design, architecture, food photography, or fashion (not just "a person in a setting" — must be explicitly about the domain):
+If input is specifically about interior design, architecture, food photography, or fashion (not just "a person in a setting" — must be explicitly about the domain) AND does not match Rule 8.5:
 "interior of," "interior design," "architectural photo," "exterior of [building]," "food photo," "food spread," "fashion editorial," "fashion shoot," "outfit photography," "menswear," "womenswear"
 → Classify as INTERIOR/ARCH/FOOD/FASHION.
 
