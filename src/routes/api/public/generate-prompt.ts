@@ -81,42 +81,8 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             },
           ];
 
-          const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "openai/gpt-5",
-              messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                { role: "user", content: userMessage },
-              ],
-              tools,
-              tool_choice: { type: "function", function: { name: "deliver_prompt" } },
-              stream: true,
-            }),
-          });
-
-          if (!aiResponse.ok || !aiResponse.body) {
-            const errText = await aiResponse.text().catch(() => "");
-            console.error("AI gateway error:", aiResponse.status, errText);
-            const status = aiResponse.status;
-            const message =
-              status === 429
-                ? "Rate limit reached. Please wait a moment and try again."
-                : status === 402
-                ? "AI credits exhausted. Please add credits in workspace settings."
-                : "AI service error";
-            return new Response(JSON.stringify({ error: message }), {
-              status: status === 429 || status === 402 ? status : 500,
-              headers: { "Content-Type": "application/json", ...corsHeaders },
-            });
-          }
-
-          // Stream SSE: forward incremental tool-call argument deltas to the client.
-          const upstream = aiResponse.body;
+          // Return SSE immediately, then start the AI request inside the stream.
+          // This prevents the public route from timing out before the model sends headers.
           const encoder = new TextEncoder();
           const decoder = new TextDecoder();
 
@@ -144,7 +110,40 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                 }
               };
 
-              const reader = upstream.getReader();
+              send("status", { message: "starting" });
+              const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${apiKey}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  model: "google/gemini-3-flash-preview",
+                  messages: [
+                    { role: "system", content: SYSTEM_PROMPT },
+                    { role: "user", content: userMessage },
+                  ],
+                  tools,
+                  tool_choice: { type: "function", function: { name: "deliver_prompt" } },
+                  stream: true,
+                }),
+              });
+
+              if (!aiResponse.ok || !aiResponse.body) {
+                const errText = await aiResponse.text().catch(() => "");
+                console.error("AI gateway error:", aiResponse.status, errText);
+                const message =
+                  aiResponse.status === 429
+                    ? "Rate limit reached. Please wait a moment and try again."
+                    : aiResponse.status === 402
+                    ? "AI credits exhausted. Please add credits in workspace settings."
+                    : "AI service error";
+                send("error", { error: message });
+                safeClose();
+                return;
+              }
+
+              const reader = aiResponse.body.getReader();
               let buffer = "";
               let assembled = "";
 
