@@ -298,9 +298,6 @@ function AppPage() {
                   </>
                 )}
               </Button>
-              <p className="text-center text-mono-sm text-[color:var(--text-tertiary)]">
-                Powered by Claude Sonnet 4.5 via Lovable AI
-              </p>
             </div>
           </div>
 
