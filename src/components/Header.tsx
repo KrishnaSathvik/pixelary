@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import logo from "@/assets/logo.png";
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -23,9 +24,13 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6 lg:px-12">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="flex h-7 w-7 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[13px] font-semibold leading-none">
-            P
-          </span>
+          <img
+            src={logo}
+            alt="Promptcraft"
+            width={28}
+            height={28}
+            className="h-7 w-7 dark:invert"
+          />
           <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
             Promptcraft
           </span>
