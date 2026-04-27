@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "AI-powered prompt generator built on the convergent techniques used by the top 1% of prompt engineers. Works with ChatGPT, OpenAI API, fal.ai.",
+          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs. Ten category templates for ChatGPT, the OpenAI API, and fal.ai.",
       },
     ],
   }),
@@ -29,13 +29,12 @@ function LandingPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true" />
         <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 pt-24 sm:pt-32 pb-20 sm:pb-28 text-center">
-          <p className="eyebrow">Prompt Engine — V1</p>
           <h1 className="mt-6 text-display-xl mx-auto max-w-4xl text-[color:var(--text-primary)]">
             Turn rough ideas into pro-grade image prompts.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-body-lg text-[color:var(--text-secondary)]">
-            Built on the convergent techniques used by the top 1% of prompt engineers — distilled
-            into one fast, opinionated tool for OpenAI’s GPT Image 2.
+            Built on patterns from OpenAI's image generation guide and fal.ai's prompt
+            documentation — distilled into one fast, opinionated tool for OpenAI's GPT Image 2.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -50,10 +49,6 @@ function LandingPage() {
             </Link>
           </div>
 
-          <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
-            No signup required to try ·{" "}
-            <kbd className="font-mono">⌘&nbsp;K</kbd> opens the app
-          </p>
         </div>
       </section>
 
@@ -90,10 +85,11 @@ function LandingPage() {
         <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
           <div className="max-w-2xl mb-16">
             <p className="eyebrow">Why it works</p>
-            <h2 className="mt-4 text-display-md">Convergent techniques, one tool.</h2>
+            <h2 className="mt-4 text-display-md">Ten templates, one tool.</h2>
             <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
-              We analyzed 200+ prompts from the top of X, GitHub, and the OpenAI cookbook. The
-              patterns that actually shipped — distilled into ten category templates.
+              Built on patterns from OpenAI's image generation guide, fal.ai's prompt
+              documentation, and the structural fundamentals that work across modern image
+              models — distilled into ten category templates.
             </p>
           </div>
 
