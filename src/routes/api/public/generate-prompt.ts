@@ -63,10 +63,46 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             ? category
             : null;
 
+          // Deterministic ASPECT RATIO LOCK: when the user names a ratio
+          // (direct "16:9", word "square", or implied "thumbnail"/"story"),
+          // force the model to include that exact ratio in its output.
+          const ASPECT_KEYWORDS: Array<[RegExp, string]> = [
+            // Direct ratio mentions take priority — match first.
+            [/\b(\d{1,2}:\d{1,2}(?:\.\d+)?)\b/, "DIRECT"],
+            // Word-based mentions (longer phrases first to avoid partial overlap).
+            [/\binstagram\s+story\b/i, "9:16"],
+            [/\byoutube\s+thumbnail\b/i, "16:9"],
+            [/\bsquare\s+format\b/i, "1:1"],
+            [/\bsquare\b/i, "1:1"],
+            [/\bportrait\b/i, "4:5"],
+            [/\bvertical\b/i, "9:16"],
+            [/\bstory\b/i, "9:16"],
+            [/\breel\b/i, "9:16"],
+            [/\btiktok\b/i, "9:16"],
+            [/\blandscape\b/i, "16:9"],
+            [/\bhorizontal\b/i, "16:9"],
+            [/\bwidescreen\b/i, "16:9"],
+            [/\bthumbnail\b/i, "16:9"],
+            [/\bbanner\b/i, "16:9"],
+            [/\bcinematic\s+(?:shot|still|photo|image|portrait|frame|framing|aspect)\b/i, "2.39:1"],
+            [/\bpinterest\b/i, "2:3"],
+          ];
+          let lockedRatio: string | null = null;
+          for (const [re, ratio] of ASPECT_KEYWORDS) {
+            const m = userIdea.match(re);
+            if (m) {
+              lockedRatio = ratio === "DIRECT" ? m[1] : ratio;
+              break;
+            }
+          }
+
           const userMessage = [
             effectiveCategory ? `Category hint: ${effectiveCategory}` : null,
             cinematicForced
               ? `LOCKED CATEGORY: The user explicitly requested cinematic framing. Use the CHARACTER SHEET / CINEMATIC SCENE template. Do NOT route to INTERIOR/ARCH/FOOD/FASHION even if the subject is a wedding, kitchen, food, dress, or building.`
+              : null,
+            lockedRatio
+              ? `LOCKED ASPECT RATIO: ${lockedRatio} — The output prompt MUST include the exact phrase "${lockedRatio} aspect ratio" verbatim. Do not substitute a different ratio. Do not omit it.`
               : null,
             `Mode: ${mode}`,
             `User idea: ${userIdea}`,
