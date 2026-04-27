@@ -26,19 +26,19 @@ function CodeBlock({ code }: { code: string }) {
     setTimeout(() => setCopied(false), 1500);
   };
   return (
-    <div className="group relative my-6">
-      <pre className="overflow-x-auto rounded-lg border border-border/60 bg-[var(--code-bg)] p-4 text-sm">
-        <code className="font-mono text-[var(--code-fg)] whitespace-pre-wrap break-words">
+    <div className="group relative my-8">
+      <pre className="overflow-x-auto rounded-lg border border-[color:var(--code-border)] bg-[color:var(--code-bg)] px-6 py-5">
+        <code className="font-mono text-[14px] leading-[1.6] text-[color:var(--code-text)] whitespace-pre-wrap break-words">
           {code}
         </code>
       </pre>
       <button
         type="button"
         onClick={handleCopy}
-        className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-md border border-border/60 bg-card/80 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100"
+        className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-visible:opacity-100"
         aria-label="Copy code"
       >
-        {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
+        {copied ? <Check className="h-4 w-4 text-[color:var(--success)]" /> : <Copy className="h-4 w-4" />}
       </button>
     </div>
   );
@@ -47,7 +47,6 @@ function CodeBlock({ code }: { code: string }) {
 // Inline parser: bold, italic, inline code, links
 function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
-  // Pattern order matters; we'll use a tokenizer.
   const pattern = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -62,14 +61,14 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
       nodes.push(
         <code
           key={key}
-          className="rounded bg-[var(--code-bg)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--code-fg)]"
+          className="rounded-sm bg-[color:var(--code-bg)] border border-[color:var(--code-border)] px-1.5 py-0.5 font-mono text-[0.85em] text-[color:var(--code-text)]"
         >
           {token.slice(1, -1)}
         </code>
       );
     } else if (token.startsWith("**")) {
       nodes.push(
-        <strong key={key} className="font-semibold text-foreground">
+        <strong key={key} className="font-semibold text-[color:var(--text-primary)]">
           {token.slice(2, -2)}
         </strong>
       );
@@ -80,7 +79,7 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
           <a
             key={key}
             href={m[2]}
-            className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
+            className="text-[color:var(--text-primary)] underline underline-offset-[3px] decoration-[color:var(--border-default)] hover:decoration-[color:var(--accent-orange)]"
           >
             {m[1]}
           </a>
@@ -105,7 +104,6 @@ export function renderMarkdown(md: string): RenderedContent {
   while (i < lines.length) {
     const line = lines[i];
 
-    // Fenced code block
     if (line.startsWith("```")) {
       const codeLines: string[] = [];
       i++;
@@ -113,12 +111,11 @@ export function renderMarkdown(md: string): RenderedContent {
         codeLines.push(lines[i]);
         i++;
       }
-      i++; // skip closing ```
+      i++;
       out.push(<CodeBlock key={`code-${key++}`} code={codeLines.join("\n")} />);
       continue;
     }
 
-    // Headings
     if (line.startsWith("## ")) {
       const text = line.slice(3).trim();
       const id = slugify(text);
@@ -127,7 +124,7 @@ export function renderMarkdown(md: string): RenderedContent {
         <h2
           key={`h-${key++}`}
           id={id}
-          className="mt-20 mb-5 scroll-mt-24 font-serif text-3xl font-bold tracking-tight text-foreground"
+          className="mt-24 mb-6 text-heading-lg text-[color:var(--text-primary)]"
         >
           {text}
         </h2>
@@ -143,7 +140,7 @@ export function renderMarkdown(md: string): RenderedContent {
         <h3
           key={`h-${key++}`}
           id={id}
-          className="mt-10 mb-3 scroll-mt-24 text-2xl font-bold text-foreground"
+          className="mt-12 mb-4 text-heading-md text-[color:var(--text-primary)]"
         >
           {text}
         </h3>
@@ -152,14 +149,12 @@ export function renderMarkdown(md: string): RenderedContent {
       continue;
     }
 
-    // Horizontal rule
     if (/^---+$/.test(line.trim())) {
-      out.push(<hr key={`hr-${key++}`} className="my-10 border-border/60" />);
+      out.push(<hr key={`hr-${key++}`} className="my-12 border-[color:var(--border-subtle)]" />);
       i++;
       continue;
     }
 
-    // Blockquote
     if (line.startsWith("> ")) {
       const quoteLines: string[] = [];
       while (i < lines.length && lines[i].startsWith("> ")) {
@@ -169,7 +164,7 @@ export function renderMarkdown(md: string): RenderedContent {
       out.push(
         <blockquote
           key={`q-${key++}`}
-          className="my-6 border-l-4 border-primary pl-6 font-serif text-2xl italic text-muted-foreground"
+          className="my-8 border-l-[3px] border-[color:var(--accent)] bg-[color:var(--bg-subtle)] px-6 py-4 italic text-[18px] leading-[1.6] text-[color:var(--text-secondary)]"
         >
           {renderInline(quoteLines.join(" "), `q-${key}`)}
         </blockquote>
@@ -177,13 +172,12 @@ export function renderMarkdown(md: string): RenderedContent {
       continue;
     }
 
-    // Table (must start with "|")
     if (line.startsWith("|") && i + 1 < lines.length && /^\|[\s:-|]+\|$/.test(lines[i + 1])) {
       const headerCells = line
         .slice(1, -1)
         .split("|")
         .map((c) => c.trim());
-      i += 2; // skip header + separator
+      i += 2;
       const rows: string[][] = [];
       while (i < lines.length && lines[i].startsWith("|")) {
         rows.push(
@@ -195,12 +189,18 @@ export function renderMarkdown(md: string): RenderedContent {
         i++;
       }
       out.push(
-        <div key={`tbl-${key++}`} className="my-6 overflow-x-auto rounded-lg border border-border/60">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/40">
+        <div
+          key={`tbl-${key++}`}
+          className="my-8 overflow-x-auto rounded-md border border-[color:var(--border-subtle)]"
+        >
+          <table className="w-full text-body-sm">
+            <thead className="bg-[color:var(--bg-subtle)]">
               <tr>
                 {headerCells.map((c, idx) => (
-                  <th key={idx} className="px-4 py-3 text-left font-semibold text-foreground">
+                  <th
+                    key={idx}
+                    className="px-4 py-3 text-left font-mono text-[12px] tracking-[0.04em] uppercase text-[color:var(--text-tertiary)]"
+                  >
                     {renderInline(c, `th-${idx}`)}
                   </th>
                 ))}
@@ -208,9 +208,9 @@ export function renderMarkdown(md: string): RenderedContent {
             </thead>
             <tbody>
               {rows.map((row, rIdx) => (
-                <tr key={rIdx} className="border-t border-border/60">
+                <tr key={rIdx} className="border-t border-[color:var(--border-subtle)]">
                   {row.map((c, cIdx) => (
-                    <td key={cIdx} className="px-4 py-3 align-top text-muted-foreground">
+                    <td key={cIdx} className="px-4 py-3 align-top text-[color:var(--text-secondary)]">
                       {renderInline(c, `td-${rIdx}-${cIdx}`)}
                     </td>
                   ))}
@@ -223,7 +223,6 @@ export function renderMarkdown(md: string): RenderedContent {
       continue;
     }
 
-    // Unordered list
     if (/^[-*] /.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^[-*] /.test(lines[i])) {
@@ -231,11 +230,11 @@ export function renderMarkdown(md: string): RenderedContent {
         i++;
       }
       out.push(
-        <ul key={`ul-${key++}`} className="my-5 space-y-2 pl-5">
+        <ul key={`ul-${key++}`} className="my-6 space-y-2 pl-5">
           {items.map((it, idx) => (
             <li
               key={idx}
-              className="relative pl-4 text-muted-foreground before:absolute before:left-0 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-primary"
+              className="relative pl-5 text-[color:var(--text-secondary)] before:absolute before:left-0 before:top-[0.85em] before:h-px before:w-3 before:bg-[color:var(--text-tertiary)]"
             >
               {renderInline(it, `li-${idx}`)}
             </li>
@@ -245,7 +244,6 @@ export function renderMarkdown(md: string): RenderedContent {
       continue;
     }
 
-    // Ordered list
     if (/^\d+\.\s/.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
@@ -253,9 +251,12 @@ export function renderMarkdown(md: string): RenderedContent {
         i++;
       }
       out.push(
-        <ol key={`ol-${key++}`} className="my-5 list-decimal space-y-2 pl-6 marker:font-semibold marker:text-primary">
+        <ol
+          key={`ol-${key++}`}
+          className="my-6 list-decimal space-y-2 pl-7 marker:font-mono marker:text-[color:var(--text-tertiary)] marker:tabular-nums"
+        >
           {items.map((it, idx) => (
-            <li key={idx} className="pl-1 text-muted-foreground">
+            <li key={idx} className="pl-1 text-[color:var(--text-secondary)]">
               {renderInline(it, `oli-${idx}`)}
             </li>
           ))}
@@ -264,13 +265,11 @@ export function renderMarkdown(md: string): RenderedContent {
       continue;
     }
 
-    // Blank lines
     if (line.trim() === "") {
       i++;
       continue;
     }
 
-    // Paragraph: collect consecutive non-blank, non-special lines
     const paraLines: string[] = [line];
     i++;
     while (
@@ -287,7 +286,7 @@ export function renderMarkdown(md: string): RenderedContent {
       i++;
     }
     out.push(
-      <p key={`p-${key++}`} className="my-5 text-[1.0625rem] leading-[1.75] text-muted-foreground">
+      <p key={`p-${key++}`} className="my-6">
         {renderInline(paraLines.join(" "), `p-${key}`)}
       </p>
     );
