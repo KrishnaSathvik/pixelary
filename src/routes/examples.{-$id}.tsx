@@ -233,12 +233,16 @@ function ExampleDrawerContent({ example }: { example: Example }) {
 
   return (
     <div className="flex flex-col">
-      <DialogHeader className="px-8 pt-7 pb-5 border-b border-[color:var(--border-subtle)] sticky top-0 bg-[color:var(--bg)]/95 backdrop-blur z-10">
+      <DialogHeader className="px-8 pt-7 pb-5 pr-14 border-b border-[color:var(--border-subtle)] sticky top-0 bg-[color:var(--bg)]/95 backdrop-blur z-20">
         <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
           {example.category}
         </span>
         <DialogTitle className="sr-only">Example: {example.user_input}</DialogTitle>
         <DialogDescription className="sr-only">Full prompt and details for this example.</DialogDescription>
+        <DialogClose className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]">
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </DialogClose>
       </DialogHeader>
 
       <div className="px-8 py-8 space-y-8">
