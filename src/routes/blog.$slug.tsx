@@ -3,17 +3,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
-  ThumbsUp,
-  ThumbsDown,
   Twitter,
   Github,
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { getPostBySlug, getRelatedPosts } from "@/data/posts";
 import { renderMarkdown } from "@/lib/markdown";
-import { toast } from "sonner";
 
 const SITE_URL = "https://promptcraft.lovable.app";
 
