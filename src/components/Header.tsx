@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import logo from "@/assets/logo.png";
 
 export function Header() {
   const { user, signOut } = useAuth();
