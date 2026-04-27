@@ -9,10 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiGeneratePromptRouteImport } from './routes/api/generate-prompt'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -32,35 +50,81 @@ const ApiGeneratePromptRoute = ApiGeneratePromptRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/api/generate-prompt'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/library'
+    | '/login'
+    | '/signup'
+    | '/api/generate-prompt'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/api/generate-prompt'
-  id: '__root__' | '/' | '/app' | '/api/generate-prompt'
+  to: '/' | '/app' | '/library' | '/login' | '/signup' | '/api/generate-prompt'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/library'
+    | '/login'
+    | '/signup'
+    | '/api/generate-prompt'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
+  LibraryRoute: typeof LibraryRoute
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
   ApiGeneratePromptRoute: typeof ApiGeneratePromptRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -88,8 +152,20 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
+  LibraryRoute: LibraryRoute,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
   ApiGeneratePromptRoute: ApiGeneratePromptRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
