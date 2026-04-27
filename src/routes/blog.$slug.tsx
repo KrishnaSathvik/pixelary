@@ -3,17 +3,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
-  ThumbsUp,
-  ThumbsDown,
   Twitter,
   Github,
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { getPostBySlug, getRelatedPosts } from "@/data/posts";
 import { renderMarkdown } from "@/lib/markdown";
-import { toast } from "sonner";
 
 const SITE_URL = "https://promptcraft.lovable.app";
 
@@ -97,7 +93,6 @@ function PostPage() {
   const { nodes, headings } = useMemo(() => renderMarkdown(post.content), [post.content]);
 
   const [activeId, setActiveId] = useState<string>(headings[0]?.id ?? "");
-  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const [tocOpen, setTocOpen] = useState(false);
 
   useEffect(() => {
@@ -117,11 +112,6 @@ function PostPage() {
     });
     return () => observer.disconnect();
   }, [headings]);
-
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Thanks! We’ll be in touch soon.");
-  };
 
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
@@ -269,71 +259,27 @@ function PostPage() {
             </div>
           </div>
 
-          {/* Feedback */}
-          <div className="flex items-center justify-between rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-5">
-            <span className="text-body-sm font-medium text-[color:var(--text-primary)]">
-              Was this useful?
-            </span>
-            <div className="flex gap-2">
-              <Button
-                variant={feedback === "up" ? "default" : "outline"}
-                size="sm"
-                onClick={() => {
-                  setFeedback("up");
-                  toast.success("Thanks for the feedback!");
-                }}
-              >
-                <ThumbsUp className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={feedback === "down" ? "default" : "outline"}
-                size="sm"
-                onClick={() => {
-                  setFeedback("down");
-                  toast("Thanks — we’ll keep improving.");
-                }}
-              >
-                <ThumbsDown className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
           {/* Big CTA */}
-          <div className="border border-[color:var(--accent)] bg-[color:var(--accent)] text-[color:var(--accent-text)] p-10 text-center rounded-md">
-            <p className="font-mono text-[11px] font-medium tracking-[0.1em] uppercase text-[color:var(--accent-text)]/60">
+          <div className="border border-[color:var(--accent)] bg-[color:var(--accent)] p-10 text-center rounded-md">
+            <p className="font-mono text-[11px] font-medium tracking-[0.1em] uppercase text-white/60">
               Generate yours
             </p>
-            <h3 className="mt-3 text-heading-lg">
+            <h3 className="mt-3 text-heading-lg text-white">
               Generate polished prompts in seconds.
             </h3>
-            <p className="mt-3 text-body-md text-[color:var(--accent-text)]/75">
+            <p className="mt-3 text-body-md text-white/75">
               Paste a rough idea. Get back a structured prompt that ships.
             </p>
             <Link to="/app" className="mt-6 inline-block">
               <Button
                 size="lg"
                 variant="secondary"
-                className="bg-[color:var(--accent-text)] text-[color:var(--accent)] hover:bg-[color:var(--bg-subtle)] border-transparent"
+                className="bg-white text-[color:var(--accent)] hover:bg-[color:var(--bg-subtle)] border-transparent"
               >
                 Open Promptcraft <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
             </Link>
           </div>
-
-          {/* Newsletter */}
-          <form
-            onSubmit={handleNewsletter}
-            className="rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6"
-          >
-            <h4 className="text-heading-sm">Get new articles in your inbox</h4>
-            <p className="mt-1.5 text-body-sm text-[color:var(--text-secondary)]">
-              One short email when we publish something new. No spam.
-            </p>
-            <div className="mt-4 flex gap-2">
-              <Input type="email" required placeholder="you@company.com" />
-              <Button type="submit">Subscribe</Button>
-            </div>
-          </form>
 
           {/* Related posts */}
           {related.length > 0 && (
