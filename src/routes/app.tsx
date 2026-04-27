@@ -436,16 +436,21 @@ function ResultView({
     const labels = ["Safe", "Stylized", "Experimental"];
     return (
       <div className="space-y-4">
-        {result.prompts.map((p, i) => (
-          <div key={i} className="space-y-2">
-            <div className="text-xs uppercase tracking-widest text-primary font-semibold">
-              {labels[i] || `Variant ${i + 1}`}
+        {result.prompts.map((p, i) => {
+          const isLast = i === result.prompts!.length - 1;
+          return (
+            <div key={i} className="space-y-2">
+              <div className="text-xs uppercase tracking-widest text-primary font-semibold">
+                {labels[i] || `Variant ${i + 1}`}
+              </div>
+              <CodeBlock text={p} streaming={streaming && isLast} />
             </div>
-            <CodeBlock text={p} />
-          </div>
-        ))}
+          );
+        })}
         {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+        {!streaming && (
+          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+        )}
       </div>
     );
   }
