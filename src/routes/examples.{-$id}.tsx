@@ -233,12 +233,12 @@ function ExampleDrawerContent({ example }: { example: Example }) {
 
   return (
     <div className="flex flex-col">
-      <SheetHeader className="px-8 pt-7 pb-5 border-b border-[color:var(--border-subtle)] sticky top-0 bg-[color:var(--bg)]/95 backdrop-blur z-10">
+      <DialogHeader className="px-8 pt-7 pb-5 border-b border-[color:var(--border-subtle)] sticky top-0 bg-[color:var(--bg)]/95 backdrop-blur z-10">
         <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
           {example.category}
         </span>
-        <SheetTitle className="sr-only">Example: {example.user_input}</SheetTitle>
-      </SheetHeader>
+        <DialogTitle className="sr-only">Example: {example.user_input}</DialogTitle>
+      </DialogHeader>
 
       <div className="px-8 py-8 space-y-8">
         <div>
