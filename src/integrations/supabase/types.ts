@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      prompts: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          input_text: string
+          mode: string | null
+          output_prompt: string
+          user_id: string
+          variants: Json | null
+          why_it_works: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          input_text: string
+          mode?: string | null
+          output_prompt: string
+          user_id: string
+          variants?: Json | null
+          why_it_works?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          input_text?: string
+          mode?: string | null
+          output_prompt?: string
+          user_id?: string
+          variants?: Json | null
+          why_it_works?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
