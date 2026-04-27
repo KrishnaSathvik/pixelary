@@ -256,7 +256,7 @@ function AppPage() {
 
             <Button
               onClick={() => generate()}
-              disabled={loading}
+              disabled={loading || streaming}
               size="lg"
               className="w-full bg-amber-gradient text-primary-foreground hover:opacity-90 shadow-amber-glow h-12 text-base gap-2"
             >
@@ -264,6 +264,11 @@ function AppPage() {
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
                   Generating…
+                </>
+              ) : streaming ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Streaming…
                 </>
               ) : (
                 <>
@@ -283,16 +288,17 @@ function AppPage() {
               <h2 className="text-2xl font-bold tracking-tight">Your polished prompt</h2>
               {result && (
                 <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                  {result.category || "READY"}
+                  {streaming ? "STREAMING" : result.category || "READY"}
                 </span>
               )}
             </div>
 
             {!result && !loading && <EmptyState />}
-            {loading && <LoadingState />}
+            {loading && !result && <LoadingState />}
             {result && (
               <ResultView
                 result={result}
+                streaming={streaming}
                 onCopy={() => {}}
                 onRegenerate={() => generate()}
                 onSave={savePrompt}
