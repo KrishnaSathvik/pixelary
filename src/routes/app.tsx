@@ -73,7 +73,7 @@ function AppPage() {
     setStreaming(false);
     setResult(null);
     try {
-      const res = await fetch("/api/generate-prompt", {
+      const res = await fetch("/api/public/generate-prompt", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
         body: JSON.stringify({ userInput, category, mode }),

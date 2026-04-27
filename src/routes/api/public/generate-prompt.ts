@@ -13,7 +13,7 @@ interface RequestBody {
   mode?: string;
 }
 
-export const Route = createFileRoute("/api/generate-prompt")({
+export const Route = createFileRoute("/api/public/generate-prompt")({
   server: {
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: corsHeaders }),
