@@ -177,14 +177,11 @@ function ExamplesPage() {
       </section>
 
       {/* DRAWER */}
-      <Sheet open={!!selected} onOpenChange={(open) => !open && closeDrawer()}>
-        <SheetContent
-          side="right"
-          className="w-full sm:max-w-[640px] bg-[color:var(--bg)] border-l border-[color:var(--border-subtle)] p-0 overflow-y-auto"
-        >
+      <Dialog open={!!selected} onOpenChange={(open: boolean) => !open && closeDrawer()}>
+        <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] max-h-[85vh] overflow-y-auto bg-[color:var(--bg)] border border-[color:var(--border-subtle)] p-0">
           {selected && <ExampleDrawerContent example={selected} />}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
