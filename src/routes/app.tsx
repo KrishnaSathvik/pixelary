@@ -175,7 +175,8 @@ function AppPage() {
   useEffect(() => {
     if (seed) {
       setInput(seed);
-      toast.success("Loaded from example — generate to see your version.");
+      // Auto-generate so the user doesn't stare at an empty screen
+      generate(seed);
     }
     textareaRef.current?.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
