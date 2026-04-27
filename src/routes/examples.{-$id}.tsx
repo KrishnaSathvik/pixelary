@@ -7,9 +7,9 @@ import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import { examples, EXAMPLE_CATEGORIES, type Example } from "@/data/examples";
 
-const PAGE_TITLE = "GPT Image 2 Prompt Examples — 18 Production-Grade Templates | Promptcraft";
+const PAGE_TITLE = "GPT Image 2 Prompt Examples — 20 Production-Grade Templates | Promptcraft";
 const PAGE_DESCRIPTION =
-  "Browse 18 polished GPT Image 2 prompts across 8 categories. Posters, infographics, UI mockups, cinematic scenes, and more. Copy any example or generate your own.";
+  "Browse 20 polished GPT Image 2 prompts across 10 categories — posters, infographics, UI mockups, cinematic scenes, multi-panel storyboards, abstract & surreal mood pieces, and more. Copy any example or generate your own.";
 const PAGE_URL = "https://promptcraft.lovable.app/examples";
 
 export const Route = createFileRoute("/examples/{-$id}")({
@@ -98,10 +98,10 @@ function ExamplesPage() {
         <div className="mx-auto max-w-[1200px] px-6 lg:px-12 pt-20 pb-16">
           <p className="eyebrow">Examples library</p>
           <h1 className="mt-4 text-display-md max-w-3xl">
-            18 production-grade prompts for GPT Image 2.
+            20 production-grade prompts for GPT Image 2.
           </h1>
           <p className="mt-5 max-w-2xl text-body-lg text-[color:var(--text-secondary)]">
-            Real examples across 8 categories. Copy any prompt, or generate your own in seconds.
+            Real examples across 10 categories — including multi-panel storyboards and open-ended creative work. Copy any prompt, or generate your own in seconds.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-start gap-3">
             <Link to="/app">
