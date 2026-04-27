@@ -32,9 +32,8 @@ function LandingPage() {
           <h1 className="mt-6 text-display-xl mx-auto max-w-4xl text-[color:var(--text-primary)]">
             Turn rough ideas into pro-grade image prompts.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-body-lg text-[color:var(--text-secondary)]">
-            Built on patterns from OpenAI's image generation guide and fal.ai's prompt
-            documentation — distilled into one fast, opinionated tool for OpenAI's GPT Image 2.
+          <p className="mx-auto mt-6 max-w-3xl text-body-lg text-[color:var(--text-secondary)]">
+            Built on patterns from OpenAI's image generation guide and fal.ai's prompt documentation — distilled into one fast, opinionated tool for OpenAI's GPT Image 2.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
