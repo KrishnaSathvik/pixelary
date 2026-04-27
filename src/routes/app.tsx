@@ -486,7 +486,9 @@ function ResultView({
           </div>
         </div>
       )}
-      <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+      {!streaming && (
+        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+      )}
     </div>
   );
 }
