@@ -161,10 +161,15 @@ function AppPage() {
     }
   };
 
-  // Auto focus on mount
+  // Auto focus on mount + handle ?seed= prefill from Examples gallery
   useEffect(() => {
+    if (seed) {
+      setInput(seed);
+      toast.success("Loaded from example — generate to see your version.");
+    }
     textareaRef.current?.focus();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed]);
 
   const generateVariant = async (variantHint: string) => {
     await generate(`${input.trim()} — variant: ${variantHint}`);
