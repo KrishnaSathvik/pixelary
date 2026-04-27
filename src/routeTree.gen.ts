@@ -19,7 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ExamplesChar123IdChar125RouteImport } from './routes/examples.{-$id}'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as ApiGeneratePromptRouteImport } from './routes/api/generate-prompt'
+import { Route as ApiPublicGeneratePromptRouteImport } from './routes/api/public/generate-prompt'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -72,9 +72,9 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiGeneratePromptRoute = ApiGeneratePromptRouteImport.update({
-  id: '/api/generate-prompt',
-  path: '/api/generate-prompt',
+const ApiPublicGeneratePromptRoute = ApiPublicGeneratePromptRouteImport.update({
+  id: '/api/public/generate-prompt',
+  path: '/api/public/generate-prompt',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -86,10 +86,10 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/api/generate-prompt': typeof ApiGeneratePromptRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
   '/blog/': typeof BlogIndexRoute
+  '/api/public/generate-prompt': typeof ApiPublicGeneratePromptRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -99,10 +99,10 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/api/generate-prompt': typeof ApiGeneratePromptRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
   '/blog': typeof BlogIndexRoute
+  '/api/public/generate-prompt': typeof ApiPublicGeneratePromptRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -113,10 +113,10 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/api/generate-prompt': typeof ApiGeneratePromptRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
   '/blog/': typeof BlogIndexRoute
+  '/api/public/generate-prompt': typeof ApiPublicGeneratePromptRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -128,10 +128,10 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/signup'
     | '/sitemap.xml'
-    | '/api/generate-prompt'
     | '/blog/$slug'
     | '/examples/{-$id}'
     | '/blog/'
+    | '/api/public/generate-prompt'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -141,10 +141,10 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/signup'
     | '/sitemap.xml'
-    | '/api/generate-prompt'
     | '/blog/$slug'
     | '/examples/{-$id}'
     | '/blog'
+    | '/api/public/generate-prompt'
   id:
     | '__root__'
     | '/'
@@ -154,10 +154,10 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/signup'
     | '/sitemap.xml'
-    | '/api/generate-prompt'
     | '/blog/$slug'
     | '/examples/{-$id}'
     | '/blog/'
+    | '/api/public/generate-prompt'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -168,10 +168,10 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  ApiGeneratePromptRoute: typeof ApiGeneratePromptRoute
   BlogSlugRoute: typeof BlogSlugRoute
   ExamplesChar123IdChar125Route: typeof ExamplesChar123IdChar125Route
   BlogIndexRoute: typeof BlogIndexRoute
+  ApiPublicGeneratePromptRoute: typeof ApiPublicGeneratePromptRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -246,11 +246,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/generate-prompt': {
-      id: '/api/generate-prompt'
-      path: '/api/generate-prompt'
-      fullPath: '/api/generate-prompt'
-      preLoaderRoute: typeof ApiGeneratePromptRouteImport
+    '/api/public/generate-prompt': {
+      id: '/api/public/generate-prompt'
+      path: '/api/public/generate-prompt'
+      fullPath: '/api/public/generate-prompt'
+      preLoaderRoute: typeof ApiPublicGeneratePromptRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -264,10 +264,10 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  ApiGeneratePromptRoute: ApiGeneratePromptRoute,
   BlogSlugRoute: BlogSlugRoute,
   ExamplesChar123IdChar125Route: ExamplesChar123IdChar125Route,
   BlogIndexRoute: BlogIndexRoute,
+  ApiPublicGeneratePromptRoute: ApiPublicGeneratePromptRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
