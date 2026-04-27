@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Copy, Check, Lightbulb, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/examples/{-$id}")({
 });
 
 function ExamplesPage() {
-  const { id } = Route.useParams();
+  const { id } = useParams({ strict: false });
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string>("All");
 

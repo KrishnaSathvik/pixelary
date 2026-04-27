@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 
@@ -172,15 +172,6 @@ function LandingPage() {
             <Link to="/blog" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Blog</Link>
             <span aria-hidden>·</span>
             <Link to="/login" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Log in</Link>
-            <span aria-hidden>·</span>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition inline-flex items-center gap-1"
-            >
-              <Github className="h-3 w-3" /> GitHub
-            </a>
           </nav>
         </div>
       </footer>

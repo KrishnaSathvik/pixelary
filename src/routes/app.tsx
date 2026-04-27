@@ -254,8 +254,8 @@ function AppPage() {
                 </label>
                 <Select value={category} onValueChange={setCategory}>
                   <SelectTrigger id="category-select" className="bg-[color:var(--bg)] border-[color:var(--border-default)] h-10 rounded-md">
-                    <SelectValue />
-                  </SelectTrigger>
+                  <SelectValue placeholder="Auto-detect" />
+                </SelectTrigger>
                   <SelectContent>
                     {CATEGORIES.map((c) => (
                       <SelectItem key={c.value} value={c.value}>
