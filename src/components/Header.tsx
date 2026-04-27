@@ -76,12 +76,10 @@ function NavLink({
   exact?: boolean;
   params?: Record<string, string | undefined>;
 }) {
+  const linkProps = { to, params } as never;
   return (
     <Link
-      // @ts-expect-error generic to/params for shared nav helper
-      to={to}
-      // @ts-expect-error generic to/params for shared nav helper
-      params={params}
+      {...linkProps}
       className="px-3 py-2 text-sm font-medium text-[color:var(--text-secondary)] transition-colors duration-150 hover:text-[color:var(--text-primary)]"
       activeProps={{
         className:
