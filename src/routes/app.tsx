@@ -472,13 +472,8 @@ function ResultView({
         })}
         {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
         {!streaming && (
-          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={result.prompts!.join("\n\n---\n\n")} />
         )}
-      </div>
-    );
-  }
-
-  return (
     <div className="space-y-5">
       {result.prompt && <CodeBlock text={result.prompt} streaming={streaming} />}
       {(result.size || result.quality || result.aspect_ratio) && (
