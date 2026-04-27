@@ -458,7 +458,7 @@ function ResultView({
   // Default / JSON mode
   return (
     <div className="space-y-4">
-      {result.prompt && <CodeBlock text={result.prompt} />}
+      {result.prompt && <CodeBlock text={result.prompt} streaming={streaming} />}
       {(result.size || result.quality || result.aspect_ratio) && (
         <div className="flex flex-wrap gap-2">
           {result.size && <Tag label="size" value={result.size} />}
