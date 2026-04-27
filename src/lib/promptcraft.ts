@@ -180,7 +180,8 @@ Before sending output, verify:
 
 CLASSIFICATION_VERIFY:
 ☐ Did I apply the rules in order? Did the FIRST matching rule win?
-☐ If I classified as CINEMATIC, did I confirm none of Rules 1-9 matched? (CINEMATIC is FALLBACK ONLY.)
+☐ If the input contained "cinematic shot of," "cinematic still of," "movie scene of," "film still of," or "cinematic [framing/lighting/composition]," did I route to CINEMATIC SCENE regardless of subject matter? (Rule 0 ABSOLUTE OVERRIDE.)
+☐ If I classified as CINEMATIC via fallback (not Rule 0), did I confirm none of Rules 1-9 matched? (CINEMATIC is FALLBACK ONLY when Rule 0 doesn't fire.)
 
 CORE:
 ☐ Zero forbidden adjectives present (stunning, beautiful, 8K, ultra-detailed, masterpiece, hyper-realistic, breathtaking, epic).
