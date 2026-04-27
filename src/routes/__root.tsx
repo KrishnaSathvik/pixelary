@@ -7,17 +7,17 @@ import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist.
+        <p className="eyebrow">Error · 404</p>
+        <h1 className="mt-4 text-display-md">Page not found</h1>
+        <p className="mt-3 text-body-md text-[color:var(--text-secondary)]">
+          The page you’re looking for doesn’t exist.
         </p>
-        <div className="mt-6">
+        <div className="mt-8">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-md bg-[color:var(--accent)] px-5 py-3 text-sm font-medium text-[color:var(--accent-text)] transition-colors hover:bg-[color:var(--accent-hover)]"
           >
             Go home
           </Link>
@@ -32,11 +32,12 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "color-scheme", content: "light" },
       { title: "Promptcraft — Pro-grade image prompts from rough ideas" },
       {
         name: "description",
         content:
-          "Convert rough creative ideas into production-grade prompts for OpenAI's GPT Image 2. Built on the techniques used by the top 1% of prompt engineers.",
+          "Convert rough creative ideas into production-grade prompts for OpenAI’s GPT Image 2. Built on the techniques used by the top 1% of prompt engineers.",
       },
       { property: "og:title", content: "Promptcraft — Pro-grade image prompts" },
       {
@@ -48,9 +49,11 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap",
       },
     ],
   }),
@@ -61,7 +64,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
@@ -79,13 +82,15 @@ function RootComponent() {
       <AuthProvider>
         <Outlet />
         <Toaster
-          theme="dark"
+          theme="light"
           position="top-right"
           toastOptions={{
             style: {
-              background: "var(--card)",
-              color: "var(--foreground)",
-              border: "1px solid var(--border)",
+              background: "var(--bg-elevated)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border-default)",
+              borderRadius: "var(--radius-md)",
+              boxShadow: "var(--shadow-md)",
             },
           }}
         />
