@@ -27,10 +27,30 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <NavLink to="/" exact label="Home" />
-          <NavLink to="/examples/{-$id}" params={{ id: undefined }} label="Examples" />
-          <NavLink to="/blog" label="Blog" />
-          {user && <NavLink to="/library" label="Library" />}
+          <Link
+            to="/"
+            className={NAV_CLS}
+            activeProps={{ className: NAV_CLS_ACTIVE }}
+            activeOptions={{ exact: true }}
+          >
+            Home
+          </Link>
+          <Link
+            to="/examples/{-$id}"
+            params={{ id: undefined }}
+            className={NAV_CLS}
+            activeProps={{ className: NAV_CLS_ACTIVE }}
+          >
+            Examples
+          </Link>
+          <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Blog
+          </Link>
+          {user && (
+            <Link to="/library" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+              Library
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -65,29 +85,7 @@ export function Header() {
   );
 }
 
-function NavLink({
-  to,
-  label,
-  exact,
-  params,
-}: {
-  to: string;
-  label: string;
-  exact?: boolean;
-  params?: Record<string, string | undefined>;
-}) {
-  const linkProps = { to, params } as unknown as Record<string, unknown>;
-  return (
-    <Link
-      {...linkProps}
-      className="px-3 py-2 text-sm font-medium text-[color:var(--text-secondary)] transition-colors duration-150 hover:text-[color:var(--text-primary)]"
-      activeProps={{
-        className:
-          "px-3 py-2 text-sm font-medium text-[color:var(--text-primary)]",
-      }}
-      activeOptions={exact ? { exact: true } : undefined}
-    >
-      {label}
-    </Link>
-  );
-}
+const NAV_CLS =
+  "px-3 py-2 text-sm font-medium text-[color:var(--text-secondary)] transition-colors duration-150 hover:text-[color:var(--text-primary)]";
+const NAV_CLS_ACTIVE =
+  "px-3 py-2 text-sm font-medium text-[color:var(--text-primary)]";
