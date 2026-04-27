@@ -49,10 +49,6 @@ function LandingPage() {
             </Link>
           </div>
 
-          <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
-            No signup required to try ·{" "}
-            <kbd className="font-mono">⌘&nbsp;K</kbd> opens the app
-          </p>
         </div>
       </section>
 
