@@ -14,7 +14,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ExamplesChar123IdChar125RouteImport } from './routes/examples.{-$id}'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiGeneratePromptRouteImport } from './routes/api/generate-prompt'
 
 const SignupRoute = SignupRouteImport.update({
@@ -42,12 +44,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExamplesChar123IdChar125Route =
   ExamplesChar123IdChar125RouteImport.update({
     id: '/examples/{-$id}',
     path: '/examples/{-$id}',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiGeneratePromptRoute = ApiGeneratePromptRouteImport.update({
   id: '/api/generate-prompt',
   path: '/api/generate-prompt',
@@ -61,7 +73,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,7 +84,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,7 +96,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,7 +109,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/api/generate-prompt'
+    | '/blog/$slug'
     | '/examples/{-$id}'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,7 +120,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/api/generate-prompt'
+    | '/blog/$slug'
     | '/examples/{-$id}'
+    | '/blog'
   id:
     | '__root__'
     | '/'
@@ -109,7 +131,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/api/generate-prompt'
+    | '/blog/$slug'
     | '/examples/{-$id}'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,7 +143,9 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   ApiGeneratePromptRoute: typeof ApiGeneratePromptRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   ExamplesChar123IdChar125Route: typeof ExamplesChar123IdChar125Route
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -159,11 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/examples/{-$id}': {
       id: '/examples/{-$id}'
       path: '/examples/{-$id}'
       fullPath: '/examples/{-$id}'
       preLoaderRoute: typeof ExamplesChar123IdChar125RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/generate-prompt': {
@@ -183,8 +223,19 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   ApiGeneratePromptRoute: ApiGeneratePromptRoute,
+  BlogSlugRoute: BlogSlugRoute,
   ExamplesChar123IdChar125Route: ExamplesChar123IdChar125Route,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
