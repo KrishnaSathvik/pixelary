@@ -73,7 +73,18 @@ function AppPage() {
     setStreaming(false);
     setResult(null);
     try {
-      const res = await fetch("/api/public/generate-prompt", {
+      // The id-preview--* host routes through Lovable's auth bridge and 302-redirects
+      // even /api/public/* requests. The stable project--*[-dev].lovable.app host
+      // honors the public bypass. Rewrite the URL when we're inside id-preview.
+      let endpoint = "/api/public/generate-prompt";
+      if (typeof window !== "undefined") {
+        const host = window.location.hostname;
+        const m = host.match(/^id-preview--([0-9a-f-]+)\.lovable\.app$/i);
+        if (m) {
+          endpoint = `https://project--${m[1]}-dev.lovable.app/api/public/generate-prompt`;
+        }
+      }
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
         body: JSON.stringify({ userInput, category, mode }),
