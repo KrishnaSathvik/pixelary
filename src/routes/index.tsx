@@ -29,13 +29,12 @@ function LandingPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true" />
         <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 pt-24 sm:pt-32 pb-20 sm:pb-28 text-center">
-          <p className="eyebrow">Prompt Engine — V1</p>
           <h1 className="mt-6 text-display-xl mx-auto max-w-4xl text-[color:var(--text-primary)]">
             Turn rough ideas into pro-grade image prompts.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-body-lg text-[color:var(--text-secondary)]">
-            Built on the convergent techniques used by the top 1% of prompt engineers — distilled
-            into one fast, opinionated tool for OpenAI’s GPT Image 2.
+            Built on patterns from OpenAI's image generation guide and fal.ai's prompt
+            documentation — distilled into one fast, opinionated tool for OpenAI's GPT Image 2.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
