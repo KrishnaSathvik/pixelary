@@ -85,10 +85,11 @@ function LandingPage() {
         <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
           <div className="max-w-2xl mb-16">
             <p className="eyebrow">Why it works</p>
-            <h2 className="mt-4 text-display-md">Convergent techniques, one tool.</h2>
+            <h2 className="mt-4 text-display-md">Ten templates, one tool.</h2>
             <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
-              We analyzed 200+ prompts from the top of X, GitHub, and the OpenAI cookbook. The
-              patterns that actually shipped — distilled into ten category templates.
+              Built on patterns from OpenAI's image generation guide, fal.ai's prompt
+              documentation, and the structural fundamentals that work across modern image
+              models — distilled into ten category templates.
             </p>
           </div>
 
