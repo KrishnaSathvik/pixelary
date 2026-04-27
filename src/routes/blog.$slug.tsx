@@ -93,7 +93,6 @@ function PostPage() {
   const { nodes, headings } = useMemo(() => renderMarkdown(post.content), [post.content]);
 
   const [activeId, setActiveId] = useState<string>(headings[0]?.id ?? "");
-  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const [tocOpen, setTocOpen] = useState(false);
 
   useEffect(() => {
@@ -113,11 +112,6 @@ function PostPage() {
     });
     return () => observer.disconnect();
   }, [headings]);
-
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success("Thanks! We’ll be in touch soon.");
-  };
 
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
