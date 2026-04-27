@@ -16,7 +16,7 @@ export const posts: Post[] = [
   {
     slug: "gpt-image-2-prompt-examples",
     title: "GPT Image 2 Prompt Examples: 12 Templates That Actually Work",
-    subtitle: "Real prompts across 8 categories — copy, paste, ship.",
+    subtitle: "Real prompts across our 10 categories — copy, paste, ship.",
     category: "Examples",
     author: "Promptcraft Team",
     read_time: "8 min",
@@ -25,7 +25,7 @@ export const posts: Post[] = [
       "OpenAI's GPT Image 2 launched on April 21, 2026 with reasoning-powered generation and dramatically improved text rendering. Here are 12 production-grade prompts across the categories that matter, with explanations of why each one works.",
     seo_title: "GPT Image 2 Prompt Examples: 12 Production Templates (2026)",
     seo_description:
-      "Production-grade prompt examples for OpenAI's GPT Image 2 across 8 categories: posters, infographics, UI mockups, cinematic scenes, image edits, and more.",
+      "Production-grade prompt examples for OpenAI's GPT Image 2 across 10 categories: posters, infographics, UI mockups, cinematic scenes, multi-panel storyboards, image edits, and more.",
     content: `
 ## What's actually new with GPT Image 2
 
@@ -527,7 +527,7 @@ Launched April 21, 2026. The first OpenAI image model with built-in O-series rea
 - Native 2K resolution with optional 4K upscaling
 - Multi-turn editing endpoint with mask-based inpainting and outpainting
 - Available via ChatGPT, Codex, and the API
-- API pricing: $5/M text input, $8/M image input, $30/M image output tokens — roughly $0.006 to $0.21 per image (OpenAI pricing page)
+- API pricing: tiered token-based, roughly $0.006 to $0.21 per image depending on quality and resolution. Check OpenAI's pricing page for current rates — these can change between releases.
 
 **Image Arena leaderboard:** GPT Image 2 took the top position on the Image Arena leaderboard at launch, leading by 24 points over Google Imagen 3 according to early benchmark data.
 
