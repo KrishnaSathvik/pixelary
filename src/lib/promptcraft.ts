@@ -158,6 +158,7 @@ Use the 6-block structure:
 - PAGE-TO-PAGE CONTINUITY: explicit anchor phrases like "same suit, same chest core glow intensity, same visor across all pages" / "color grading consistent: cool blues for hero moments, warm oranges for danger."
 - GENERATION INSTRUCTIONS: "Generate each page as a separate image. Restate the CONSISTENT ELEMENTS block when prompting each page. Number outputs 01-N for sequencing."
 - NUMBERING: page count summary at the end ("Total: N pages").
+- FINAL LINE (always include verbatim as the last line of multi-page output): "NOTE TO USER: This is a multi-page sequence. Each PAGE block is intended to be generated as a separate image (N total renders). Restate the CONSISTENT ELEMENTS block when prompting each page." — replace N with the actual page count.
 
 ### For OPEN-ENDED CREATIVE (5-layer structure):
 Drop photographic vocabulary entirely. Camera specs (35mm, f/1.8, ISO) actively hurt abstract output by forcing literal interpretation.
