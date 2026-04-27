@@ -378,6 +378,7 @@ function CodeBlock({ text, streaming = false }: { text: string; streaming?: bool
 
 function ResultView({
   result,
+  streaming = false,
   onRegenerate,
   onSave,
   onVariantClick,
@@ -385,6 +386,7 @@ function ResultView({
   isLoggedIn,
 }: {
   result: PromptResult;
+  streaming?: boolean;
   onCopy: () => void;
   onRegenerate: () => void;
   onSave: () => void;
