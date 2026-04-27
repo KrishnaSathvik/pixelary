@@ -20,7 +20,7 @@ export const posts: Post[] = [
     category: "Examples",
     author: "Promptcraft Team",
     read_time: "8 min",
-    published: "2026-04-25",
+    published: "2026-04-27",
     excerpt:
       "OpenAI's GPT Image 2 launched on April 21, 2026 with reasoning-powered generation and dramatically improved text rendering. Here are 12 production-grade prompts across the categories that matter, with explanations of why each one works.",
     seo_title: "GPT Image 2 Prompt Examples: 12 Production Templates (2026)",
@@ -175,7 +175,7 @@ Or paste your rough idea into [Promptcraft](/app) and let it generate the struct
     category: "Tips",
     author: "Promptcraft Team",
     read_time: "8 min",
-    published: "2026-04-24",
+    published: "2026-04-26",
     excerpt:
       "Most ChatGPT image prompt advice is recycled from older models. Here's what works specifically with GPT Image 2's reasoning architecture — practical techniques, not magic words.",
     seo_title: "10 ChatGPT Image Prompt Tips for Better Results in 2026",
@@ -290,7 +290,7 @@ If running through this checklist on every prompt sounds like work, [Promptcraft
     category: "Framework",
     author: "Promptcraft Team",
     read_time: "7 min",
-    published: "2026-04-23",
+    published: "2026-04-25",
     excerpt:
       "Most AI image prompts fail because they're missing structure, not detail. Here's a 6-layer framework that works as a starting point for any image type — useful as a checklist when your prompts are coming out generic.",
     seo_title: "A 6-Layer Framework for AI Image Prompts",
@@ -415,7 +415,7 @@ You can apply this manually on every prompt. Or you can paste your rough idea in
     category: "How-to",
     author: "Promptcraft Team",
     read_time: "6 min",
-    published: "2026-04-22",
+    published: "2026-04-23",
     excerpt:
       "Text rendering used to be the biggest weakness of AI image generation. GPT Image 2 mostly fixed it — independent reviews report 95%+ accuracy. But getting reliable output still requires a specific approach.",
     seo_title: "How to Write AI Image Prompts with Readable Text",
