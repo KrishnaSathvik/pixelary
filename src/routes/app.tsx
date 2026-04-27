@@ -15,6 +15,7 @@ import { CATEGORIES, MODES, type ModeValue } from "@/lib/promptcraft";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
