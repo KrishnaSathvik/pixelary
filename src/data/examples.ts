@@ -205,6 +205,58 @@ export const examples: Example[] = [
       "For drama: add 'wet hair, light rain droplets visible on shoulders'",
       "For cleaner: ask for 'no rain on subject, only on environment'"
     ]
+  },
+  {
+    id: "storyboard-barista",
+    category: "Storyboards",
+    user_input: "storyboard for a 4-panel sequence of a barista making latte art",
+    prompt: `CONSISTENT ELEMENTS (locked across all 4 panels):
+- Character: woman in her late 20s, tied-back dark hair, charcoal apron over cream shirt, small silver hoop earrings, focused expression
+- Visual style: editorial documentary photography, natural light, warm palette, slight film grain (Kodak Portra 400)
+- Setting: small specialty coffee bar with brass fixtures and white subway tile
+- Aspect ratio: each panel 4:5 portrait, arranged as 2x2 grid
+
+PANEL-BY-PANEL:
+- Panel 1: medium close-up at 50mm, side angle, barista pulling espresso shot, golden crema streaming into white cup, steam rising
+- Panel 2: overhead 90-degree shot at 35mm, both hands holding pitcher tilting milk into espresso, swirl forming
+- Panel 3: close-up at 85mm, hands controlling pitcher angle, intricate rosetta pattern emerging, shallow depth of field
+- Panel 4: medium shot at 50mm, three-quarter angle, barista sliding finished latte toward camera, slight smile, window light from camera-left
+
+LAYOUT: 2x2 grid, thin 4px black gutters, panel numbers "01"-"04" in Geist Mono lower-left
+
+CONSISTENCY ANCHORS:
+- Same character: identical apron, hair, earrings across all panels
+- Same setting and lighting direction throughout
+- Same color grade and grain
+- Each panel readable in isolation, flows as a sequence`,
+    why_it_works: "Character locked at the top with specific physical anchors (hoop earrings). Each panel has its own shot type and emotional beat. Consistency phrases restated at the end because drift is the #1 storyboard failure.",
+    variants: [
+      "For comic-style: shift to 'ink and watercolor illustration with bold black outlines, halftone shading'",
+      "For wider sequence: expand to 6 panels in a 3x2 grid"
+    ]
+  },
+  {
+    id: "openended-abstract-mood",
+    category: "Open-Ended Creative",
+    user_input: "abstract image about feeling overwhelmed but hopeful",
+    prompt: `Mixed-media abstract composition, 4:5 portrait.
+
+Medium: layered oil pastel on cold-press watercolor paper, visible paper grain, occasional pencil under-drawing peeking through, scattered fingerprints in the pigment.
+
+Mood: tension between weight and lift — heavy compressed forms in the lower two-thirds gradually loosening into open breathing space in the upper third. Emotionally ambivalent, leaning toward quiet optimism.
+
+Palette: dense slate gray and oxidized iron at the bottom, transitioning through bruised plum and ochre in the middle, opening into pale cerulean and bone white at the top. A single thread of warm cadmium orange traces vertically from bottom to top.
+
+Composition: vertical movement bottom-to-top, no horizon line, no recognizable figures or objects. Forms suggest geological strata at the bottom, atmospheric weather in the middle, dawn sky at the top.
+
+Art-movement anchor: late color field painting tradition, Hilma af Klint structural mysticism, Rothko-influenced atmospheric layering.
+
+No representational subjects. No text. Soft edges throughout.`,
+    why_it_works: "Drops photographic language entirely. Five-layer structure (medium, mood, palette, composition, anchor) gives concrete formal vocabulary without forcing a literal subject. The single orange thread is the one anchor element — abstract work needs at least one or it dissolves into noise.",
+    variants: [
+      "For collage: shift medium to 'torn paper collage with visible adhesive ridges, photocopied texture fragments'",
+      "For digital: shift to 'digital airbrush with hard-edge geometric overlays, screen print registration errors'"
+    ]
   }
 ];
 
@@ -215,9 +267,11 @@ export const EXAMPLE_CATEGORIES = [
   "UI Mockups",
   "Social Posts",
   "Cinematic",
+  "Storyboards",
   "Interior/Food/Fashion",
   "Visual Summaries",
   "Image Edits",
+  "Open-Ended Creative",
 ] as const;
 
 // Distinct gradients per category for visual placeholders
@@ -227,7 +281,9 @@ export const CATEGORY_GRADIENTS: Record<string, string> = {
   "UI Mockups": "linear-gradient(135deg, #1A2238 0%, #0F1729 100%)",
   "Social Posts": "linear-gradient(135deg, #EC4899 0%, #7C3AED 100%)",
   Cinematic: "linear-gradient(135deg, #0A4D5C 0%, #F4A582 100%)",
+  Storyboards: "linear-gradient(135deg, #0F172A 0%, #64748B 100%)",
   "Interior/Food/Fashion": "linear-gradient(135deg, #92400E 0%, #FCD34D 100%)",
   "Visual Summaries": "linear-gradient(135deg, #1E293B 0%, #475569 100%)",
   "Image Edits": "linear-gradient(135deg, #4338CA 0%, #06B6D4 100%)",
+  "Open-Ended Creative": "linear-gradient(135deg, #8B5CF6 0%, #F472B6 50%, #FBBF24 100%)",
 };
