@@ -164,20 +164,20 @@ function LandingPage() {
               Promptcraft © {new Date().getFullYear()}
             </span>
           </div>
-          <nav className="flex items-center gap-2 text-mono-sm text-[color:var(--text-tertiary)]">
-            <Link to="/app" className="hover:text-[color:var(--text-primary)] transition">Generator</Link>
+          <nav className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-mono-sm text-[color:var(--text-tertiary)]">
+            <Link to="/app" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Generator</Link>
             <span aria-hidden>·</span>
-            <Link to="/examples/{-$id}" params={{ id: undefined }} className="hover:text-[color:var(--text-primary)] transition">Examples</Link>
+            <Link to="/examples/{-$id}" params={{ id: undefined }} className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Examples</Link>
             <span aria-hidden>·</span>
-            <Link to="/blog" className="hover:text-[color:var(--text-primary)] transition">Blog</Link>
+            <Link to="/blog" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Blog</Link>
             <span aria-hidden>·</span>
-            <Link to="/login" className="hover:text-[color:var(--text-primary)] transition">Log in</Link>
+            <Link to="/login" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Log in</Link>
             <span aria-hidden>·</span>
             <a
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[color:var(--text-primary)] transition inline-flex items-center gap-1"
+              className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition inline-flex items-center gap-1"
             >
               <Github className="h-3 w-3" /> GitHub
             </a>
