@@ -161,7 +161,6 @@ function AppPage() {
     }
   };
 
-  // Auto focus on mount + handle ?seed= prefill from Examples gallery
   useEffect(() => {
     if (seed) {
       setInput(seed);
@@ -204,38 +203,45 @@ function AppPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-[1280px] px-6 lg:px-12 py-12">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
           {/* LEFT — INPUT */}
-          <div className="space-y-5">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">Your rough idea</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Type anything. We'll handle the structure, lighting, lens, and constraints.
-              </p>
-            </div>
-
-            <Textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="e.g. poster for data engineering meetup in SF next month"
-              className="min-h-[220px] resize-y bg-card border-border/60 text-base font-mono leading-relaxed focus-visible:ring-primary"
-            />
-            <p className="text-xs text-muted-foreground">
-              Press <kbd className="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">⌘ Enter</kbd> to generate
+          <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6 sm:p-8 shadow-md-card">
+            <p className="eyebrow">Step 01 · Input</p>
+            <h1 className="mt-3 text-heading-lg">Your rough idea</h1>
+            <p className="mt-2 text-body-md text-[color:var(--text-secondary)]">
+              Type anything. We’ll handle the structure, lighting, lens, and constraints.
             </p>
 
-            <div className="space-y-3">
+            <div className="mt-6 space-y-5">
               <div>
-                <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-2">
+                <label htmlFor="rough-idea" className="sr-only">Rough idea</label>
+                <Textarea
+                  id="rough-idea"
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="e.g. poster for data engineering meetup in SF next month"
+                  className="min-h-[220px] resize-y bg-[color:var(--bg)] border-[color:var(--border-default)] text-[15px] font-mono leading-[1.65] focus-visible:border-[color:var(--accent)] focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/15"
+                />
+                <p className="mt-2 text-mono-sm text-[color:var(--text-tertiary)]">
+                  Press{" "}
+                  <kbd className="px-1.5 py-0.5 rounded-sm bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[11px]">
+                    ⌘ Enter
+                  </kbd>{" "}
+                  to generate
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="category-select" className="block eyebrow mb-2">
                   Category
                 </label>
                 <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger className="bg-card border-border/60">
+                  <SelectTrigger id="category-select" className="bg-[color:var(--bg)] border-[color:var(--border-default)] h-10 rounded-md">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -249,18 +255,18 @@ function AppPage() {
               </div>
 
               <div>
-                <label className="block text-xs uppercase tracking-widest text-muted-foreground mb-2">
-                  Mode
-                </label>
+                <p className="eyebrow mb-2">Mode</p>
                 <div className="flex flex-wrap gap-2">
                   {MODES.map((m) => (
                     <button
                       key={m.value}
+                      type="button"
                       onClick={() => setMode(m.value)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${
+                      aria-pressed={mode === m.value}
+                      className={`px-3 py-1.5 rounded-full text-[12px] font-mono font-medium tracking-[0.06em] uppercase border transition-colors duration-150 ${
                         mode === m.value
-                          ? "bg-primary text-primary-foreground border-primary shadow-amber-glow"
-                          : "bg-card border-border/60 text-muted-foreground hover:text-foreground hover:border-border"
+                          ? "bg-[color:var(--accent)] text-[color:var(--accent-text)] border-[color:var(--accent)]"
+                          : "bg-[color:var(--bg-elevated)] border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:border-[color:var(--border-strong)]"
                       }`}
                     >
                       {m.label}
@@ -268,61 +274,66 @@ function AppPage() {
                   ))}
                 </div>
               </div>
-            </div>
 
-            <Button
-              onClick={() => generate()}
-              disabled={loading || streaming}
-              size="lg"
-              className="w-full bg-amber-gradient text-primary-foreground hover:opacity-90 shadow-amber-glow h-12 text-base gap-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Generating…
-                </>
-              ) : streaming ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Streaming…
-                </>
-              ) : (
-                <>
-                  <Wand2 className="h-4 w-4" />
-                  Generate Prompt
-                </>
-              )}
-            </Button>
-            <p className="text-xs text-center text-muted-foreground">
-              Powered by frontier reasoning models via Lovable AI
-            </p>
+              <Button
+                onClick={() => generate()}
+                disabled={loading || streaming}
+                size="lg"
+                className="w-full gap-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating…
+                  </>
+                ) : streaming ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Streaming…
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="h-4 w-4" />
+                    Generate prompt
+                  </>
+                )}
+              </Button>
+              <p className="text-center text-mono-sm text-[color:var(--text-tertiary)]">
+                Powered by Claude Sonnet 4.5 via Lovable AI
+              </p>
+            </div>
           </div>
 
           {/* RIGHT — OUTPUT */}
-          <div className="space-y-5">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold tracking-tight">Your polished prompt</h2>
+          <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6 sm:p-8 shadow-md-card">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="eyebrow">Step 02 · Output</p>
+                <h2 className="mt-3 text-heading-lg">Your polished prompt</h2>
+              </div>
               {result && (
-                <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                  {streaming ? "STREAMING" : result.category || "READY"}
+                <span className="pill" style={{ color: "var(--text-primary)" }}>
+                  {streaming ? "Streaming" : result.category || "Ready"}
                 </span>
               )}
             </div>
 
-            {!result && !loading && <EmptyState />}
-            {loading && !result && <LoadingState />}
-            {result && (
-              <ResultView
-                result={result}
-                streaming={streaming}
-                onCopy={() => {}}
-                onRegenerate={() => generate()}
-                onSave={savePrompt}
-                onVariantClick={generateVariant}
-                saving={saving}
-                isLoggedIn={!!user}
-              />
-            )}
+            <div className="mt-6">
+              {!result && !loading && <EmptyState />}
+              {loading && !result && <LoadingState />}
+              {result && (
+                <ResultView
+                  result={result}
+                  streaming={streaming}
+                  onCopy={() => {}}
+                  onRegenerate={() => generate()}
+                  onSave={savePrompt}
+                  onVariantClick={generateVariant}
+                  saving={saving}
+                  isLoggedIn={!!user}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -332,15 +343,15 @@ function AppPage() {
 
 function EmptyState() {
   return (
-    <div className="rounded-xl border border-dashed border-border bg-card/40 p-10 text-center">
-      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted/40">
-        <Sparkles className="h-5 w-5 text-muted-foreground" />
+    <div className="rounded-md border border-dashed border-[color:var(--border-default)] bg-[color:var(--bg-subtle)] p-10 text-center">
+      <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--bg-elevated)] border border-[color:var(--border-subtle)]">
+        <Sparkles className="h-4 w-4 text-[color:var(--text-tertiary)]" />
       </div>
-      <p className="text-sm text-muted-foreground">Output will appear here</p>
+      <p className="text-body-sm text-[color:var(--text-tertiary)]">Output will appear here</p>
       <div className="mt-6 space-y-2">
-        <div className="h-3 rounded bg-muted/30 animate-pulse" />
-        <div className="h-3 rounded bg-muted/30 w-5/6 mx-auto animate-pulse" />
-        <div className="h-3 rounded bg-muted/30 w-4/6 mx-auto animate-pulse" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)]" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)] w-5/6 mx-auto" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)] w-4/6 mx-auto" />
       </div>
     </div>
   );
@@ -348,16 +359,16 @@ function EmptyState() {
 
 function LoadingState() {
   return (
-    <div className="rounded-xl border border-border/60 bg-card p-6 shadow-soft">
-      <div className="flex items-center gap-3 text-sm text-muted-foreground">
-        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+    <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--code-bg)] p-6">
+      <div className="flex items-center gap-2.5 text-mono-sm text-[color:var(--text-secondary)]">
+        <Loader2 className="h-4 w-4 animate-spin" />
         Crafting your prompt…
       </div>
       <div className="mt-6 space-y-2">
-        <div className="h-3 rounded bg-muted/30 animate-pulse" />
-        <div className="h-3 rounded bg-muted/30 animate-pulse" />
-        <div className="h-3 rounded bg-muted/30 w-4/5 animate-pulse" />
-        <div className="h-3 rounded bg-muted/30 w-3/4 animate-pulse" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)] animate-pulse" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)] animate-pulse" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)] w-4/5 animate-pulse" />
+        <div className="h-2.5 rounded-sm bg-[color:var(--bg-elevated)] w-3/4 animate-pulse" />
       </div>
     </div>
   );
@@ -373,19 +384,20 @@ function CodeBlock({ text, streaming = false }: { text: string; streaming?: bool
   };
   return (
     <div className="relative group">
-      <pre className="rounded-xl bg-[var(--code-bg)] text-[var(--code-fg)] p-5 pr-14 text-sm font-mono leading-relaxed whitespace-pre-wrap overflow-x-auto border border-border/40 shadow-soft">
+      <pre className="rounded-lg bg-[color:var(--code-bg)] text-[color:var(--code-text)] px-6 py-5 pr-14 text-[14px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto border border-[color:var(--code-border)]">
         {text}
         {streaming && (
-          <span className="inline-block w-2 h-4 -mb-0.5 ml-0.5 bg-primary/80 animate-pulse align-middle" />
+          <span className="inline-block w-1.5 h-4 -mb-0.5 ml-0.5 bg-[color:var(--accent)] animate-pulse align-middle" />
         )}
       </pre>
       {!streaming && (
         <button
+          type="button"
           onClick={handleCopy}
-          className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-card/80 hover:bg-card border border-border/60 text-muted-foreground hover:text-foreground transition backdrop-blur"
-          aria-label="Copy"
+          className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors duration-150 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+          aria-label="Copy prompt"
         >
-          {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className="h-4 w-4 text-[color:var(--success)]" /> : <Copy className="h-4 w-4" />}
         </button>
       )}
     </div>
@@ -410,33 +422,32 @@ function ResultView({
   saving: boolean;
   isLoggedIn: boolean;
 }) {
-  // CRITIQUE mode rendering
   if (typeof result.score === "number") {
     return (
-      <div className="space-y-4">
-        <div className="rounded-xl border border-border/60 bg-card p-6 shadow-soft">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">Score</span>
-            <span className="text-4xl font-bold bg-amber-gradient bg-clip-text text-transparent">
-              {result.score}/10
+      <div className="space-y-5">
+        <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg)] p-6">
+          <div className="flex items-center justify-between mb-5">
+            <span className="eyebrow">Score</span>
+            <span className="text-display-md tabular-nums text-[color:var(--text-primary)]">
+              {result.score}<span className="text-[color:var(--text-tertiary)]">/10</span>
             </span>
           </div>
           {result.weaknesses && result.weaknesses.length > 0 && (
-            <div className="mb-4">
-              <h4 className="text-sm font-semibold mb-2">Weaknesses</h4>
-              <ul className="space-y-1.5 text-sm text-muted-foreground">
+            <div className="mb-5">
+              <h4 className="text-heading-sm mb-2">Weaknesses</h4>
+              <ul className="space-y-1.5 text-body-sm text-[color:var(--text-secondary)]">
                 {result.weaknesses.map((w, i) => (
-                  <li key={i} className="flex gap-2"><span className="text-destructive">•</span>{w}</li>
+                  <li key={i} className="flex gap-2"><span className="text-[color:var(--error)]">·</span>{w}</li>
                 ))}
               </ul>
             </div>
           )}
           {result.improvements && result.improvements.length > 0 && (
             <div>
-              <h4 className="text-sm font-semibold mb-2">Improvements</h4>
-              <ul className="space-y-1.5 text-sm text-muted-foreground">
+              <h4 className="text-heading-sm mb-2">Improvements</h4>
+              <ul className="space-y-1.5 text-body-sm text-[color:var(--text-secondary)]">
                 {result.improvements.map((w, i) => (
-                  <li key={i} className="flex gap-2"><span className="text-success">→</span>{w}</li>
+                  <li key={i} className="flex gap-2"><span className="text-[color:var(--success)]">→</span>{w}</li>
                 ))}
               </ul>
             </div>
@@ -447,16 +458,15 @@ function ResultView({
     );
   }
 
-  // BATCH mode
   if (result.prompts && result.prompts.length > 0) {
     const labels = ["Safe", "Stylized", "Experimental"];
     return (
-      <div className="space-y-4">
+      <div className="space-y-5">
         {result.prompts.map((p, i) => {
           const isLast = i === result.prompts!.length - 1;
           return (
             <div key={i} className="space-y-2">
-              <div className="text-xs uppercase tracking-widest text-primary font-semibold">
+              <div className="font-mono text-[12px] tracking-[0.08em] uppercase text-[color:var(--text-tertiary)] font-medium">
                 {labels[i] || `Variant ${i + 1}`}
               </div>
               <CodeBlock text={p} streaming={streaming && isLast} />
@@ -471,9 +481,8 @@ function ResultView({
     );
   }
 
-  // Default / JSON mode
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {result.prompt && <CodeBlock text={result.prompt} streaming={streaming} />}
       {(result.size || result.quality || result.aspect_ratio) && (
         <div className="flex flex-wrap gap-2">
@@ -484,17 +493,18 @@ function ResultView({
       )}
       {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
       {result.variants && result.variants.length > 0 && (
-        <div className="rounded-xl border border-border/60 bg-card/60 p-5 shadow-soft">
-          <div className="flex items-center gap-2 text-sm font-semibold mb-3">
-            <Lightbulb className="h-4 w-4 text-primary" />
+        <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg)] p-5">
+          <div className="flex items-center gap-2 text-body-sm font-semibold mb-3 text-[color:var(--text-primary)]">
+            <Lightbulb className="h-4 w-4" />
             Try variants
           </div>
           <div className="space-y-2">
             {result.variants.map((v, i) => (
               <button
                 key={i}
+                type="button"
                 onClick={() => onVariantClick(v)}
-                className="w-full text-left text-sm p-3 rounded-lg bg-background/50 border border-border/40 hover:border-primary/40 hover:bg-background transition"
+                className="w-full text-left text-body-sm p-3 rounded-md bg-[color:var(--bg-elevated)] border border-[color:var(--border-subtle)] hover:border-[color:var(--border-strong)] transition-colors duration-150 text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
               >
                 {v}
               </button>
@@ -511,20 +521,18 @@ function ResultView({
 
 function WhyItWorks({ text }: { text: string }) {
   return (
-    <div className="rounded-xl border border-border/40 bg-muted/20 p-5">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-semibold">
-        Why this works
-      </div>
-      <p className="text-sm leading-relaxed text-foreground/90">{text}</p>
+    <div className="rounded-lg border-l-2 border-[color:var(--accent)] bg-[color:var(--bg-subtle)] px-5 py-4">
+      <div className="eyebrow mb-2">Why this works</div>
+      <p className="text-body-md italic leading-relaxed text-[color:var(--text-secondary)]">{text}</p>
     </div>
   );
 }
 
 function Tag({ label, value }: { label: string; value: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/40 px-2.5 py-1 text-xs font-mono">
-      <span className="text-muted-foreground">{label}:</span>
-      <span className="text-foreground">{value}</span>
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--border-subtle)] bg-[color:var(--bg-subtle)] px-2.5 py-1 text-[12px] font-mono font-medium">
+      <span className="text-[color:var(--text-tertiary)] uppercase tracking-[0.06em]">{label}</span>
+      <span className="text-[color:var(--text-primary)]">{value}</span>
     </span>
   );
 }
@@ -551,7 +559,7 @@ function ActionRow({
         Regenerate
       </Button>
       {!isLoggedIn && (
-        <Link to="/login" className="text-xs text-muted-foreground hover:text-foreground ml-auto">
+        <Link to="/login" className="text-mono-sm text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] ml-auto">
           Sign in to save →
         </Link>
       )}
