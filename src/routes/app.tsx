@@ -47,6 +47,7 @@ function AppPage() {
   const [category, setCategory] = useState<string>("auto");
   const [mode, setMode] = useState<ModeValue>("default");
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [result, setResult] = useState<PromptResult | null>(null);
   const [saving, setSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -58,24 +59,87 @@ function AppPage() {
       return;
     }
     setLoading(true);
+    setStreaming(false);
     setResult(null);
     try {
       const res = await fetch("/api/generate-prompt", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
         body: JSON.stringify({ userInput, category, mode }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data?.error || "Failed to generate");
+
+      if (!res.ok || !res.body) {
+        let msg = "Failed to generate";
+        try {
+          const data = await res.json();
+          msg = data?.error || msg;
+        } catch {}
+        toast.error(msg);
         return;
       }
-      setResult(data);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let currentEvent = "";
+      let gotFirst = false;
+
+      const applyPartial = (args: string) => {
+        const partial: PromptResult = {};
+        const p = extractPartialString(args, "prompt");
+        if (p) partial.prompt = p;
+        const arr = extractPartialStringArray(args, "prompts");
+        if (arr && arr.length) partial.prompts = arr;
+        const cat = extractPartialString(args, "category");
+        if (cat) partial.category = cat;
+        const why = extractPartialString(args, "why_it_works");
+        if (why) partial.why_it_works = why;
+        setResult(partial);
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let nl: number;
+        while ((nl = buffer.indexOf("\n")) !== -1) {
+          const line = buffer.slice(0, nl);
+          buffer = buffer.slice(nl + 1);
+          if (line.startsWith("event:")) {
+            currentEvent = line.slice(6).trim();
+          } else if (line.startsWith("data:")) {
+            const payload = line.slice(5).trim();
+            if (!payload) continue;
+            try {
+              const json = JSON.parse(payload);
+              if (currentEvent === "delta" && typeof json.args === "string") {
+                if (!gotFirst) {
+                  gotFirst = true;
+                  setLoading(false);
+                  setStreaming(true);
+                }
+                applyPartial(json.args);
+              } else if (currentEvent === "done") {
+                setResult(json as PromptResult);
+                setStreaming(false);
+              } else if (currentEvent === "error") {
+                toast.error(json?.error || "Generation failed");
+                setStreaming(false);
+              }
+            } catch {
+              // ignore
+            }
+          } else if (line === "") {
+            currentEvent = "";
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
       toast.error("Network error. Try again.");
     } finally {
       setLoading(false);
+      setStreaming(false);
     }
   };
 
