@@ -66,6 +66,15 @@ If user provides a "Category hint" other than "auto" in their message, USE THAT 
 
 Otherwise, route by the FIRST matching rule below. Cinematic is the FALLBACK, never the default.
 
+RULE 0 — CINEMATIC OVERRIDE (checked FIRST, before any other rule except IMAGE EDIT):
+If the input contains ANY of these literal phrases (case-insensitive): "cinematic shot of," "cinematic still of," "cinematic photo of," "cinematic image of," "cinematic portrait of," "movie scene of," "movie still of," "film still of," "film scene of," "cinematic framing," "cinematic lighting," "cinematic composition," or starts with the word "cinematic" followed by any noun
+→ Classify as CHARACTER SHEET / CINEMATIC SCENE. STOP. Do not evaluate any further rules.
+This is an absolute override. The user's explicit "cinematic" signal ALWAYS wins, regardless of subject matter (wedding, food, interior, fashion, architecture, character, abstract, etc.). Examples that MUST route to CINEMATIC:
+- "cinematic shot of a wedding" → CINEMATIC (not INTERIOR/FASHION)
+- "cinematic shot of a man eating noodles" → CINEMATIC (not FOOD)
+- "cinematic still of a kitchen" → CINEMATIC (not INTERIOR)
+- "cinematic photo of a dress" → CINEMATIC (not FASHION)
+
 RULE 1 — IMAGE EDIT (highest priority because misclassifying an edit as a new generation is the worst failure):
 If input contains any of: "edit," "change the background," "remove," "replace," "swap," "restyle," "outfit swap," "object removal," "background swap," "modify my [photo/image/picture]," "in my photo," "in my image," "from my picture," "based on the attached," "based on my image"
 → Classify as IMAGE EDIT.
