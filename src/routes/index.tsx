@@ -93,15 +93,15 @@ function LandingPage() {
             <h2 className="mt-4 text-display-md">Convergent techniques, one tool.</h2>
             <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
               We analyzed 200+ prompts from the top of X, GitHub, and the OpenAI cookbook. The
-              patterns that actually shipped — distilled into eight category templates.
+              patterns that actually shipped — distilled into ten category templates.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <FeatureCard
               tag="01 · CATEGORIES"
-              title="Eight templates"
-              body="Posters, UI mockups, cinematic scenes, infographics, edits — each gets its own structural template."
+              title="Ten templates"
+              body="Posters, UI mockups, cinematic scenes, multi-panel storyboards, abstract & surreal mood pieces, image edits — each gets its own structural template."
             />
             <FeatureCard
               tag="02 · GUARDRAILS"
