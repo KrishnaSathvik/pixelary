@@ -76,7 +76,7 @@ function NavLink({
   exact?: boolean;
   params?: Record<string, string | undefined>;
 }) {
-  const linkProps = { to, params } as never;
+  const linkProps = { to, params } as unknown as Record<string, unknown>;
   return (
     <Link
       {...linkProps}
