@@ -539,14 +539,37 @@ function ActionRow({
   onSave,
   saving,
   isLoggedIn,
+  promptText,
 }: {
   onRegenerate: () => void;
   onSave: () => void;
   saving: boolean;
   isLoggedIn: boolean;
+  promptText?: string;
 }) {
+  const handleOpenInImago = async () => {
+    if (!promptText) return;
+    try {
+      await navigator.clipboard.writeText(promptText);
+      toast.success("Prompt copied — paste into Imago with ⌘V / Ctrl+V");
+    } catch {
+      toast.error("Couldn't copy automatically — copy manually before pasting");
+    }
+    window.open(
+      "https://chatgpt.com/g/g-69e7de729cb48191a6aa83ec3af8a6cb-imago",
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
   return (
     <div className="flex flex-wrap items-center gap-2 pt-2">
+      {promptText && (
+        <Button onClick={handleOpenInImago} size="sm" className="gap-2">
+          <ExternalLink className="h-3.5 w-3.5" />
+          Open in Imago
+        </Button>
+      )}
       <Button onClick={onSave} disabled={saving} variant="outline" size="sm" className="gap-2">
         {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
         Save to library
