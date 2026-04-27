@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "AI-powered prompt generator built on the convergent techniques used by the top 1% of prompt engineers. Works with ChatGPT, OpenAI API, fal.ai.",
+          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs. Ten category templates for ChatGPT, the OpenAI API, and fal.ai.",
       },
     ],
   }),
