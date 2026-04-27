@@ -17,7 +17,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 
+interface AppSearch {
+  seed?: string;
+}
+
 export const Route = createFileRoute("/app")({
+  validateSearch: (search: Record<string, unknown>): AppSearch => {
+    const seed = search.seed;
+    return {
+      seed: typeof seed === "string" && seed.length > 0 && seed.length <= 4000 ? seed : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Generator — Promptcraft" },
