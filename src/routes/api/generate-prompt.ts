@@ -122,10 +122,26 @@ export const Route = createFileRoute("/api/generate-prompt")({
 
           const stream = new ReadableStream({
             async start(controller) {
+              let closed = false;
+              const safeClose = () => {
+                if (closed) return;
+                closed = true;
+                try {
+                  controller.close();
+                } catch {
+                  /* already closed */
+                }
+              };
               const send = (event: string, data: unknown) => {
-                controller.enqueue(
-                  encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
-                );
+                if (closed) return;
+                try {
+                  controller.enqueue(
+                    encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+                  );
+                } catch {
+                  // Client disconnected mid-stream — stop trying.
+                  closed = true;
+                }
               };
 
               const reader = upstream.getReader();
@@ -133,7 +149,7 @@ export const Route = createFileRoute("/api/generate-prompt")({
               let assembled = "";
 
               try {
-                while (true) {
+                while (!closed) {
                   const { done, value } = await reader.read();
                   if (done) break;
                   buffer += decoder.decode(value, { stream: true });
@@ -161,25 +177,36 @@ export const Route = createFileRoute("/api/generate-prompt")({
                   }
                 }
 
+                if (closed) return;
+
                 // Final parse
                 let finalResult: unknown = null;
                 try {
                   finalResult = JSON.parse(assembled);
-                } catch (e) {
+                } catch {
                   console.error("Failed to parse final tool args:", assembled);
                   send("error", { error: "Invalid AI response format" });
-                  controller.close();
+                  safeClose();
                   return;
                 }
                 send("done", finalResult);
-                controller.close();
+                safeClose();
               } catch (err) {
                 console.error("stream error:", err);
                 send("error", {
                   error: err instanceof Error ? err.message : "Stream error",
                 });
-                controller.close();
+                safeClose();
+              } finally {
+                try {
+                  reader.releaseLock();
+                } catch {
+                  /* noop */
+                }
               }
+            },
+            cancel() {
+              // Client disconnected — nothing to do, the start() loop checks `closed`.
             },
           });
 
