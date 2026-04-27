@@ -51,7 +51,6 @@ export const Route = createFileRoute("/api/generate-prompt")({
             .filter(Boolean)
             .join("\n\n");
 
-          // Tool schema for structured output
           const tools = [
             {
               type: "function",
@@ -96,45 +95,103 @@ export const Route = createFileRoute("/api/generate-prompt")({
               ],
               tools,
               tool_choice: { type: "function", function: { name: "deliver_prompt" } },
+              stream: true,
             }),
           });
 
-          if (!aiResponse.ok) {
-            const errText = await aiResponse.text();
+          if (!aiResponse.ok || !aiResponse.body) {
+            const errText = await aiResponse.text().catch(() => "");
             console.error("AI gateway error:", aiResponse.status, errText);
-            if (aiResponse.status === 429) {
-              return new Response(
-                JSON.stringify({ error: "Rate limit reached. Please wait a moment and try again." }),
-                { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } }
-              );
-            }
-            if (aiResponse.status === 402) {
-              return new Response(
-                JSON.stringify({ error: "AI credits exhausted. Please add credits in workspace settings." }),
-                { status: 402, headers: { "Content-Type": "application/json", ...corsHeaders } }
-              );
-            }
-            return new Response(JSON.stringify({ error: "AI service error" }), {
-              status: 500,
+            const status = aiResponse.status;
+            const message =
+              status === 429
+                ? "Rate limit reached. Please wait a moment and try again."
+                : status === 402
+                ? "AI credits exhausted. Please add credits in workspace settings."
+                : "AI service error";
+            return new Response(JSON.stringify({ error: message }), {
+              status: status === 429 || status === 402 ? status : 500,
               headers: { "Content-Type": "application/json", ...corsHeaders },
             });
           }
 
-          const data = await aiResponse.json();
-          const toolCall = data?.choices?.[0]?.message?.tool_calls?.[0];
-          if (!toolCall?.function?.arguments) {
-            console.error("No tool call in response:", JSON.stringify(data));
-            return new Response(JSON.stringify({ error: "Invalid AI response format" }), {
-              status: 500,
-              headers: { "Content-Type": "application/json", ...corsHeaders },
-            });
-          }
+          // Stream SSE: forward incremental tool-call argument deltas to the client.
+          const upstream = aiResponse.body;
+          const encoder = new TextEncoder();
+          const decoder = new TextDecoder();
 
-          const result = JSON.parse(toolCall.function.arguments);
+          const stream = new ReadableStream({
+            async start(controller) {
+              const send = (event: string, data: unknown) => {
+                controller.enqueue(
+                  encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+                );
+              };
 
-          return new Response(JSON.stringify(result), {
+              const reader = upstream.getReader();
+              let buffer = "";
+              let assembled = "";
+
+              try {
+                while (true) {
+                  const { done, value } = await reader.read();
+                  if (done) break;
+                  buffer += decoder.decode(value, { stream: true });
+
+                  // Process complete SSE lines
+                  let nlIndex: number;
+                  while ((nlIndex = buffer.indexOf("\n")) !== -1) {
+                    const line = buffer.slice(0, nlIndex).trim();
+                    buffer = buffer.slice(nlIndex + 1);
+                    if (!line.startsWith("data:")) continue;
+                    const payload = line.slice(5).trim();
+                    if (payload === "[DONE]") continue;
+                    try {
+                      const json = JSON.parse(payload);
+                      const delta = json?.choices?.[0]?.delta;
+                      const argDelta =
+                        delta?.tool_calls?.[0]?.function?.arguments ?? "";
+                      if (argDelta) {
+                        assembled += argDelta;
+                        send("delta", { args: assembled });
+                      }
+                    } catch {
+                      // ignore non-JSON keepalives
+                    }
+                  }
+                }
+
+                // Final parse
+                let finalResult: unknown = null;
+                try {
+                  finalResult = JSON.parse(assembled);
+                } catch (e) {
+                  console.error("Failed to parse final tool args:", assembled);
+                  send("error", { error: "Invalid AI response format" });
+                  controller.close();
+                  return;
+                }
+                send("done", finalResult);
+                controller.close();
+              } catch (err) {
+                console.error("stream error:", err);
+                send("error", {
+                  error: err instanceof Error ? err.message : "Stream error",
+                });
+                controller.close();
+              }
+            },
+          });
+
+          return new Response(stream, {
             status: 200,
-            headers: { "Content-Type": "application/json", ...corsHeaders },
+            headers: {
+              "Content-Type": "text/event-stream",
+              "Cache-Control": "no-cache, no-transform",
+              Connection: "keep-alive",
+              "X-Accel-Buffering": "no",
+              ...corsHeaders,
+            },
           });
         } catch (err) {
           console.error("generate-prompt error:", err);
