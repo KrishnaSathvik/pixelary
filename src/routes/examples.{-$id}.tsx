@@ -238,6 +238,7 @@ function ExampleDrawerContent({ example }: { example: Example }) {
           {example.category}
         </span>
         <DialogTitle className="sr-only">Example: {example.user_input}</DialogTitle>
+        <DialogDescription className="sr-only">Full prompt and details for this example.</DialogDescription>
       </DialogHeader>
 
       <div className="px-8 py-8 space-y-8">
