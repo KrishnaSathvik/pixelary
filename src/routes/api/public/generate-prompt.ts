@@ -43,10 +43,33 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             });
           }
 
+          // Deterministic CINEMATIC OVERRIDE: when the user explicitly types
+          // "cinematic shot/still/photo/...," "movie still," or "film still/scene/frame,"
+          // force the category to CINEMATIC SCENE in code so the model can't
+          // override it via subject-domain inference (e.g. "cinematic shot of
+          // a wedding" must NOT route to INTERIOR/FASHION).
+          const CINEMATIC_TRIGGERS = [
+            /\bcinematic\s+(shot|still|photo|image|portrait|frame|framing|lighting|composition)\b/i,
+            /\bmovie\s+(scene|still|frame)\b/i,
+            /\bfilm\s+(still|scene|frame)\b/i,
+          ];
+          const userIdea = userInput.trim();
+          const cinematicForced =
+            (!category || category === "auto") &&
+            CINEMATIC_TRIGGERS.some((re) => re.test(userIdea));
+          const effectiveCategory = cinematicForced
+            ? "CHARACTER SHEET / CINEMATIC SCENE"
+            : category && category !== "auto"
+            ? category
+            : null;
+
           const userMessage = [
-            category && category !== "auto" ? `Category hint: ${category}` : null,
+            effectiveCategory ? `Category hint: ${effectiveCategory}` : null,
+            cinematicForced
+              ? `LOCKED CATEGORY: The user explicitly requested cinematic framing. Use the CHARACTER SHEET / CINEMATIC SCENE template. Do NOT route to INTERIOR/ARCH/FOOD/FASHION even if the subject is a wedding, kitchen, food, dress, or building.`
+              : null,
             `Mode: ${mode}`,
-            `User idea: ${userInput.trim()}`,
+            `User idea: ${userIdea}`,
           ]
             .filter(Boolean)
             .join("\n\n");
