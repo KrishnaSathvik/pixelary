@@ -39,14 +39,20 @@ export function Header() {
             to="/examples/{-$id}"
             params={{ id: undefined }}
             className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            activeProps={{ className: "px-3 py-2 text-sm text-foreground font-medium border-b-2 border-primary -mb-[2px]" }}
+            activeProps={{ className: "px-3 py-2 text-sm text-foreground font-medium" }}
           >
             Examples
           </Link>
           <Link
-            to="/app"
+            to="/blog"
             className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             activeProps={{ className: "px-3 py-2 text-sm text-foreground font-medium" }}
+          >
+            Blog
+          </Link>
+          <Link
+            to="/app"
+            className="px-3 py-2 text-sm text-primary-foreground bg-amber-gradient rounded-md font-medium hover:opacity-90 ml-1"
           >
             Generate
           </Link>
