@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as AppRouteImport } from './routes/app'
@@ -19,9 +21,19 @@ import { Route as ExamplesChar123IdChar125RouteImport } from './routes/examples.
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiGeneratePromptRouteImport } from './routes/api/generate-prompt'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -71,7 +83,9 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
@@ -82,7 +96,9 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
@@ -94,7 +110,9 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/signup': typeof SignupRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/generate-prompt': typeof ApiGeneratePromptRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
@@ -107,7 +125,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/library'
     | '/login'
+    | '/robots.txt'
     | '/signup'
+    | '/sitemap.xml'
     | '/api/generate-prompt'
     | '/blog/$slug'
     | '/examples/{-$id}'
@@ -118,7 +138,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/library'
     | '/login'
+    | '/robots.txt'
     | '/signup'
+    | '/sitemap.xml'
     | '/api/generate-prompt'
     | '/blog/$slug'
     | '/examples/{-$id}'
@@ -129,7 +151,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/library'
     | '/login'
+    | '/robots.txt'
     | '/signup'
+    | '/sitemap.xml'
     | '/api/generate-prompt'
     | '/blog/$slug'
     | '/examples/{-$id}'
@@ -141,7 +165,9 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SignupRoute: typeof SignupRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiGeneratePromptRoute: typeof ApiGeneratePromptRoute
   BlogSlugRoute: typeof BlogSlugRoute
   ExamplesChar123IdChar125Route: typeof ExamplesChar123IdChar125Route
@@ -150,11 +176,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -221,7 +261,9 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SignupRoute: SignupRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiGeneratePromptRoute: ApiGeneratePromptRoute,
   BlogSlugRoute: BlogSlugRoute,
   ExamplesChar123IdChar125Route: ExamplesChar123IdChar125Route,
@@ -230,3 +272,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
