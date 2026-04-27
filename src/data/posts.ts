@@ -22,88 +22,94 @@ export const posts: Post[] = [
     read_time: "8 min",
     published: "2026-04-25",
     excerpt:
-      "OpenAI's GPT Image 2 launched April 21, 2026 — and most online prompt examples are already outdated. Here are 12 production-grade prompts across the 8 categories that matter, with explanations of why each one works.",
-    seo_title: "GPT Image 2 Prompt Examples: 12 Templates That Actually Work in 2026",
+      "OpenAI's GPT Image 2 launched on April 21, 2026 with reasoning-powered generation and dramatically improved text rendering. Here are 12 production-grade prompts across the categories that matter, with explanations of why each one works.",
+    seo_title: "GPT Image 2 Prompt Examples: 12 Production Templates (2026)",
     seo_description:
       "Production-grade prompt examples for OpenAI's GPT Image 2 across 8 categories: posters, infographics, UI mockups, cinematic scenes, image edits, and more.",
     content: `
-## Why most GPT Image 2 prompts you'll find online are wrong
+## What's actually new with GPT Image 2
 
-GPT Image 2 launched on April 21, 2026 — barely days ago. Most prompt guides circulating online were written for GPT Image 1.5, DALL-E 3, or Midjourney. The techniques don't fully transfer.
+OpenAI launched GPT Image 2 (also branded as ChatGPT Images 2.0) on April 21, 2026. It's the third generation of OpenAI's image models, following GPT Image 1 (April 2025) and GPT Image 1.5 (December 2025).
 
-GPT Image 2 has reasoning. It handles 7-8 stacked constraints. It renders text reliably across Latin and CJK scripts. None of that was true for the previous generation. The prompts that worked then look amateur now.
+The two genuinely new capabilities are:
 
-This article gives you 12 prompts that actually work — battle-tested across the 8 categories most creators care about. Each one shows the rough idea, the polished prompt, and why it works.
+1. **Built-in reasoning before generation.** This is the first OpenAI image model to integrate O-series reasoning into the image pipeline. Before generating, the model analyzes the prompt, plans the composition, and reasons about constraints — which is why it handles complex layered prompts (UI mockups, multi-element layouts, scenes with text) much better than its predecessors.
 
-## The 6-layer formula
+2. **Multilingual text rendering at production quality.** Text inside images now renders accurately across Latin, Chinese, Japanese, Korean, Hindi, Bengali, and Arabic scripts. Independent reviews put accuracy above 95% on first-generation attempts. Mixed-script layouts (Japanese poster with English brand name, etc.) actually work now — they didn't in any previous model.
 
-Every prompt below uses the same underlying structure:
+The model is available in ChatGPT, Codex, and the API. Pricing on the API is $5 per million text input tokens, $8 per million image input tokens, and $30 per million image output tokens — which works out to roughly $0.006 to $0.21 per generated image depending on quality and resolution. (Source: OpenAI pricing page, April 2026.)
+
+This article gives you 12 prompts that work well with GPT Image 2's reasoning model — battle-tested across the categories most creators care about.
+
+## The structural pattern these prompts follow
+
+Every prompt below shares the same underlying structure:
 
 [Subject + specifics] + [Action] + [Environment + cultural anchor] + [Composition] + [Lighting] + [Style/medium]
 
-For photoreal, add camera body, lens, aperture. For text in images, wrap the copy in quotes and specify font/weight/color/placement. For edits, use the CHANGE / PRESERVE / MATCH structure.
+For photoreal: add camera body, lens, aperture. For text in images, wrap the copy in quotes and specify font/weight/color/placement. For edits, use the CHANGE / PRESERVE / MATCH structure.
 
-Now the examples.
+This is a synthesis of patterns we've seen work across hundreds of prompts — not an industry standard, but a useful framework for thinking about what's missing in any given prompt.
 
 ## 1. Event poster
 
-**Rough idea:** "poster for a data engineering meetup in sf next month"
+**Rough idea:** "poster for a tech conference"
 
 **Polished prompt:**
 
 \`\`\`
-Minimalist event poster, 2:3 portrait. Headline "DATA NIGHT" in bold condensed sans-serif, ALL CAPS, off-white, upper third. Subtitle "SF • DEC 12 • 2026" in thin sans-serif below, same color, letter-spacing 0.2em. Visual: single thin amber line arcing across the lower third. Background: deep navy (#0F1A2E). Generous negative space, Swiss design aesthetic. Verbatim text — no extra characters, no duplicate text, no text artifacts.
+Minimalist event poster, 2:3 portrait. Headline "FUTURE STACK" in bold condensed sans-serif, ALL CAPS, off-white, upper third. Subtitle "MARCH 14 — 16 • 2026" in thin sans-serif below, same color, letter-spacing 0.2em. Visual: single thin line arcing across the lower third connecting two small filled circles. Background: deep charcoal (#1A1A1A). Generous negative space, Swiss design aesthetic. Verbatim text — no extra characters, no duplicate text, no text artifacts.
 \`\`\`
 
 **Why it works:** All text is in quotes with placement, weight, and color locked. The hex code prevents palette drift. "Swiss design aesthetic" handles composition without needing more rules.
 
 ## 2. Process flow infographic
 
-**Rough idea:** "infographic showing how data flows in medallion architecture"
+**Rough idea:** "infographic showing a 4-stage workflow"
 
 **Polished prompt:**
 
 \`\`\`
-Horizontal 4-stage pipeline diagram, 16:9 landscape, white background. Four rounded rectangles equally spaced left to right with metallic gradient fills: stage 1 "BRONZE", stage 2 "SILVER", stage 3 "GOLD", stage 4 "PLATINUM". Above each rectangle: an isometric line icon. Beneath each: a 2-word descriptor in dark navy sans-serif. Thin arrows between stages. Header at top: "Medallion Architecture" in bold sans-serif, navy.
+Horizontal 4-stage pipeline diagram, 16:9 landscape, white background. Four rounded rectangles equally spaced left to right, each labeled in bold sans-serif: "PLAN", "BUILD", "TEST", "SHIP". Above each rectangle: a simple isometric line icon. Beneath each: a 2-word descriptor in dark gray sans-serif. Thin arrows between stages. Header at top: "Project Workflow" in bold sans-serif, dark navy.
 \`\`\`
 
 **Why it works:** Layout topology is stated upfront. Each stage has explicit fill, label, and icon. Connectors specified. The model handles the rest.
 
 ## 3. Web dashboard mockup
 
-**Rough idea:** "dashboard mockup for a parks travel website"
+**Rough idea:** "dashboard mockup for a SaaS analytics product"
 
 **Polished prompt:**
 
 \`\`\`
-MacBook Pro 14" screen mockup at 16:10 aspect, dark theme. App is "TrailVerse" analytics dashboard. Top nav: logo "TrailVerse" left, tabs "Parks · Articles · Affiliates" center, profile avatar right. Main: 4 KPI cards showing "12.4K Visitors", "847 Signups", "$2,341 Revenue", "62% Engagement" with amber sparklines. Below: line chart "Traffic — Last 30 Days". Right sidebar: "Top 5 Articles" list. Background: deep navy (#0F1729). Accent: amber (#F59E0B). shadcn/ui aesthetic.
+MacBook Pro 14" screen mockup at 16:10 aspect, dark theme. Generic SaaS analytics dashboard. Top nav: logo placeholder left, tabs "Overview · Reports · Users · Settings" center, profile avatar right. Main: 4 KPI cards showing "12.4K Active Users", "847 New Signups", "$2,341 MRR", "62% Engagement" with cyan sparklines. Below: line chart "Activity — Last 30 Days". Right sidebar: "Top 5 Channels" list. Background: deep navy (#0F1729). Accent: cyan (#06B6D4). shadcn/ui aesthetic.
 \`\`\`
 
 **Why it works:** Specific device frame, specific component layout, specific data. The shadcn reference handles styling without you having to describe every spacing decision.
 
 ## 4. LinkedIn carousel slide
 
-**Rough idea:** "slide about h1b job search realities"
+**Rough idea:** "slide with a stat about productivity"
 
 **Polished prompt:**
 
 \`\`\`
-LinkedIn carousel slide, 4:5 portrait, off-white background (#F7F3EC). Massive headline filling the upper two-thirds: "73% of H-1B holders apply to over 200 jobs." in bold condensed sans-serif, dark navy, left-aligned. Beneath, on a single line: "before getting one offer." in thin italic serif, same navy. Lower-left corner: small attribution "Slide 1 of 7" in tiny gray sans-serif.
+LinkedIn carousel slide, 4:5 portrait, off-white background (#F7F3EC). Massive headline filling the upper two-thirds: "Workers spend 21.8 hours per week in meetings." in bold condensed sans-serif, dark navy, left-aligned. Beneath, on a single line: "Most of them are unnecessary." in thin italic serif, same navy. Lower-left corner: small text "Slide 1 of 7" in tiny gray sans-serif.
 \`\`\`
 
 **Why it works:** The stat-as-hook follows what actually performs on LinkedIn. Two-tier typography (bold + italic serif) creates rhythm. Negative space gives the eye room.
 
 ## 5. Cinematic still
 
-**Rough idea:** "cinematic shot of an indian wedding"
+**Rough idea:** "cinematic shot of a wedding"
 
 **Polished prompt:**
 
 \`\`\`
-Cinematic still, 2.39:1 anamorphic. Bride in deep crimson silk lehenga with gold embroidery sits on a low wooden swing in a courtyard at dusk, hands resting in her lap, looking off-frame to the right. Background: blurred warm string lights, marigold garlands. Shot at 50mm, f/1.8, eye-level, medium close-up. Lighting: warm tungsten string lights from above-right creating soft rim, ambient blue-hour fill. Color grade: teal-orange, slightly desaturated. Kodak Portra 400 grain. Mood: contemplative, intimate.
+Cinematic still, 2.39:1 anamorphic. Bride in flowing ivory dress sits on a low garden bench in a courtyard at dusk, hands resting in her lap, looking off-frame to the right. Background: blurred warm string lights, scattered flowers. Shot at 50mm, f/1.8, eye-level, medium close-up. Lighting: warm tungsten string lights from above-right creating soft rim, ambient blue-hour fill. Color grade: teal-orange, slightly desaturated. Kodak Portra 400 grain. Mood: contemplative, intimate.
 \`\`\`
 
-**Why it works:** Pose, gaze direction, and clothing are specific. 50mm + f/1.8 locks the cinematic feel. Two named light sources prevent flat lighting. The Kodak Portra reference handles color science in two words.
+**Why it works:** Pose, gaze direction, and clothing are specific. 50mm + f/1.8 locks the cinematic feel. Two named light sources prevent flat lighting.
 
 ## 6. Interior photograph
 
@@ -112,31 +118,31 @@ Cinematic still, 2.39:1 anamorphic. Bride in deep crimson silk lehenga with gold
 **Polished prompt:**
 
 \`\`\`
-Interior photograph, 4:5 portrait. Reading nook built into a bay window of a 1920s craftsman home. Window seat with deep cushion in oatmeal linen, two earth-tone pillows. Built-in bookshelves on both sides, stained dark walnut. Single brass swing-arm reading lamp mounted left, switched on. A worn leather-bound book lies open face-down on the cushion. Soft north-facing morning light streaming through the window, sheer linen curtains diffusing it, dust motes visible. Shot at 35mm, f/4. Architectural digest editorial style. No people.
+Interior photograph, 4:5 portrait. Reading nook built into a bay window. Window seat with deep cushion in oatmeal linen, two earth-tone pillows. Built-in bookshelves on both sides, dark wood. Single brass swing-arm reading lamp mounted left. Worn leather-bound book lies open face-down on cushion. Soft north-facing morning light through window, sheer linen curtains diffusing it. Shot at 35mm, f/4. Architectural digest editorial style. No people.
 \`\`\`
 
-**Why it works:** "1920s craftsman" triggers world knowledge for the architecture. Specific materials throughout. Light source named with quality. The worn book detail makes it feel lived-in.
+**Why it works:** Specific materials throughout. Light source named with quality. The worn book detail makes it feel lived-in.
 
 ## 7. Food photography
 
-**Rough idea:** "south indian breakfast"
+**Rough idea:** "breakfast spread"
 
 **Polished prompt:**
 
 \`\`\`
-Overhead flat-lay food photograph, 1:1 square, 90-degree top-down angle. South indian breakfast on a polished banana leaf over a dark wooden table. Center: crisp golden dosa folded in half. Around it in small steel cups (dabara): white coconut chutney, brick-red tomato chutney, yellow sambar. Top-right: plate of two soft round idlis. Bottom-left: steel tumbler of filter coffee with steam wisps. Scattered curry leaves and halved lime as styling. Soft window light from upper-left. Shot at 50mm, f/5.6. Editorial food photography, slightly rustic.
+Overhead flat-lay food photograph, 1:1 square, 90-degree top-down angle. Breakfast spread on a wooden table. Center: stack of fluffy pancakes with maple syrup, butter melting on top. Around it: crispy bacon, scrambled eggs, mixed berries, glass of orange juice, ceramic mug of black coffee with steam wisps. Scattered mint leaves and halved orange as styling. Soft window light from upper-left. Shot at 50mm, f/5.6. Editorial food photography, slightly rustic.
 \`\`\`
 
-**Why it works:** Cuisine and meal context anchor everything. Authentic serving vessels (banana leaf, steel dabara) force regional accuracy. Light direction is named.
+**Why it works:** Universal breakfast items recognizable across cultures. Specific positioning. Light direction named.
 
 ## 8. Background swap edit
 
-**Rough idea:** "change my photo's background to rainy tokyo at night"
+**Rough idea:** "change my photo's background to a rainy city at night"
 
 **Polished prompt:**
 
 \`\`\`
-CHANGE: Replace the background with a rainy Tokyo street at night — neon signs reflecting on wet pavement, blurred passing cars, bokeh from kanji-character signage, light rain visible against dark sky.
+CHANGE: Replace the background with a rainy city street at night — neon signs reflecting on wet pavement, blurred passing cars, soft bokeh from illuminated signage, light rain visible against dark sky.
 
 PRESERVE: Subject's face, pose, hair, clothing, body framing, skin tones, and exact silhouette — locked exactly as in source.
 
@@ -147,64 +153,56 @@ MATCH: Original lighting direction and intensity on subject (rim from camera-rig
 
 ## 4 more shorter examples
 
-**Concept art:** \`Concept art illustration, 16:9 cinematic, matte painting style. Sprawling low-profile data center built into a Martian crater, glowing blue server lights through narrow window slits, solar arrays across rust-red plain. Two figures in white pressure suits walking toward an airlock. Sky: dusty pink with two small moons visible. Syd Mead industrial sensibility.\`
+**Concept art:** \`Concept art illustration, 16:9 cinematic, matte painting style. Sprawling low-profile research facility built into the side of a rocky crater on an alien planet, glowing blue lights through narrow window slits, solar arrays across rust-red plain. Two figures in white pressure suits walking toward an airlock. Sky: dusty pink with two small moons.\`
 
-**Magazine cover:** \`Editorial magazine cover, 8.5x11 portrait. Masthead "TRAILVERSE" in bold sans-serif, white, top center. Headline "Arches at Dawn" in elegant serif italic, lower left third. Sub-headline "12 hidden viewpoints" in thin sans-serif beneath. Cover photo: silhouetted Delicate Arch against deep blue-to-orange gradient sky, single visible star.\`
+**Magazine cover:** \`Editorial magazine cover, 8.5x11 portrait. Masthead "WANDER" in bold sans-serif, white, top center. Headline "Mountains at Dawn" in elegant serif italic, lower left third. Sub-headline "12 hidden viewpoints" in thin sans-serif beneath. Cover photo: silhouetted mountain range against deep blue-to-orange gradient sky.\`
 
-**Comparison infographic:** \`Two-column comparison infographic, 4:5 portrait. Left header "BATCH" in blue (#2B6CB0); right header "STREAMING" in amber (#D69E2E). Vertical divider. Five rows: Latency / Throughput / Use Cases / Tools / Cost. Statements max 6 words each. Title "Batch vs Streaming" in oversized navy serif.\`
+**Comparison infographic:** \`Two-column comparison infographic, 4:5 portrait. Left header "OPTION A" in blue (#2B6CB0); right header "OPTION B" in amber (#D69E2E). Vertical divider. Five rows: Speed / Cost / Flexibility / Best For / Trade-off. Statements max 6 words each.\`
 
-**Object removal edit:** \`CHANGE: Remove the green trash can in lower-left and the power line crossing the upper third. Reconstruct the wall behind the trash can using existing brick pattern; reconstruct sky as clean continuous gradient. PRESERVE: Every person, the storefront awning, parked car, street signs, sidewalk, all shadows. MATCH: Golden hour from camera-right, warm temperature, film grain.\`
+**Object removal edit:** \`CHANGE: Remove the green trash can in lower-left and the power line crossing the upper third. Reconstruct the wall behind using existing brick pattern; reconstruct sky as clean continuous gradient. PRESERVE: Every person, the storefront awning, parked car, street signs, sidewalk, all shadows. MATCH: Golden hour from camera-right, warm temperature, film grain.\`
 
 ## How to use these
 
-Don't just copy them verbatim. Use them as templates:
+Don't just copy them verbatim. Use them as templates: find the example closest to your use case, swap out the subject specifics for your own, keep the structural skeleton (camera specs, lighting language, aspect ratio), and iterate by changing one variable at a time.
 
-1. Find the example closest to your use case
-2. Swap out the subject specifics (your brand, your scene, your product)
-3. Keep the structural skeleton (the camera specs, the lighting language, the aspect ratio)
-4. Generate, then iterate by changing one variable at a time
-
-Or skip the manual work entirely and paste your rough idea into [Promptcraft](/app) — it'll handle the structure for you.
+Or paste your rough idea into [Promptcraft](/app) and let it generate the structured prompt for you.
 `,
   },
   {
     slug: "chatgpt-image-prompt-tips",
-    title: "11 ChatGPT Image Prompt Tips That Separate Pro Outputs from Amateur Ones",
-    subtitle:
-      "Convergent techniques from the X prompt community, OpenAI's cookbook, and real production workflows.",
+    title: "10 ChatGPT Image Prompt Tips for Production-Quality Results",
+    subtitle: "Practical techniques drawn from real testing — not magic words.",
     category: "Tips",
     author: "Promptcraft Team",
-    read_time: "9 min",
+    read_time: "8 min",
     published: "2026-04-24",
     excerpt:
-      "Most ChatGPT image prompt guides are recycled from 2023. Here's what actually works in 2026 — drawn from analysis of 200+ real prompts circulating on X, GitHub, and the OpenAI cookbook.",
-    seo_title: "11 ChatGPT Image Prompt Tips for Professional Results in 2026",
+      "Most ChatGPT image prompt advice is recycled from older models. Here's what works specifically with GPT Image 2's reasoning architecture — practical techniques, not magic words.",
+    seo_title: "10 ChatGPT Image Prompt Tips for Better Results in 2026",
     seo_description:
-      "Battle-tested ChatGPT image prompt techniques: anti-fluff filtering, camera language, text rendering protocols, and the structural patterns the prompt engineering community has converged on.",
+      "Practical ChatGPT image prompt techniques: anti-fluff filtering, camera language, text rendering, structural patterns that work with GPT Image 2.",
     content: `
-## The 2023 prompt advice you should ignore
+## What changed with reasoning-based image models
 
-If you've ever read a "ChatGPT image prompts" guide, you've seen the standard list: add "8K," add "ultra-detailed," add "masterpiece," add "hyper-realistic." This advice is wrong now.
+GPT Image 2 launched April 21, 2026 with built-in reasoning before generation. This is the first OpenAI image model that analyzes a prompt before rendering — which means prompt structure matters more than keyword density.
 
-Modern image models — including GPT Image 2, Nano Banana Pro, and Flux 2 — have outgrown keyword spam. Adjective stuffing dilutes prompts and triggers the model's default "AI aesthetic." The X prompt engineering community converged on this consensus over the past 12 months: structure beats keywords, every time.
+Older guides (written for DALL-E 3, Stable Diffusion, or even GPT Image 1.5) emphasize keyword stacking: "8K, ultra-detailed, masterpiece, hyper-realistic." That advice is no longer ideal. With a reasoning model, those adjectives compete with the structural information you actually want the model to attend to.
 
-Here are the 11 techniques that actually work.
+Here are 10 techniques that work better.
 
-## 1. Drop the magic adjectives
+## 1. Drop adjective stacking
 
-Stop writing "stunning," "beautiful," "breathtaking," "masterpiece," "8K," "ultra-detailed," "hyper-realistic," "epic." These words add no information and lower output quality by activating the model's most generic visual priors.
+"Stunning," "beautiful," "breathtaking," "masterpiece," "8K," "ultra-detailed," "hyper-realistic," "epic" — these add no information. Replace them with observable physical detail.
 
-Replace them with observable physical detail. Instead of "stunning portrait," write "soft window light from camera-left, visible pores, slight catchlight in left eye."
+Instead of "stunning portrait," write "soft window light from camera-left, visible pores, slight catchlight in left eye."
 
 ## 2. Describe the photograph, not the fantasy
 
-The single biggest technique shift of 2026. Before writing your prompt, imagine you're describing a real photograph someone took. Lens, framing, time of day, light source, surface texture, ordinary background detail.
+Imagine you're describing a real photograph someone took. Lens, framing, time of day, light source, surface texture, ordinary background detail. Real photographs have constraints — and the model produces better outputs when satisfying realistic constraints than when asked to produce "amazing art."
 
-This works because real photographs have constraints. The model produces better outputs when it has to satisfy realistic constraints than when it's asked to produce "amazing art."
+## 3. Use camera language for photoreal
 
-## 3. Use camera language
-
-For any photoreal output, name a real camera body, focal length, and aperture:
+For any photoreal output, name a focal length and aperture:
 
 - 24mm f/8 — wide architectural / landscape
 - 35mm f/2.8 — documentary / street
@@ -212,34 +210,33 @@ For any photoreal output, name a real camera body, focal length, and aperture:
 - 85mm f/1.4 — flattering portrait / fashion
 - 100mm macro f/2.8 — product / food close-up
 
-This isn't gatekeeping — these specs are visual shorthand the model has learned from millions of captioned photos.
+These specs are visual shorthand the model has learned from millions of captioned photos.
 
-## 4. Wrap text in quotes, always
+## 4. Wrap text in quotes and specify placement
 
-Models hallucinate text constantly when it's not constrained. The protocol that works:
+Even with GPT Image 2's improved text rendering, structure helps. The protocol that works:
 
 - Wrap exact copy in quotes or ALL CAPS
 - Specify font style, weight, color, placement
-- Add "verbatim — no extra characters, no substitutions"
-- Keep text under 5 words per element
+- Add "verbatim — no extra characters, no substitutions" for accuracy-critical text
 - End with "no duplicate text, no text artifacts"
 
-## 5. Stack 5-8 concrete constraints
+## 5. Stack concrete constraints
 
-GPT Image 2 reliably handles 7-8 distinct constraints in a single prompt. Use that headroom. A prompt with 8 specific constraints will outperform one with 3 — every time.
+GPT Image 2 reliably handles multiple distinct constraints in a single prompt — its reasoning layer means it can satisfy more without dropping any. Use this to your advantage.
 
 Don't write: "a modern living room."
 
-Write: "a 1920s craftsman living room with oak built-ins, oatmeal linen sofa, brass swing-arm lamp from camera-left, north-facing morning light, hardwood floor, small Persian rug, single open book on a side table, no people."
+Write: "a craftsman-style living room with oak built-ins, oatmeal linen sofa, brass swing-arm lamp from camera-left, north-facing morning light, hardwood floor, small Persian rug, single open book on a side table, no people."
 
 ## 6. Use cultural and temporal anchors
 
 You don't have to describe everything. Name a cultural moment and the model fills in the details:
 
-- "1990s Seattle grunge era"
-- "Tokyo izakaya in Showa-era 1985"
-- "SF Mission District during dot-com 1999"
-- "rural Kerala monsoon season"
+- "1990s grunge era"
+- "1985 izakaya"
+- "dot-com era 1999"
+- "rural village during monsoon season"
 
 This triggers world knowledge — the model knows what these scenes look like, and you get specificity for free.
 
@@ -248,8 +245,8 @@ This triggers world knowledge — the model knows what these scenes look like, a
 Always end your prompt with the aspect ratio that matches your use case:
 
 - 16:9 — landscape, web hero, YouTube
-- 9:16 — Instagram story, TikTok
-- 4:5 — Instagram feed, LinkedIn
+- 9:16 — vertical story, TikTok
+- 4:5 — feed posts
 - 1:1 — profile, square social
 - 2:3 — Pinterest, magazine
 - 2.39:1 — anamorphic cinematic
@@ -262,19 +259,18 @@ Image edits drift unless you use a strict structure:
 
 - CHANGE: the one thing you want different
 - PRESERVE: the explicit list of everything that must stay
-- MATCH: the lighting / color temperature / grain logic to maintain
+- MATCH: the lighting, color temperature, grain logic to maintain
 
-Restate the PRESERVE list every iteration. Drift compounds across edits.
+Restate the PRESERVE list every iteration — drift compounds.
 
 ## 9. Avoid living artist names
 
-Beyond ethics, naming living artists produces inconsistent outputs because models have been trained to suppress those associations. Use art disciplines, eras, or movements instead:
+Beyond ethics, naming living artists produces inconsistent outputs. Use art disciplines, eras, or movements instead:
 
 - "Bauhaus poster design"
 - "Swiss editorial style"
 - "Memphis Group"
 - "mid-century modern illustration"
-- "Syd Mead industrial sensibility" (deceased + discipline = safe)
 
 ## 10. Iterate one variable at a time
 
@@ -282,53 +278,36 @@ Don't change four things between generations. You'll never know which change fix
 
 When iterating, keep everything constant except one element — light direction, OR aspect ratio, OR color palette. This is how you actually learn what each lever does.
 
-## 11. Use the self-check before submitting
-
-Before you hit generate, ask yourself:
-
-- Zero forbidden adjectives present?
-- 5+ concrete constraints stacked?
-- Camera/lens specified if photoreal?
-- Aspect ratio specified?
-- Text rendering follows the protocol if text is involved?
-- No living artist names?
-
-If any check fails, revise before generating. This habit alone will 2-3x your output quality.
-
 ## The faster path
 
-If running through this checklist on every prompt sounds like work — that's because it is. [Promptcraft](/app) automates all 11 of these techniques. Paste a rough idea, get back a structured prompt that has already passed every check.
-
-Or copy the techniques and apply them manually. Either way, the era of keyword-spam prompting is over.
+If running through this checklist on every prompt sounds like work, [Promptcraft](/app) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
 `,
   },
   {
-    slug: "ai-image-prompt-formula",
-    title: "The 6-Layer AI Image Prompt Formula That Replaces Guesswork",
+    slug: "ai-image-prompt-framework",
+    title: "A 6-Layer Framework for Writing AI Image Prompts",
     subtitle: "A repeatable structure for any image type — posters, photoreal, UI mockups, edits.",
     category: "Framework",
     author: "Promptcraft Team",
     read_time: "7 min",
     published: "2026-04-23",
     excerpt:
-      "Most AI image prompts fail because they're missing structure, not detail. Here's the 6-layer formula that works across every model — GPT Image 2, Nano Banana, Flux 2, Midjourney — and across every category.",
-    seo_title: "The 6-Layer AI Image Prompt Formula (2026 Framework)",
+      "Most AI image prompts fail because they're missing structure, not detail. Here's a 6-layer framework that works as a starting point for any image type — useful as a checklist when your prompts are coming out generic.",
+    seo_title: "A 6-Layer Framework for AI Image Prompts",
     seo_description:
-      "A repeatable structural formula for writing AI image prompts: subject, action, environment, composition, lighting, style. Works across GPT Image 2, Midjourney, Flux, and more.",
+      "A practical structural framework for writing AI image prompts: subject, action, environment, composition, lighting, style. A useful checklist for any image generation task.",
     content: `
-## The problem with most prompt advice
+## Why structure beats keywords
 
-Most prompt guides give you keywords or example outputs. Neither helps when you sit down to write your own prompt for your own scene.
+Most prompt advice gives you keywords or example outputs. Neither helps when you sit down to write your own prompt for your own scene.
 
-What you need is a formula — a structural skeleton you can apply to any image type. After analyzing 200+ high-performing prompts from the X prompt engineering community, the OpenAI cookbook, and Reddit, the same 6 layers appear in every great prompt.
-
-Here's the formula.
+What helps is structure — a checklist you can run through to make sure your prompt isn't missing anything obvious. This framework isn't an industry standard, just a practical synthesis of what tends to be present in prompts that produce good results.
 
 ## The 6 layers
 
 [Subject + specifics] + [Action / Pose] + [Environment + cultural anchor] + [Composition: shot, angle, aspect ratio] + [Lighting: quality + direction + temperature] + [Style / Medium]
 
-That's it. Every layer is non-negotiable. Most failed prompts skip 3-4 of them.
+Most failed prompts skip 3-4 of these layers.
 
 ## Layer 1: Subject + specifics
 
@@ -350,9 +329,9 @@ Be specific about gaze direction — "looking off-frame to the camera-left" read
 
 Where, when, what's around. This is where cultural anchors do massive heavy lifting:
 
-- "a coffee shop in 1990s Seattle grunge era"
-- "an SF Mission District garage in dot-com 1999"
-- "a Tokyo izakaya in Showa-era 1985"
+- "a coffee shop in 1990s grunge era"
+- "a busy office during dot-com 1999"
+- "a noodle bar in 1985 Tokyo"
 
 Each anchor gives the model a thousand visual associations for free. Use them.
 
@@ -386,35 +365,33 @@ This is where you tell the model whether you want photoreal, illustration, or so
 - Editorial: "magazine editorial style, slightly desaturated"
 - Illustration: "watercolor, visible paper texture, soft color bleeds"
 - Vector: "flat vector illustration, 2-color palette"
-- Concept art: "matte painting, painterly atmosphere, mid-century futurist line work"
+- Concept art: "matte painting, painterly atmosphere"
 
-## The formula in action
+## The framework in action
 
 Watch the same idea evolve through the layers:
 
-**Layer 0 (typical bad prompt):** "a hiker in arches"
+**Layer 0 (typical thin prompt):** "a hiker on a mountain"
 
 **With Subject:** "Solo hiker in faded red windbreaker"
 
 **Add Action:** "...walking away from camera on a sandstone trail"
 
-**Add Environment:** "...in Arches National Park, late afternoon golden hour"
+**Add Environment:** "...in a desert canyon at golden hour"
 
 **Add Composition:** "Low-angle wide shot at 24mm, 3:2 aspect"
 
-**Add Lighting:** "Long shadows raking across the rock, warm rim light from camera-right, dust catching in the light"
+**Add Lighting:** "Long shadows raking across the rock, warm rim light from camera-right"
 
-**Add Style:** "Shot on full-frame mirrorless, documentary travel photography, Kodak Portra 400 grain"
+**Add Style:** "Documentary travel photography, Kodak Portra 400 grain"
 
 **Final stacked prompt:**
 
 \`\`\`
-Solo hiker in faded red windbreaker walking away from camera on a sandstone trail in Arches National Park, late afternoon golden hour with long shadows raking across the rock, Delicate Arch visible in middle distance. Low-angle wide shot at 24mm, f/8, 3:2 aspect. Warm rim light from camera-right, dust catching in the light. Shot on full-frame mirrorless body, documentary travel photography, Kodak Portra 400 grain.
+Solo hiker in faded red windbreaker walking away from camera on a sandstone trail in a desert canyon at golden hour. Long shadows raking across the rock, distant rock formations visible in middle distance. Low-angle wide shot at 24mm, f/8, 3:2 aspect. Warm rim light from camera-right, dust catching in the light. Documentary travel photography, Kodak Portra 400 grain.
 \`\`\`
 
-This is the difference between a generic AI render and a usable editorial image.
-
-## Where the formula breaks (and what to use instead)
+## Where the framework breaks (and what to use instead)
 
 Three categories need a different structure:
 
@@ -422,38 +399,36 @@ Three categories need a different structure:
 
 **Typography-heavy posters:** Lead with text (in quotes, with placement), then add the visual layer using layers 3-6. Subject and action collapse.
 
-**Infographics and diagrams:** Lead with structure (layout topology, components, connectors). Lighting and composition become "clean white background, generous spacing."
+**Abstract / experimental work:** Photographic vocabulary actively hurts abstract output. Use medium + mood + palette + composition instead, with art-movement anchors instead of camera specs.
 
-For everything else — photoreal, cinematic, character art, interiors, food, fashion, architecture — the 6 layers work.
+For everything else — photoreal, cinematic, character art, interiors, food, fashion, architecture — the 6 layers work as a useful checklist.
 
-## Use the formula or use Promptcraft
+## Use the framework or use Promptcraft
 
-You can apply this manually on every prompt. Or you can paste your rough idea into [Promptcraft](/app) and get a structured 6-layer prompt back in seconds. Same formula, automated.
-
-The formula is the point. The tool is just the shortcut.
+You can apply this manually on every prompt. Or you can paste your rough idea into [Promptcraft](/app) and get a structured 6-layer prompt back in seconds. Same framework, automated.
 `,
   },
   {
     slug: "ai-image-prompts-with-text",
-    title: "How to Write AI Image Prompts That Actually Render Text Correctly",
+    title: "How to Write AI Image Prompts That Render Text Correctly",
     subtitle: "The protocol for posters, social graphics, and any image with words on it.",
     category: "How-to",
     author: "Promptcraft Team",
     read_time: "6 min",
     published: "2026-04-22",
     excerpt:
-      "Text rendering is the biggest practical problem in AI image generation. Even with GPT Image 2's 95%+ accuracy, garbled text is still the most common failure. Here's the protocol that actually works.",
-    seo_title: "How to Write AI Image Prompts with Text That Renders Correctly",
+      "Text rendering used to be the biggest weakness of AI image generation. GPT Image 2 mostly fixed it — independent reviews report 95%+ accuracy. But getting reliable output still requires a specific approach.",
+    seo_title: "How to Write AI Image Prompts with Readable Text",
     seo_description:
-      "The text-rendering protocol for AI image prompts: quotes, placement specifications, font weights, the 'verbatim' trick, and the common mistakes that cause garbled output.",
+      "The text-rendering protocol for AI image prompts: quotes, placement specifications, font weights, the verbatim trigger, and common mistakes.",
     content: `
-## Why AI keeps butchering your text
+## What actually changed with text rendering
 
-You write a prompt for a poster. You include the headline. The output comes back with "DTAA NIHGT" or "DAATA NUGHT" or some hybrid hallucination. Sound familiar?
+For years, text inside AI-generated images was unreliable. Garbled letters, made-up characters, hybrid hallucinations. This was the running joke of the industry, and the main reason these tools were unusable for branding, posters, or anything with copy.
 
-This was the single biggest weakness of every image model from 2022 through early 2025. GPT Image 2 fixed most of it — text accuracy is now above 95% across Latin and CJK scripts. But "most of it" still leaves you with garbled output if you don't follow the protocol.
+GPT Image 2 fixed most of it. Independent reviews of the April 21, 2026 launch put text accuracy above 95% across Latin, Chinese, Japanese, Korean, Hindi, Bengali, and Arabic scripts. PetaPixel called it the first AI image model where text rendering "actually works for production." OpenAI's announcement specifically highlighted text rendering as one of the model's three core upgrades.
 
-Here's the protocol the prompt engineering community converged on.
+But "above 95%" still leaves room for errors. And if you don't follow the protocol below, your hit rate drops fast. Here's what works.
 
 ## Rule 1: Wrap exact copy in quotes
 
@@ -463,16 +438,7 @@ Always write: \`a poster with the headline "DATA NIGHT" displayed prominently\`
 
 Quotation marks tell the model: this is the literal string. Not a description. Not a theme. Render exactly these characters.
 
-## Rule 2: ALL CAPS for short headlines
-
-Models render uppercase text more reliably than mixed case. For headlines under 5 words, use ALL CAPS:
-
-- \`headline "DATA NIGHT" in bold condensed sans-serif\`
-- \`title "MARS COLONY" in display serif\`
-
-For longer text or sentence-case copy, mixed case still works — just keep the rest of the protocol tight.
-
-## Rule 3: Specify font style, weight, color, placement
+## Rule 2: Specify font style, weight, color, placement
 
 The model has to make four decisions about every text element. Don't leave them to chance:
 
@@ -481,35 +447,25 @@ The model has to make four decisions about every text element. Don't leave them 
 - **Color:** name a hex code (#0F1729) or descriptive color (off-white, deep navy)
 - **Placement:** upper third, centered, lower-left corner, vertical along right edge
 
-Example: \`Subtitle "SF • DEC 12 • 2026" in thin sans-serif, off-white, lower third, letter-spacing 0.2em\`
+Example: \`Subtitle "MARCH 14" in thin sans-serif, off-white, lower third, letter-spacing 0.2em\`
 
-## Rule 4: Keep text under 5 words per element
+## Rule 3: Use the "verbatim" trigger
 
-GPT Image 2 reliably renders 1-5 words per text element. Push beyond that and accuracy drops fast. For longer text:
-
-- Split it into multiple elements (headline + subtitle + caption)
-- Or accept that the model will likely produce passable but imperfect output
-- Or composite the text in Figma/Canva afterward
-
-The honest truth: for any text over 8 words, you're better off generating the visual and adding the text manually.
-
-## Rule 5: Use the "verbatim" trigger
-
-For accuracy-critical text — brand names, dates, prices, taglines — append this exact phrase:
+For accuracy-critical text — brand names, dates, prices, taglines — append this phrase:
 
 \`Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts.\`
 
-This phrase has become the de-facto incantation in the X prompt community. It's not magic — it's a constraint stack that the reasoning layer of GPT Image 2 actually attends to.
+This works because GPT Image 2's reasoning layer attends to explicit constraints. The phrase has become a common pattern in the prompt engineering community for a reason — it lowers the error rate noticeably on critical text.
 
-## Rule 6: Spell out tricky brand names
+## Rule 4: Spell out unusual brand names
 
 If your brand name has unusual letter combinations or made-up words, spell it letter by letter on first reference:
 
-\`Logo "TRAILVERSE" (T-R-A-I-L-V-E-R-S-E) in bold sans-serif, white\`
+\`Logo "WANDER" (W-A-N-D-E-R) in bold sans-serif, white\`
 
-This is overkill for common words but lifesaving for brand names.
+Overkill for common words, but lifesaving for brand names the model might "correct" to a real word.
 
-## Rule 7: Don't ask for paragraphs
+## Rule 5: Don't ask for paragraphs
 
 Image models are not document layout engines. Asking for "a paragraph of body text below the headline" produces gibberish that looks like text but isn't.
 
@@ -519,19 +475,19 @@ If you need real paragraph text in a layout, use the right tool — Figma, Canva
 
 Even with the protocol, three things remain inconsistent:
 
-1. **Brand logos** — the model can't reproduce existing logos (Nike swoosh, Apple, etc.) accurately. Composite them in Figma.
+1. **Existing brand logos** — the model can't reproduce specific real-world logos (Nike swoosh, etc.) accurately. Composite them in Figma.
 2. **Long-form text** — paragraphs, lists, or any text over ~10 words. Generate the visual, add text after.
-3. **Multi-language mixed text** — mixing scripts (Latin + Hindi + Chinese in one image) often produces errors in one or more scripts.
+3. **Mixed languages** — mixing scripts (Latin + Hindi + Chinese in one image) often produces errors in one or more scripts, though GPT Image 2 does better at this than any previous model.
 
 ## Putting it together
 
 Here's a complete text-heavy prompt that follows the full protocol:
 
 \`\`\`
-Minimalist event poster, 2:3 portrait. Headline "DATA NIGHT" in bold condensed sans-serif, ALL CAPS, off-white (#F7F3EC), upper third. Subtitle "SF • DEC 12 • 2026" in thin sans-serif, off-white, below headline, letter-spacing 0.2em. Bottom-right corner: small attribution "@latentengineer_" in tiny gray sans-serif. Background: deep navy (#0F1A2E). Generous negative space. Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts.
+Minimalist event poster, 2:3 portrait. Headline "FUTURE STACK" in bold condensed sans-serif, ALL CAPS, off-white (#F7F3EC), upper third. Subtitle "MARCH 14 — 16 • 2026" in thin sans-serif, off-white, below headline, letter-spacing 0.2em. Bottom-right corner: small attribution "Conference 2026" in tiny gray sans-serif. Background: deep navy (#0F1A2E). Generous negative space. Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts.
 \`\`\`
 
-Three text elements, each with its own font weight, color, and placement. ALL CAPS for the short headline. Hex codes for color lock. The verbatim trigger at the end.
+Three text elements, each with its own font weight, color, and placement. Hex codes for color lock. The verbatim trigger at the end.
 
 ## The shortcut
 
@@ -540,137 +496,158 @@ Manually applying this protocol on every prompt is tedious. [Promptcraft](/app) 
   },
   {
     slug: "gpt-image-2-vs-nano-banana-vs-midjourney",
-    title: "GPT Image 2 vs Nano Banana Pro vs Midjourney: Which to Use When",
-    subtitle:
-      "An honest comparison of the three top image models in 2026 — strengths, weaknesses, and the right tool for each job.",
+    title: "GPT Image 2 vs Nano Banana Pro vs Midjourney V8: 2026 Comparison",
+    subtitle: "An honest comparison of the three top AI image models in April 2026.",
     category: "Comparison",
     author: "Promptcraft Team",
-    read_time: "8 min",
+    read_time: "9 min",
     published: "2026-04-21",
     excerpt:
-      "Three models dominate AI image generation in 2026: GPT Image 2, Google's Nano Banana Pro, and Midjourney. Each is best at something different. Here's how to pick the right one for your use case.",
-    seo_title: "GPT Image 2 vs Nano Banana Pro vs Midjourney: 2026 Comparison",
+      "Three models dominate AI image generation in April 2026: OpenAI's GPT Image 2, Google's Nano Banana Pro, and Midjourney V8. Each has a clear sweet spot. Here's where each one actually wins, based on benchmarks and verified capabilities.",
+    seo_title: "GPT Image 2 vs Nano Banana Pro vs Midjourney V8 (April 2026)",
     seo_description:
-      "Honest comparison of GPT Image 2, Google Nano Banana Pro, and Midjourney across photorealism, text rendering, prompt adherence, and editing. Pick the right model for your project.",
+      "Honest comparison of GPT Image 2, Google Nano Banana Pro, and Midjourney V8 across photorealism, text rendering, prompt adherence, and editing. With verified capabilities and use cases.",
     content: `
-## Why this comparison matters
+## The April 2026 image generation landscape
 
-If you're generating AI images professionally in 2026, you're probably using more than one model. The three that matter:
+Three models dominate AI image generation in April 2026:
 
 - **GPT Image 2** — OpenAI, launched April 21, 2026
-- **Nano Banana Pro** — Google, dominant in prompt adherence
-- **Midjourney** — still the cinematic gold standard
+- **Nano Banana Pro** — Google's Gemini 3 Pro Image model
+- **Midjourney V8** — released early 2026
 
-Each is best at something different. Picking the wrong one wastes hours. Here's the honest breakdown.
+Each is best at something different. Picking the wrong model wastes time on iterations. Here's the honest breakdown based on verified capabilities and recent benchmarks.
 
-## Quick verdict
+## GPT Image 2 — the new leader
 
-| Use case | Best model | Why |
-|---|---|---|
-| Photorealistic portraits | Midjourney | Best aesthetic polish, cinematic style |
-| Text-heavy graphics (posters, social) | GPT Image 2 | Highest text rendering accuracy |
-| Image editing (background swap, object removal) | Nano Banana Pro | Best prompt adherence on edits |
-| UI mockups & dashboards | GPT Image 2 | Best at structured layouts and reasoning |
-| Cinematic / concept art | Midjourney | Unmatched mood and atmosphere |
-| Product photography | GPT Image 2 or Midjourney | Tie — both clean, depends on style |
-| Multi-language text | GPT Image 2 | Only model with reliable CJK rendering |
-| Quick iteration / experimentation | Nano Banana Pro | Fastest, most consistent |
+Launched April 21, 2026. The first OpenAI image model with built-in O-series reasoning before generation.
 
-## GPT Image 2 — the reasoning model
+**Verified capabilities:**
+- Text rendering above 95% accuracy across Latin, Chinese, Japanese, Korean, Hindi, Bengali, and Arabic scripts (independent reviews, April 2026)
+- Native 2K resolution with optional 4K upscaling
+- Multi-turn editing endpoint with mask-based inpainting and outpainting
+- Available via ChatGPT, Codex, and the API
+- API pricing: $5/M text input, $8/M image input, $30/M image output tokens — roughly $0.006 to $0.21 per image (OpenAI pricing page)
 
-Launched April 21, 2026. Native 2K resolution with optional 4K upscaling.
+**Image Arena leaderboard:** GPT Image 2 took the top position on the Image Arena leaderboard at launch, leading by 24 points over Google Imagen 3 according to early benchmark data.
 
 **Strengths:**
-- Text rendering above 95% accuracy across Latin and CJK scripts
-- Reasoning layer interprets complex layered prompts
-- Two modes (Instant and Thinking) for different complexity levels
-- Best handling of structured layouts (UI, infographics, posters)
-- World knowledge to December 2025 — references real events, places, eras
+- Best-in-class text rendering, especially for mixed-script and dense layouts
+- Reasoning layer interprets complex layered prompts well
+- Strong instruction-following on long, multi-part prompts
+- Multi-turn editing without drift
+- Handles dense scenes with many distinct objects
 
 **Weaknesses:**
-- Style control less granular than Midjourney (can't specify film stock as precisely)
-- Stricter content policy than Stable Diffusion or Flux
-- Default aesthetic has a slight bias that requires effort to override
-- Brand logos still inconsistent
+- Style control less granular than Midjourney
+- Stricter content policy than open-source alternatives
+- API requires Organization Verification before access
+- Knowledge cutoff is December 2025
 
-**Best for:** Anything with text, UI mockups, infographics, structured posters, magazine-style layouts.
+**Best for:** Anything with text, UI mockups, infographics, structured posters, magazine-style layouts, multilingual content.
 
-## Nano Banana Pro — the prompt adherence champion
+## Nano Banana Pro — the precision tool
 
-Google's image model, integrated with Gemini.
+Google's Gemini 3 Pro Image model. Released late 2025, established by April 2026.
+
+**Verified capabilities:**
+- Text rendering at 94-96% accuracy (spectrumailab benchmark, December 2025)
+- Native 4K (4096x4096) generation
+- Identity Locking system for character consistency, processing up to 14 reference images simultaneously
+- Available through Gemini app, AI Mode in Search, NotebookLM, Workspace, Vertex AI, and AI Studio
 
 **Strengths:**
-- Highest prompt adherence of any model — generates exactly what you ask
-- Best image editing with reference image support
-- Excellent character consistency across multiple generations
-- Knows what it's creating — can reverse-engineer images for new angles
+- Highest character consistency across multiple generations (Identity Locking)
+- Best for editing workflows that need precise control
+- Native 4K resolution at faster speeds (8-12 seconds per image)
+- Strong instruction adherence for "make it exactly like this" tasks
+- Pay-per-image pricing with batch discounts (50% off official rates)
 
 **Weaknesses:**
-- Output resolution lower than GPT Image 2 and Midjourney
-- Struggles with stylized cinematic outputs
-- More documentary realism, less editorial polish
-- Default aesthetic can feel sterile
+- Style and aesthetic less distinctive — outputs can feel restrained
+- Not as strong on artistic or stylized work
+- Less unified product surface (split across multiple Google products)
 
-**Best for:** Image edits, product photography, character continuity across a series, projects where you need exactly what you described.
+**Best for:** Image edits, character continuity across a series, product photography, controllable workflows where you need exactly what you described.
 
-## Midjourney — the cinematic standard
+## Midjourney V8 — the artistic standard
 
-Still the industry leader for aesthetic polish.
+Released early 2026 with major architectural changes (switched from TPUs to GPUs with PyTorch codebase).
+
+**Verified capabilities:**
+- Native 2K (2048x2048) generation — upgraded from V7's 1024x1024
+- Improved text rendering and semantic understanding vs V7
+- Web platform available alongside Discord
+- Subscription pricing: $10-$120/month
+- Stealth Mode available on Pro and Mega plans
 
 **Strengths:**
 - Most consistently impressive default aesthetic
-- Best cinematic mood, atmosphere, color grading
-- Unmatched for moody portraits and concept art
-- Strong style consistency within a project (with --sref and --cref)
+- Best cinematic mood, atmosphere, and color grading
+- Strong for moody portraits, fantasy, and concept art
+- Distinctive artistic signature
+- Style references (--sref) and character references (--cref) for consistency
 
 **Weaknesses:**
-- Text rendering still unreliable
+- Text rendering still trails GPT Image 2 (handles short words like "STOP" or "CAFE" but struggles with longer text or specific font layouts)
 - Less prompt adherence than GPT Image 2 or Nano Banana Pro
-- Discord-based workflow is friction (Web app exists but lags)
-- No reasoning — keyword weighting still required
-- Can't compete on UI mockups or structured layouts
+- No public API — Discord and web only
+- 2K resolution is half the linear resolution of Nano Banana Pro's 4K
+- Subscription model rather than pay-per-image
 
-**Best for:** Cinematic stills, concept art, mood-driven imagery, fashion editorial, hero images for blog posts.
+**Best for:** Cinematic stills, concept art, mood-driven imagery, fashion editorial, hero images, anything where artistic atmosphere matters more than precise instruction following.
 
-## How to pick — the decision tree
+## Quick decision guide
 
-**Does your image have text?** → GPT Image 2.
-
-**Are you editing an existing image?** → Nano Banana Pro.
-
-**Do you need cinematic atmosphere or moody portraits?** → Midjourney.
-
-**Is it a structured layout (UI, infographic, dashboard)?** → GPT Image 2.
-
-**Is it a clean product shot?** → GPT Image 2 or Midjourney (try both).
-
-**Do you need exact prompt adherence with no creative interpretation?** → Nano Banana Pro.
-
-**Multi-language text or CJK scripts?** → GPT Image 2 (only viable option).
+| Use case | Best model | Why |
+|---|---|---|
+| Posters with text | GPT Image 2 | Highest text rendering accuracy across scripts |
+| UI mockups & dashboards | GPT Image 2 | Best at structured layouts and reasoning |
+| Multilingual content | GPT Image 2 | Mixed-script layouts work reliably |
+| Image editing | GPT Image 2 or Nano Banana Pro | Both have strong editing — GPT Image 2 for natural-language edits, Nano Banana Pro for precise control |
+| Character consistency | Nano Banana Pro | Identity Locking processes up to 14 references |
+| Product photography | Nano Banana Pro | Best precision and control |
+| 4K native output | Nano Banana Pro | Native 4K vs Midjourney's 2K |
+| Cinematic / concept art | Midjourney V8 | Unmatched aesthetic atmosphere |
+| Mood-driven hero imagery | Midjourney V8 | Default beauty without prompt engineering |
+| Quick iteration / experimentation | Nano Banana Pro | Fast generation (8-12s for 4K) |
 
 ## The prompt translation problem
 
-One critical thing most comparisons miss: the same prompt does not work across models.
+A prompt optimized for one model does not transfer cleanly to another:
 
-- GPT Image 2 likes natural sentences with reasoning hooks ("Soft north-facing light because it's a 1920s craftsman home")
-- Midjourney likes keyword-weighted descriptions with parameters ("--ar 16:9 --style raw")
-- Nano Banana Pro likes literal precise descriptions with strong noun-verb structure
+- **GPT Image 2** rewards natural sentences with reasoning hooks ("Soft north-facing light because it's a craftsman home")
+- **Midjourney V8** rewards keyword-weighted descriptions with parameters ("--ar 16:9 --style raw")
+- **Nano Banana Pro** rewards literal precise descriptions with strong noun-verb structure
 
-A prompt optimized for Midjourney will underperform on GPT Image 2 — and vice versa. If you switch models, rewrite your prompt for the new model's strengths.
+Switching models without rewriting your prompt typically underperforms by a meaningful margin. Most professional teams use 2-3 of these models, not just one.
 
-[Promptcraft](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which most teams in 2026 are — that's the leverage point.
+A common stack:
+
+1. **GPT Image 2** for structured outputs (posters, social graphics, UI, infographics)
+2. **Midjourney V8** for hero imagery and cinematic stills
+3. **Nano Banana Pro** for edits and precise iterations
+
+This is more work than picking one — but the output quality difference is real, and the cost of using the wrong tool for a job is hours of bad iterations.
 
 ## What this means for your workflow
 
-The honest answer: most professional teams use 2-3 of these models, not just one. A common stack:
+If you're picking just one in April 2026:
 
-1. **GPT Image 2** for structured outputs (posters, social graphics, UI, infographics)
-2. **Midjourney** for hero imagery and cinematic stills
-3. **Nano Banana Pro** for edits and iterations
+- **Default to GPT Image 2** for most production workflows — it has the strongest combination of capabilities and is improving fastest
+- **Use Midjourney V8** when aesthetic quality is the entire point and you're not constrained by text rendering needs
+- **Use Nano Banana Pro** when you need character consistency across a series or precise edits
 
-This is more work than picking one. But the output quality difference is real, and the cost of using the wrong tool for a job is hours of bad iterations.
+[Promptcraft](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
 
-Pick the model that matches the job. Write prompts that match the model. Ship better images.
+## Sources
+
+- OpenAI launch announcement and pricing page (April 21, 2026)
+- fal.ai GPT Image 2 model page
+- Independent reviews from PixVerse, Lushbinary, MindStudio (April 22-27, 2026)
+- spectrumailab text rendering benchmarks (December 2025)
+- LaoZhang AI comparison guide (March 2026)
+- NightCafe Midjourney V8 vs Nano Banana Pro comparison (January 2026)
 `,
   },
 ];
