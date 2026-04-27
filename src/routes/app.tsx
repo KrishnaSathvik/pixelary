@@ -15,6 +15,7 @@ import { CATEGORIES, MODES, type ModeValue } from "@/lib/promptcraft";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -46,6 +47,7 @@ function AppPage() {
   const [category, setCategory] = useState<string>("auto");
   const [mode, setMode] = useState<ModeValue>("default");
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [result, setResult] = useState<PromptResult | null>(null);
   const [saving, setSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -57,24 +59,87 @@ function AppPage() {
       return;
     }
     setLoading(true);
+    setStreaming(false);
     setResult(null);
     try {
       const res = await fetch("/api/generate-prompt", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
         body: JSON.stringify({ userInput, category, mode }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data?.error || "Failed to generate");
+
+      if (!res.ok || !res.body) {
+        let msg = "Failed to generate";
+        try {
+          const data = await res.json();
+          msg = data?.error || msg;
+        } catch {}
+        toast.error(msg);
         return;
       }
-      setResult(data);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let currentEvent = "";
+      let gotFirst = false;
+
+      const applyPartial = (args: string) => {
+        const partial: PromptResult = {};
+        const p = extractPartialString(args, "prompt");
+        if (p) partial.prompt = p;
+        const arr = extractPartialStringArray(args, "prompts");
+        if (arr && arr.length) partial.prompts = arr;
+        const cat = extractPartialString(args, "category");
+        if (cat) partial.category = cat;
+        const why = extractPartialString(args, "why_it_works");
+        if (why) partial.why_it_works = why;
+        setResult(partial);
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let nl: number;
+        while ((nl = buffer.indexOf("\n")) !== -1) {
+          const line = buffer.slice(0, nl);
+          buffer = buffer.slice(nl + 1);
+          if (line.startsWith("event:")) {
+            currentEvent = line.slice(6).trim();
+          } else if (line.startsWith("data:")) {
+            const payload = line.slice(5).trim();
+            if (!payload) continue;
+            try {
+              const json = JSON.parse(payload);
+              if (currentEvent === "delta" && typeof json.args === "string") {
+                if (!gotFirst) {
+                  gotFirst = true;
+                  setLoading(false);
+                  setStreaming(true);
+                }
+                applyPartial(json.args);
+              } else if (currentEvent === "done") {
+                setResult(json as PromptResult);
+                setStreaming(false);
+              } else if (currentEvent === "error") {
+                toast.error(json?.error || "Generation failed");
+                setStreaming(false);
+              }
+            } catch {
+              // ignore
+            }
+          } else if (line === "") {
+            currentEvent = "";
+          }
+        }
+      }
     } catch (err) {
       console.error(err);
       toast.error("Network error. Try again.");
     } finally {
       setLoading(false);
+      setStreaming(false);
     }
   };
 
@@ -191,7 +256,7 @@ function AppPage() {
 
             <Button
               onClick={() => generate()}
-              disabled={loading}
+              disabled={loading || streaming}
               size="lg"
               className="w-full bg-amber-gradient text-primary-foreground hover:opacity-90 shadow-amber-glow h-12 text-base gap-2"
             >
@@ -199,6 +264,11 @@ function AppPage() {
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
                   Generating…
+                </>
+              ) : streaming ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Streaming…
                 </>
               ) : (
                 <>
@@ -218,16 +288,17 @@ function AppPage() {
               <h2 className="text-2xl font-bold tracking-tight">Your polished prompt</h2>
               {result && (
                 <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                  {result.category || "READY"}
+                  {streaming ? "STREAMING" : result.category || "READY"}
                 </span>
               )}
             </div>
 
             {!result && !loading && <EmptyState />}
-            {loading && <LoadingState />}
+            {loading && !result && <LoadingState />}
             {result && (
               <ResultView
                 result={result}
+                streaming={streaming}
                 onCopy={() => {}}
                 onRegenerate={() => generate()}
                 onSave={savePrompt}
@@ -276,7 +347,7 @@ function LoadingState() {
   );
 }
 
-function CodeBlock({ text }: { text: string }) {
+function CodeBlock({ text, streaming = false }: { text: string; streaming?: boolean }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     await navigator.clipboard.writeText(text);
@@ -288,20 +359,26 @@ function CodeBlock({ text }: { text: string }) {
     <div className="relative group">
       <pre className="rounded-xl bg-[var(--code-bg)] text-[var(--code-fg)] p-5 pr-14 text-sm font-mono leading-relaxed whitespace-pre-wrap overflow-x-auto border border-border/40 shadow-soft">
         {text}
+        {streaming && (
+          <span className="inline-block w-2 h-4 -mb-0.5 ml-0.5 bg-primary/80 animate-pulse align-middle" />
+        )}
       </pre>
-      <button
-        onClick={handleCopy}
-        className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-card/80 hover:bg-card border border-border/60 text-muted-foreground hover:text-foreground transition backdrop-blur"
-        aria-label="Copy"
-      >
-        {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
-      </button>
+      {!streaming && (
+        <button
+          onClick={handleCopy}
+          className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-card/80 hover:bg-card border border-border/60 text-muted-foreground hover:text-foreground transition backdrop-blur"
+          aria-label="Copy"
+        >
+          {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+        </button>
+      )}
     </div>
   );
 }
 
 function ResultView({
   result,
+  streaming = false,
   onRegenerate,
   onSave,
   onVariantClick,
@@ -309,6 +386,7 @@ function ResultView({
   isLoggedIn,
 }: {
   result: PromptResult;
+  streaming?: boolean;
   onCopy: () => void;
   onRegenerate: () => void;
   onSave: () => void;
@@ -358,16 +436,21 @@ function ResultView({
     const labels = ["Safe", "Stylized", "Experimental"];
     return (
       <div className="space-y-4">
-        {result.prompts.map((p, i) => (
-          <div key={i} className="space-y-2">
-            <div className="text-xs uppercase tracking-widest text-primary font-semibold">
-              {labels[i] || `Variant ${i + 1}`}
+        {result.prompts.map((p, i) => {
+          const isLast = i === result.prompts!.length - 1;
+          return (
+            <div key={i} className="space-y-2">
+              <div className="text-xs uppercase tracking-widest text-primary font-semibold">
+                {labels[i] || `Variant ${i + 1}`}
+              </div>
+              <CodeBlock text={p} streaming={streaming && isLast} />
             </div>
-            <CodeBlock text={p} />
-          </div>
-        ))}
+          );
+        })}
         {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+        {!streaming && (
+          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+        )}
       </div>
     );
   }
@@ -375,7 +458,7 @@ function ResultView({
   // Default / JSON mode
   return (
     <div className="space-y-4">
-      {result.prompt && <CodeBlock text={result.prompt} />}
+      {result.prompt && <CodeBlock text={result.prompt} streaming={streaming} />}
       {(result.size || result.quality || result.aspect_ratio) && (
         <div className="flex flex-wrap gap-2">
           {result.size && <Tag label="size" value={result.size} />}
@@ -403,7 +486,9 @@ function ResultView({
           </div>
         </div>
       )}
-      <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+      {!streaming && (
+        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+      )}
     </div>
   );
 }
