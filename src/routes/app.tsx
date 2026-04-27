@@ -17,7 +17,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 
+interface AppSearch {
+  seed?: string;
+}
+
 export const Route = createFileRoute("/app")({
+  validateSearch: (search: Record<string, unknown>): AppSearch => {
+    const seed = search.seed;
+    return {
+      seed: typeof seed === "string" && seed.length > 0 && seed.length <= 4000 ? seed : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Generator — Promptcraft" },
@@ -51,6 +61,7 @@ function AppPage() {
   const [result, setResult] = useState<PromptResult | null>(null);
   const [saving, setSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { seed } = Route.useSearch();
 
   const generate = async (overrideInput?: string) => {
     const userInput = (overrideInput ?? input).trim();
@@ -150,10 +161,15 @@ function AppPage() {
     }
   };
 
-  // Auto focus on mount
+  // Auto focus on mount + handle ?seed= prefill from Examples gallery
   useEffect(() => {
+    if (seed) {
+      setInput(seed);
+      toast.success("Loaded from example — generate to see your version.");
+    }
     textareaRef.current?.focus();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed]);
 
   const generateVariant = async (variantHint: string) => {
     await generate(`${input.trim()} — variant: ${variantHint}`);

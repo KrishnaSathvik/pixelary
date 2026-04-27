@@ -28,11 +28,27 @@ export function Header() {
 
         <nav className="hidden md:flex items-center gap-1">
           <Link
+            to="/"
+            className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            activeProps={{ className: "px-3 py-2 text-sm text-foreground font-medium" }}
+            activeOptions={{ exact: true }}
+          >
+            Home
+          </Link>
+          <Link
+            to="/examples/{-$id}"
+            params={{ id: undefined }}
+            className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            activeProps={{ className: "px-3 py-2 text-sm text-foreground font-medium border-b-2 border-primary -mb-[2px]" }}
+          >
+            Examples
+          </Link>
+          <Link
             to="/app"
             className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             activeProps={{ className: "px-3 py-2 text-sm text-foreground font-medium" }}
           >
-            Generator
+            Generate
           </Link>
           {user && (
             <Link

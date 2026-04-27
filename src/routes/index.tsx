@@ -48,9 +48,13 @@ function LandingPage() {
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <a href="#example" className="text-sm text-muted-foreground hover:text-foreground transition">
-              See an example ↓
-            </a>
+            <Link
+              to="/examples/{-$id}"
+              params={{ id: undefined }}
+              className="text-sm text-muted-foreground hover:text-foreground transition"
+            >
+              See examples →
+            </Link>
           </div>
           <p className="mt-6 text-xs text-muted-foreground">No signup required to try.</p>
         </div>
