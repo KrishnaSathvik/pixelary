@@ -314,13 +314,16 @@ function AppPage() {
 
           {/* RIGHT — OUTPUT */}
           <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6 sm:p-8 shadow-md-card">
-            <div className="flex items-center justify-between gap-4">
-              <div>
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
                 <p className="eyebrow">Step 02 · Output</p>
                 <h2 className="mt-3 text-heading-lg">Your polished prompt</h2>
               </div>
               {result && (
-                <span className="pill" style={{ color: "var(--text-primary)" }}>
+                <span
+                  className="pill shrink-0 whitespace-nowrap"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   {streaming ? "Streaming" : result.category || "Ready"}
                 </span>
               )}
