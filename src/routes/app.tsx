@@ -410,7 +410,7 @@ function CodeBlock({ text, streaming = false }: { text: string; streaming?: bool
         <button
           type="button"
           onClick={handleCopy}
-          className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors duration-150 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+          className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors duration-150 opacity-100 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
           aria-label="Copy prompt"
         >
           {copied ? <Check className="h-4 w-4 text-[color:var(--success)]" /> : <Copy className="h-4 w-4" />}
