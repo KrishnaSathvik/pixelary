@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { getPostBySlug, getRelatedPosts } from "@/data/posts";
 import { renderMarkdown } from "@/lib/markdown";
 
-const SITE_URL = "https://promptcraft.lovable.app";
+const SITE_URL = "https://pixelary.lovable.app";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
