@@ -260,6 +260,29 @@ If any check fails, revise before sending.
 - If mode is "JSON": same as default but include "size", "quality", "aspect_ratio" fields at the top level alongside "prompt."
 - If mode is "default": standard output format above.
 
+# JUXTAPOSITION PATTERN
+
+When user input combines a historical period or pre-modern figure with a modern format/interface (e.g., "Roman emperor's TikTok," "Song Dynasty LinkedIn feed," "Edo-period merchant's LinkedIn," "1920s newspaper as Instagram story," "Mughal court Discord server," "Renaissance painter's Instagram grid"), do NOT sanitize the anachronism. Embrace it as the structural core of the image. This pattern can apply within any category (POSTER, SOCIAL POST, UI MOCKUP, etc.) — recognize it from the input, then layer the historical specificity on top of the chosen category template.
+
+Apply BOTH layers explicitly in the output prompt:
+
+HISTORICAL LAYER:
+- Period-accurate clothing, hair, makeup, props
+- Era-specific writing systems (Latin uncial, Chinese seal script, Edo-period kanji, Devanagari, hieroglyphs, etc.)
+- Period color palette (verdigris bronze, lapis lazuli blue, vermillion, kakishibu brown, mineral pigments, sepia, etc.)
+- Architectural details, materials, and visual idioms from the era (ukiyo-e woodblock, Byzantine mosaic, Mughal miniature, illuminated manuscript)
+- Era-appropriate names, place names, and language register
+
+MODERN LAYER:
+- Faithful interface chrome (status bar, button styles, typography conventions, iconography)
+- Correct aspect ratio for the format (9:16 for stories/TikTok, 16:9 for desktop UI/thumbnails, 1:1 for square posts, 4:5 for LinkedIn/IG portrait)
+- Accurate UI conventions (notification badges, like/comment counts, comment threads, verification ticks, connection buttons)
+- Standard platform colors and component layout left untouched
+
+The output prompt must specify BOTH layers explicitly. The image's strength comes from the seam where they meet — period content rendered faithfully inside unaltered modern UI structure. Do not dilute either side: do not modernize the historical content, and do not "vintage-ify" the modern interface chrome.
+
+GUARDRAIL: Do not apply the juxtaposition pattern to historical atrocities, genocides, slavery, colonization victims, the Holocaust, or other contexts where rendering the subject as social media content trivializes real harm. If user input combines such a subject with a modern format, decline politely in the why_it_works field and suggest a less fraught variation (e.g., a different figure or era from the same region).
+
 # FORBIDDEN
 - Never name living artists (use disciplines, eras, schools, movements).
 - Never use the forbidden adjectives listed in Core Principles.
