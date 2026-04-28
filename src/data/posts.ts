@@ -18,7 +18,7 @@ export const posts: Post[] = [
     title: "GPT Image 2 Prompt Examples: 12 Templates That Actually Work",
     subtitle: "Real prompts across our 10 categories — copy, paste, ship.",
     category: "Examples",
-    author: "Promptcraft Team",
+    author: "Pixelary Team",
     read_time: "8 min",
     published: "2026-04-27",
     excerpt:
@@ -165,7 +165,7 @@ MATCH: Original lighting direction and intensity on subject (rim from camera-rig
 
 Don't just copy them verbatim. Use them as templates: find the example closest to your use case, swap out the subject specifics for your own, keep the structural skeleton (camera specs, lighting language, aspect ratio), and iterate by changing one variable at a time.
 
-Or paste your rough idea into [Promptcraft](/app) and let it generate the structured prompt for you.
+Or paste your rough idea into [Pixelary](/app) and let it generate the structured prompt for you.
 `,
   },
   {
@@ -173,7 +173,7 @@ Or paste your rough idea into [Promptcraft](/app) and let it generate the struct
     title: "10 ChatGPT Image Prompt Tips for Production-Quality Results",
     subtitle: "Practical techniques drawn from real testing — not magic words.",
     category: "Tips",
-    author: "Promptcraft Team",
+    author: "Pixelary Team",
     read_time: "8 min",
     published: "2026-04-26",
     excerpt:
@@ -280,7 +280,7 @@ When iterating, keep everything constant except one element — light direction,
 
 ## The faster path
 
-If running through this checklist on every prompt sounds like work, [Promptcraft](/app) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
+If running through this checklist on every prompt sounds like work, [Pixelary](/app) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
 `,
   },
   {
@@ -288,7 +288,7 @@ If running through this checklist on every prompt sounds like work, [Promptcraft
     title: "A 6-Layer Framework for Writing AI Image Prompts",
     subtitle: "A repeatable structure for any image type — posters, photoreal, UI mockups, edits.",
     category: "Framework",
-    author: "Promptcraft Team",
+    author: "Pixelary Team",
     read_time: "7 min",
     published: "2026-04-25",
     excerpt:
@@ -403,9 +403,9 @@ Three categories need a different structure:
 
 For everything else — photoreal, cinematic, character art, interiors, food, fashion, architecture — the 6 layers work as a useful checklist.
 
-## Use the framework or use Promptcraft
+## Use the framework or use Pixelary
 
-You can apply this manually on every prompt. Or you can paste your rough idea into [Promptcraft](/app) and get a structured 6-layer prompt back in seconds. Same framework, automated.
+You can apply this manually on every prompt. Or you can paste your rough idea into [Pixelary](/app) and get a structured 6-layer prompt back in seconds. Same framework, automated.
 `,
   },
   {
@@ -413,7 +413,7 @@ You can apply this manually on every prompt. Or you can paste your rough idea in
     title: "How to Write AI Image Prompts That Render Text Correctly",
     subtitle: "The protocol for posters, social graphics, and any image with words on it.",
     category: "How-to",
-    author: "Promptcraft Team",
+    author: "Pixelary Team",
     read_time: "6 min",
     published: "2026-04-23",
     excerpt:
@@ -491,7 +491,7 @@ Three text elements, each with its own font weight, color, and placement. Hex co
 
 ## The shortcut
 
-Manually applying this protocol on every prompt is tedious. [Promptcraft](/app) bakes the entire text-rendering protocol into every poster, social graphic, and typography-heavy prompt it generates. Paste your rough idea, get back a prompt with quotes, placements, weights, and the verbatim trigger already in place.
+Manually applying this protocol on every prompt is tedious. [Pixelary](/app) bakes the entire text-rendering protocol into every poster, social graphic, and typography-heavy prompt it generates. Paste your rough idea, get back a prompt with quotes, placements, weights, and the verbatim trigger already in place.
 `,
   },
   {
@@ -499,7 +499,7 @@ Manually applying this protocol on every prompt is tedious. [Promptcraft](/app) 
     title: "GPT Image 2 vs Nano Banana Pro vs Midjourney V8: 2026 Comparison",
     subtitle: "An honest comparison of the three top AI image models in April 2026.",
     category: "Comparison",
-    author: "Promptcraft Team",
+    author: "Pixelary Team",
     read_time: "9 min",
     published: "2026-04-21",
     excerpt:
@@ -638,7 +638,7 @@ If you're picking just one in April 2026:
 - **Use Midjourney V8** when aesthetic quality is the entire point and you're not constrained by text rendering needs
 - **Use Nano Banana Pro** when you need character consistency across a series or precise edits
 
-[Promptcraft](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
+[Pixelary](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
 
 ## Sources
 

@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Promptcraft — Turn rough ideas into pro-grade image prompts" },
+      { title: "Pixelary — Turn rough ideas into pro-grade image prompts" },
       {
         name: "description",
         content:
@@ -160,7 +160,7 @@ function LandingPage() {
               P
             </span>
             <span className="text-mono-sm text-[color:var(--text-tertiary)]">
-              Promptcraft © {new Date().getFullYear()}
+              Pixelary © {new Date().getFullYear()}
             </span>
           </div>
           <nav className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-mono-sm text-[color:var(--text-tertiary)]">

@@ -30,7 +30,7 @@ export const Route = createFileRoute("/app")({
   },
   head: () => ({
     meta: [
-      { title: "Generator — Promptcraft" },
+      { title: "Generator — Pixelary" },
       { name: "description", content: "Generate production-grade image prompts in seconds." },
     ],
   }),

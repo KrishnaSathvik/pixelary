@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/library")({
-  head: () => ({ meta: [{ title: "Library — Promptcraft" }] }),
+  head: () => ({ meta: [{ title: "Library — Pixelary" }] }),
   component: LibraryPage,
 });
 
