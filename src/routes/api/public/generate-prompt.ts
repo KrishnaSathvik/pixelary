@@ -361,9 +361,8 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                 safeClose();
               } catch (err) {
                 console.error("stream error:", err);
-                send("error", {
-                  error: err instanceof Error ? err.message : "Stream error",
-                });
+                // Generic client message — full error is logged server-side only.
+                send("error", { error: "An internal error occurred. Please try again." });
                 safeClose();
               } finally {
                 try {
