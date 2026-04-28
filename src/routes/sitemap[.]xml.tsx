@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { posts } from "@/data/posts";
 import { examples } from "@/data/examples";
 
-const SITE_URL = "https://promptcraft.lovable.app";
+const SITE_URL = "https://pixelary.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {

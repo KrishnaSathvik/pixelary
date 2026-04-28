@@ -7,7 +7,7 @@ import { posts } from "@/data/posts";
 const PAGE_TITLE = "The Pixelary Blog — AI Image Prompt Engineering";
 const PAGE_DESCRIPTION =
   "Field-tested techniques for getting better AI images from GPT Image 2, Midjourney, Nano Banana Pro. Frameworks, examples, comparisons.";
-const PAGE_URL = "https://promptcraft.lovable.app/blog";
+const PAGE_URL = "https://pixelary.lovable.app/blog";
 
 export const Route = createFileRoute("/blog/")({
   head: () => {

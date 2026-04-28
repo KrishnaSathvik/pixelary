@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-const SITE_URL = "https://promptcraft.lovable.app";
+const SITE_URL = "https://pixelary.lovable.app";
 
 export const Route = createFileRoute("/robots.txt")({
   server: {

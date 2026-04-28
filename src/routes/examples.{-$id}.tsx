@@ -10,7 +10,7 @@ import { examples, EXAMPLE_CATEGORIES, type Example } from "@/data/examples";
 const PAGE_TITLE = "GPT Image 2 Prompt Examples — 30 Production-Grade Templates | Pixelary";
 const PAGE_DESCRIPTION =
   "Browse 30 polished GPT Image 2 prompts across 10 categories — posters, infographics, UI mockups, cinematic scenes, multi-panel storyboards, abstract & surreal mood pieces, and more. Copy any example or generate your own.";
-const PAGE_URL = "https://promptcraft.lovable.app/examples";
+const PAGE_URL = "https://pixelary.lovable.app/examples";
 
 export const Route = createFileRoute("/examples/{-$id}")({
   head: ({ params }) => {
