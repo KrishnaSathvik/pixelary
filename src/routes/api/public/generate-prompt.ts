@@ -389,8 +389,9 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           });
         } catch (err) {
           console.error("generate-prompt error:", err);
+          // Generic client message — full error is logged server-side only.
           return new Response(
-            JSON.stringify({ error: err instanceof Error ? err.message : "Unknown error" }),
+            JSON.stringify({ error: "An internal error occurred. Please try again." }),
             { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
           );
         }
