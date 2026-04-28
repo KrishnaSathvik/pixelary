@@ -1,0 +1,25 @@
+{
+  "name": "Pixelary",
+  "short_name": "Pixelary",
+  "description": "Pro-grade AI image prompts in seconds.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAFAF7",
+  "theme_color": "#FAFAF7",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
