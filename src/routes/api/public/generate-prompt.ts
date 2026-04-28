@@ -1,11 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SYSTEM_PROMPT } from "@/lib/promptcraft";
+import { SYSTEM_PROMPT, CATEGORIES, MODES } from "@/lib/promptcraft";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
+
+// Allowlists derived from the same source the UI uses — keeps server validation
+// in lockstep with frontend options without duplication.
+const ALLOWED_CATEGORIES = new Set<string>(CATEGORIES.map((c) => c.value));
+const ALLOWED_MODES = new Set<string>(MODES.map((m) => m.value));
+
+// In-memory IP rate limiter (best-effort; per-instance). Caps abuse from a
+// single IP without requiring auth, which would break the public demo.
+// Limits: 10 requests / minute and 60 requests / hour per IP.
+const RATE_WINDOW_MIN_MS = 60_000;
+const RATE_WINDOW_HOUR_MS = 3_600_000;
+const RATE_LIMIT_MIN = 10;
+const RATE_LIMIT_HOUR = 60;
+const ipHits = new Map<string, number[]>();
+
+function getClientIp(request: Request): string {
+  const h = request.headers;
+  return (
+    h.get("cf-connecting-ip") ||
+    h.get("x-real-ip") ||
+    (h.get("x-forwarded-for") || "").split(",")[0].trim() ||
+    "unknown"
+  );
+}
+
+function rateLimitExceeded(ip: string): boolean {
+  const now = Date.now();
+  const hits = (ipHits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_HOUR_MS);
+  const recentMin = hits.filter((t) => now - t < RATE_WINDOW_MIN_MS).length;
+  if (recentMin >= RATE_LIMIT_MIN || hits.length >= RATE_LIMIT_HOUR) {
+    ipHits.set(ip, hits);
+    return true;
+  }
+  hits.push(now);
+  ipHits.set(ip, hits);
+  // Opportunistic cleanup
+  if (ipHits.size > 5000) {
+    for (const [k, v] of ipHits) {
+      const fresh = v.filter((t) => now - t < RATE_WINDOW_HOUR_MS);
+      if (fresh.length === 0) ipHits.delete(k);
+      else ipHits.set(k, fresh);
+    }
+  }
+  return false;
+}
 
 interface RequestBody {
   userInput: string;
@@ -19,6 +64,15 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
       OPTIONS: async () => new Response(null, { status: 204, headers: corsHeaders }),
       POST: async ({ request }) => {
         try {
+          // Rate limit BEFORE doing any work
+          const ip = getClientIp(request);
+          if (rateLimitExceeded(ip)) {
+            return new Response(
+              JSON.stringify({ error: "Too many requests. Please wait a moment and try again." }),
+              { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } }
+            );
+          }
+
           const body = (await request.json()) as RequestBody;
           const { userInput, category, mode = "default" } = body;
 
@@ -33,6 +87,25 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
               status: 400,
               headers: { "Content-Type": "application/json", ...corsHeaders },
             });
+          }
+
+          // Validate mode against allowlist (prevents prompt injection via mode field)
+          if (typeof mode !== "string" || mode.length > 50 || !ALLOWED_MODES.has(mode)) {
+            return new Response(JSON.stringify({ error: "Invalid mode" }), {
+              status: 400,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            });
+          }
+
+          // Validate category against allowlist (prevents prompt injection via category field).
+          // Unknown values are rejected; absence is fine (auto-detect).
+          if (category !== undefined && category !== null) {
+            if (typeof category !== "string" || category.length > 100 || !ALLOWED_CATEGORIES.has(category)) {
+              return new Response(JSON.stringify({ error: "Invalid category" }), {
+                status: 400,
+                headers: { "Content-Type": "application/json", ...corsHeaders },
+              });
+            }
           }
 
           const apiKey = process.env.LOVABLE_API_KEY;
@@ -288,9 +361,8 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                 safeClose();
               } catch (err) {
                 console.error("stream error:", err);
-                send("error", {
-                  error: err instanceof Error ? err.message : "Stream error",
-                });
+                // Generic client message — full error is logged server-side only.
+                send("error", { error: "An internal error occurred. Please try again." });
                 safeClose();
               } finally {
                 try {
@@ -317,8 +389,9 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           });
         } catch (err) {
           console.error("generate-prompt error:", err);
+          // Generic client message — full error is logged server-side only.
           return new Response(
-            JSON.stringify({ error: err instanceof Error ? err.message : "Unknown error" }),
+            JSON.stringify({ error: "An internal error occurred. Please try again." }),
             { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
           );
         }
