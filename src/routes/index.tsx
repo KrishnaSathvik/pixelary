@@ -34,9 +34,18 @@ const EXAMPLE_INPUT = "a hiker in arches";
 const EXAMPLE_OUTPUT = `Lone hiker in dust-coated trail boots and a sun-faded olive shirt, mid-stride along a narrow sandstone ridge, framed beneath the curved sweep of Delicate Arch in Arches National Park, Utah. Late-afternoon light, 4:30pm autumn, warm 4200K side-light raking across iron-rich red rock, deep indigo shadow pooling under the arch. Wide shot, low angle from the basin, 35mm full-frame, Sony A7IV, f/8, foreground rock texture in sharp focus. Soft contrast, fine wind-blown sand visible in the air, no people in the background, 3:2 aspect ratio, photoreal.`;
 
 function LandingPage() {
+  const router = useRouter();
+  // Eager-preload the /app route chunk so the generator opens instantly when
+  // the user clicks "Open generator". Without this the user waits ~1s+ for
+  // the route's JS bundle to download on first navigation.
+  useEffect(() => {
+    router.preloadRoute({ to: "/app" }).catch(() => {});
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
+
 
       {/* HERO — the only place the dot grid appears */}
       <section className="relative overflow-hidden">
