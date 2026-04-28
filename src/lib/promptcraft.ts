@@ -28,7 +28,7 @@ export const CATEGORIES = [
   { value: "SOCIAL POST", label: "Social Post" },
   { value: "CINEMATIC SCENE", label: "Cinematic Scene" },
   { value: "STORYBOARD/MULTI-PANEL", label: "Storyboard / Multi-panel" },
-  { value: "INTERIOR/ARCH/FOOD/FASHION", label: "Interior / Arch / Food / Fashion" },
+  { value: "INTERIOR/ARCH/FOOD/FASHION", label: "Interior / Arch / Food / Fashion / Product" },
   { value: "VISUAL SUMMARY", label: "Visual Summary" },
   { value: "IMAGE EDIT", label: "Image Edit" },
   { value: "OPEN-ENDED CREATIVE", label: "Open-Ended Creative" },

@@ -266,12 +266,21 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                     .replace(/\s*--tile\b/gi, "")
                     .replace(/\s*--no\s+\S+/gi, "")
                     .trim();
+                // Lens unit guard: Gemini Flash occasionally emits "40px lens"
+                // instead of "40mm lens" because px/mm tokens collide in training.
+                // Conservative regex: only fixes \d{2,3}px directly followed by
+                // lens vocabulary, leaving legitimate "px" usage untouched.
+                const fixLensUnits = (s: string): string =>
+                  s
+                    .replace(/\b(\d{2,3})px(\s+(?:lens|prime|macro|telephoto|wide|f\/|aperture))/gi, "$1mm$2")
+                    .replace(/\b(\d{2,3})mm\s+pixel\b/gi, "$1mm");
+                const sanitize = (s: string) => fixLensUnits(stripCliFlags(s));
                 if (finalResult && typeof finalResult === "object") {
                   const fr = finalResult as Record<string, unknown>;
-                  if (typeof fr.prompt === "string") fr.prompt = stripCliFlags(fr.prompt);
+                  if (typeof fr.prompt === "string") fr.prompt = sanitize(fr.prompt);
                   if (Array.isArray(fr.prompts)) {
                     fr.prompts = fr.prompts.map((p) =>
-                      typeof p === "string" ? stripCliFlags(p) : p,
+                      typeof p === "string" ? sanitize(p) : p,
                     );
                   }
                 }
