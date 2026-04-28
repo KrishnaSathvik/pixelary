@@ -45,11 +45,8 @@ export const Route = createRootRoute({
         content: "Turn rough ideas into pro-grade image prompts. Copy-ready for ChatGPT, OpenAI API, fal.ai.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://promptcraft.lovable.app/og-default.png" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
+      { property: "og:site_name", content: "Pixelary" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://promptcraft.lovable.app/og-default.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

@@ -32,6 +32,10 @@ export const Route = createFileRoute("/app")({
     meta: [
       { title: "Generator — Pixelary" },
       { name: "description", content: "Generate production-grade image prompts in seconds." },
+      { property: "og:title", content: "Pixelary Generator" },
+      { property: "og:description", content: "Generate production-grade image prompts in seconds." },
+      { name: "twitter:title", content: "Pixelary Generator" },
+      { name: "twitter:description", content: "Generate production-grade image prompts in seconds." },
     ],
   }),
   component: AppPage,

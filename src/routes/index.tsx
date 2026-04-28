@@ -12,6 +12,18 @@ export const Route = createFileRoute("/")({
         content:
           "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs. Ten category templates for ChatGPT, the OpenAI API, and fal.ai.",
       },
+      { property: "og:title", content: "Pixelary — Turn rough ideas into pro-grade image prompts" },
+      {
+        property: "og:description",
+        content:
+          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs.",
+      },
+      { name: "twitter:title", content: "Pixelary — Turn rough ideas into pro-grade image prompts" },
+      {
+        name: "twitter:description",
+        content:
+          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs.",
+      },
     ],
   }),
   component: LandingPage,
