@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { AuthShell, Divider, GoogleIcon } from "./login";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Sign up — Promptcraft" }] }),
+  head: () => ({ meta: [{ title: "Sign up — Pixelary" }] }),
   component: SignupPage,
 });
 

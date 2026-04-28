@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import { examples, EXAMPLE_CATEGORIES, type Example } from "@/data/examples";
 
-const PAGE_TITLE = "GPT Image 2 Prompt Examples — 30 Production-Grade Templates | Promptcraft";
+const PAGE_TITLE = "GPT Image 2 Prompt Examples — 30 Production-Grade Templates | Pixelary";
 const PAGE_DESCRIPTION =
   "Browse 30 polished GPT Image 2 prompts across 10 categories — posters, infographics, UI mockups, cinematic scenes, multi-panel storyboards, abstract & surreal mood pieces, and more. Copy any example or generate your own.";
 const PAGE_URL = "https://promptcraft.lovable.app/examples";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/examples/{-$id}")({
   head: ({ params }) => {
     const example = params.id ? examples.find((e) => e.id === params.id) : undefined;
     if (example) {
-      const title = `“${example.user_input}” — ${example.category} prompt example | Promptcraft`;
+      const title = `“${example.user_input}” — ${example.category} prompt example | Pixelary`;
       const desc = `${example.why_it_works.slice(0, 155)}…`;
       return {
         meta: [
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/examples/{-$id}")({
     const itemListJsonLd = {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      name: "Promptcraft Examples Gallery",
+      name: "Pixelary Examples Gallery",
       description: PAGE_DESCRIPTION,
       numberOfItems: examples.length,
       itemListElement: examples.map((ex, i) => ({

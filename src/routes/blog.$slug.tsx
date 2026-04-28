@@ -31,7 +31,7 @@ export const Route = createFileRoute("/blog/$slug")({
       datePublished: post.published,
       dateModified: post.published,
       author: { "@type": "Organization", name: post.author },
-      publisher: { "@type": "Organization", name: "Promptcraft" },
+      publisher: { "@type": "Organization", name: "Pixelary" },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
     };
     return {
@@ -157,7 +157,7 @@ function PostPage() {
               <p className="text-body-sm font-medium text-[color:var(--text-primary)]">
                 {post.author}
               </p>
-              <p className="text-mono-sm text-[color:var(--text-tertiary)]">Promptcraft team</p>
+              <p className="text-mono-sm text-[color:var(--text-tertiary)]">Pixelary team</p>
             </div>
           </div>
         </header>
@@ -224,7 +224,7 @@ function PostPage() {
               )}
 
               <div className="border-l-2 border-[color:var(--accent)] pl-4">
-                <p className="eyebrow">Try Promptcraft</p>
+                <p className="eyebrow">Try Pixelary</p>
                 <p className="mt-2 text-body-sm text-[color:var(--text-secondary)]">
                   Generate prompts that follow every rule in this article.
                 </p>
@@ -246,7 +246,7 @@ function PostPage() {
             <div className="flex-1">
               <h4 className="text-heading-sm">{post.author}</h4>
               <p className="mt-1.5 text-body-md text-[color:var(--text-secondary)]">
-                The Promptcraft team ships AI image prompt tooling. We obsess over what works in
+                The Pixelary team ships AI image prompt tooling. We obsess over what works in
                 production — not what looks good in a demo.
               </p>
               <div className="mt-3 flex gap-3 text-[color:var(--text-tertiary)]">
@@ -277,7 +277,7 @@ function PostPage() {
                 variant="secondary"
                 className="bg-white text-[color:var(--accent)] hover:bg-[color:var(--bg-subtle)] border-transparent"
               >
-                Open Promptcraft <ArrowRight className="ml-1.5 h-4 w-4" />
+                Open Pixelary <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
             </Link>
           </div>

@@ -11,7 +11,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/launch-checklist")({
   head: () => ({
     meta: [
-      { title: "Launch Checklist — Promptcraft" },
+      { title: "Launch Checklist — Pixelary" },
       { name: "description", content: "Post-launch checklist: stress tests, log review, and soft-launch cohort." },
       { name: "robots", content: "noindex" },
     ],

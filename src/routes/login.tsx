@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Log in — Promptcraft" }] }),
+  head: () => ({ meta: [{ title: "Log in — Pixelary" }] }),
   component: LoginPage,
 });
 
@@ -97,8 +97,8 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
     <div className="min-h-screen bg-[color:var(--bg)] flex flex-col">
       <div className="px-6 lg:px-12 py-6">
         <Link to="/" className="inline-flex items-center gap-2.5">
-          <img src={logo} alt="Promptcraft" width={28} height={28} className="h-7 w-7 dark:invert" />
-          <span className="text-[15px] font-semibold tracking-tight">Promptcraft</span>
+          <img src={logo} alt="Pixelary" width={28} height={28} className="h-7 w-7 dark:invert" />
+          <span className="text-[15px] font-semibold tracking-tight">Pixelary</span>
         </Link>
       </div>
       <div className="flex-1 flex items-start sm:items-center justify-center px-6 pt-8 pb-16">

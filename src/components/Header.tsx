@@ -26,13 +26,13 @@ export function Header() {
         <Link to="/" className="flex items-center gap-2.5 group">
           <img
             src={logo}
-            alt="Promptcraft"
+            alt="Pixelary"
             width={28}
             height={28}
             className="h-7 w-7 dark:invert"
           />
           <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
-            Promptcraft
+            Pixelary
           </span>
         </Link>
 

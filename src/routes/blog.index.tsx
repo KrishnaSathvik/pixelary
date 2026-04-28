@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/data/posts";
 
-const PAGE_TITLE = "The Promptcraft Blog — AI Image Prompt Engineering";
+const PAGE_TITLE = "The Pixelary Blog — AI Image Prompt Engineering";
 const PAGE_DESCRIPTION =
   "Field-tested techniques for getting better AI images from GPT Image 2, Midjourney, Nano Banana Pro. Frameworks, examples, comparisons.";
 const PAGE_URL = "https://promptcraft.lovable.app/blog";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/blog/")({
     const blogJsonLd = {
       "@context": "https://schema.org",
       "@type": "Blog",
-      name: "The Promptcraft Blog",
+      name: "The Pixelary Blog",
       description: PAGE_DESCRIPTION,
       url: PAGE_URL,
       blogPost: posts.map((p) => ({
@@ -116,7 +116,7 @@ function BlogIndex() {
       <main className="mx-auto max-w-[1200px] px-6 lg:px-12 py-16 sm:py-24">
         <header className="max-w-3xl mb-16">
           <p className="eyebrow">Field notes</p>
-          <h1 className="mt-4 text-display-lg">The Promptcraft Blog</h1>
+          <h1 className="mt-4 text-display-lg">The Pixelary Blog</h1>
           <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
             Field-tested techniques for getting better AI images. Written by people who actually
             ship.
@@ -139,7 +139,7 @@ function BlogIndex() {
 
           <aside className="lg:sticky lg:top-24 lg:self-start space-y-8">
             <div className="border-l-2 border-[color:var(--accent)] pl-5">
-              <p className="eyebrow">Try Promptcraft</p>
+              <p className="eyebrow">Try Pixelary</p>
               <h3 className="mt-3 text-heading-sm">
                 Generate prompts that follow every rule we write about.
               </h3>
@@ -173,7 +173,7 @@ function BlogIndex() {
 
       <footer className="border-t border-[color:var(--border-subtle)]">
         <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-10 text-mono-sm text-[color:var(--text-tertiary)]">
-          Promptcraft © {new Date().getFullYear()}
+          Pixelary © {new Date().getFullYear()}
         </div>
       </footer>
     </div>

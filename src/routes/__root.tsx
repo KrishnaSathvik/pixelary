@@ -33,13 +33,13 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "color-scheme", content: "light" },
-      { title: "Promptcraft — Pro-grade image prompts from rough ideas" },
+      { title: "Pixelary — Pro-grade image prompts from rough ideas" },
       {
         name: "description",
         content:
           "Convert rough creative ideas into production-grade prompts for OpenAI’s GPT Image 2. Built on the techniques used by the top 1% of prompt engineers.",
       },
-      { property: "og:title", content: "Promptcraft — Pro-grade image prompts" },
+      { property: "og:title", content: "Pixelary — Pro-grade image prompts" },
       {
         property: "og:description",
         content: "Turn rough ideas into pro-grade image prompts. Copy-ready for ChatGPT, OpenAI API, fal.ai.",
