@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
-import { Sparkles, Copy, Check, RefreshCw, Save, Loader2, Wand2, Lightbulb, ExternalLink } from "lucide-react";
-import { PublishToLibraryToggle } from "@/components/generator/PublishToLibraryToggle";
+import { Sparkles, Copy, Check, RefreshCw, Loader2, Wand2, Lightbulb, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
