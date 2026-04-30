@@ -7,7 +7,6 @@ import {
   RefreshCw,
   Loader2,
   Wand2,
-  Lightbulb,
   ExternalLink,
   Plus,
   ChevronDown,
@@ -66,7 +65,6 @@ interface PromptResult {
   prompts?: string[];
   category?: string;
   why_it_works?: string;
-  variants?: string[];
   size?: string;
   quality?: string;
   aspect_ratio?: string;
@@ -328,7 +326,7 @@ function AppPage() {
                 <span className="text-mono-sm text-[color:var(--text-tertiary)] hidden sm:inline">
                   or press{" "}
                   <kbd className="px-1.5 py-0.5 rounded-sm bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[11px]">
-                    ⌘ Enter
+                    {navigator.platform?.toUpperCase().includes("MAC") ? "⌘" : "Ctrl"} Enter
                   </kbd>
                 </span>
               </div>
@@ -452,7 +450,7 @@ function CodeBlock({ text, jsonView, streaming = false }: CodeBlockProps) {
 
   return (
     <div className="relative">
-      <pre className="rounded-lg bg-[color:var(--code-bg)] text-[color:var(--code-text)] px-6 py-5 pr-14 text-[14px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto border border-[color:var(--code-border)]">
+      <pre className="rounded-lg bg-[color:var(--code-bg)] text-[color:var(--code-text)] px-6 py-5 pr-40 text-[14px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto border border-[color:var(--code-border)]">
         {display}
         {streaming && (
           <span className="inline-block w-1.5 h-4 -mb-0.5 ml-0.5 bg-[color:var(--accent)] animate-pulse align-middle" />
@@ -582,7 +580,6 @@ function ResultView({
                     quality: result.quality,
                     aspect_ratio: result.aspect_ratio,
                     why_it_works: result.why_it_works,
-                    variants: result.variants,
                   }
                 : undefined
             }
@@ -644,10 +641,6 @@ function ResultView({
       {!streaming && result.why_it_works && (
         <WhyItWorks text={result.why_it_works} defaultOpen={false} />
       )}
-      {!streaming && result.variants && result.variants.length > 0 && (
-        <VariantsCollapsed variants={result.variants} />
-      )}
-
       {!streaming && <NewPromptButton onClick={onNewPrompt} />}
     </div>
   );
@@ -684,41 +677,6 @@ function WhyItWorks({ text, defaultOpen = false }: { text: string; defaultOpen?:
   );
 }
 
-function VariantsCollapsed({ variants }: { variants: string[] }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="border-t border-[color:var(--border-subtle)] pt-4">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between gap-2 text-left text-body-sm text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
-      >
-        <span className="eyebrow inline-flex items-center gap-1.5">
-          <Lightbulb className="h-3.5 w-3.5" />
-          Variants{" "}
-          <span className="font-mono normal-case tracking-normal text-[color:var(--text-tertiary)]">
-            ({variants.length})
-          </span>
-        </span>
-        <ChevronDown
-          className={`h-4 w-4 text-[color:var(--text-tertiary)] transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      {open && (
-        <ul className="mt-3 space-y-2">
-          {variants.map((v, i) => (
-            <li
-              key={i}
-              className="text-body-sm p-3 rounded-md bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] text-[color:var(--text-secondary)]"
-            >
-              {v}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
 
 function Tag({ label, value }: { label: string; value: string }) {
   return (

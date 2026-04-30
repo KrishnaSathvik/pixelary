@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SYSTEM_PROMPT, CATEGORIES, MODES, PROMPT_VERSION } from "@/lib/promptcraft";
+import { SYSTEM_PROMPT, CATEGORIES, MODES, PROMPT_VERSION } from "@/lib/pixelary";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -114,7 +114,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             }
           }
 
-          const apiKey = process.env.LOVABLE_API_KEY;
+          const apiKey = process.env.OPENAI_API_KEY;
           if (!apiKey) {
             return new Response(JSON.stringify({ error: "AI service not configured" }), {
               status: 500,
@@ -189,38 +189,52 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             .filter(Boolean)
             .join("\n\n");
 
-          const tools = [
-            {
-              type: "function",
-              function: {
-                name: "deliver_prompt",
-                description: "Deliver the polished prompt result.",
-                parameters: {
-                  type: "object",
-                  properties: {
-                    prompt: {
-                      type: "string",
-                      description: "Single polished prompt (default/JSON modes)",
+          const getTools = (m: string) => {
+            const requiredByMode: Record<string, string[]> = {
+              default: ["prompt", "category", "why_it_works"],
+              BATCH: ["prompts", "category", "why_it_works"],
+              JSON: ["prompt", "category", "size", "quality", "aspect_ratio", "why_it_works"],
+              CRITIQUE: ["score", "weaknesses", "improvements", "rewritten_prompt", "category"],
+            };
+            return [
+              {
+                type: "function" as const,
+                function: {
+                  name: "deliver_prompt",
+                  description: "Deliver the polished prompt result.",
+                  parameters: {
+                    type: "object",
+                    properties: {
+                      prompt: {
+                        type: "string",
+                        description: "Single polished prompt (default/JSON modes)",
+                      },
+                      prompts: {
+                        type: "array",
+                        items: { type: "string" },
+                        description: "Three variants for BATCH mode: safe, stylized, experimental",
+                      },
+                      category: { type: "string" },
+                      why_it_works: { type: "string" },
+                      size: { type: "string", description: "JSON mode only" },
+                      quality: { type: "string", description: "JSON mode only" },
+                      aspect_ratio: { type: "string", description: "JSON mode only" },
+                      score: { type: "number", description: "CRITIQUE mode only, 1-10" },
+                      weaknesses: { type: "array", items: { type: "string" } },
+                      improvements: { type: "array", items: { type: "string" } },
+                      rewritten_prompt: {
+                        type: "string",
+                        description:
+                          "CRITIQUE mode only — full rewritten prompt with all improvements applied",
+                      },
                     },
-                    prompts: {
-                      type: "array",
-                      items: { type: "string" },
-                      description: "Three variants for BATCH mode: safe, stylized, experimental",
-                    },
-                    category: { type: "string" },
-                    why_it_works: { type: "string" },
-                    variants: { type: "array", items: { type: "string" } },
-                    size: { type: "string", description: "JSON mode only" },
-                    quality: { type: "string", description: "JSON mode only" },
-                    aspect_ratio: { type: "string", description: "JSON mode only" },
-                    score: { type: "number", description: "CRITIQUE mode only, 1-10" },
-                    weaknesses: { type: "array", items: { type: "string" } },
-                    improvements: { type: "array", items: { type: "string" } },
+                    required: requiredByMode[m] || requiredByMode.default,
                   },
                 },
               },
-            },
-          ];
+            ];
+          };
+          const tools = getTools(mode);
 
           // Return SSE immediately, then start the AI request inside the stream.
           // This prevents the public route from timing out before the model sends headers.
@@ -252,20 +266,21 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
               };
 
               send("status", { message: "starting" });
-              const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+              const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: {
                   Authorization: `Bearer ${apiKey}`,
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  model: "google/gemini-3-flash-preview",
+                  model: "gpt-5.4-mini",
                   messages: [
                     { role: "system", content: SYSTEM_PROMPT },
                     { role: "user", content: userMessage },
                   ],
                   tools,
                   tool_choice: { type: "function", function: { name: "deliver_prompt" } },
+                  temperature: 0.7,
                   stream: true,
                 }),
               });
@@ -328,7 +343,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                   safeClose();
                   return;
                 }
-                // Strip Midjourney/SD CLI flags — Promptcraft targets GPT Image 2,
+                // Strip Midjourney/SD CLI flags — Pixelary targets GPT Image 2,
                 // which doesn't use --ar/--style/--v/etc. Belt-and-suspenders sanitize.
                 const stripCliFlags = (s: string): string =>
                   s
@@ -347,7 +362,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                     .replace(/\s*--tile\b/gi, "")
                     .replace(/\s*--no\s+\S+/gi, "")
                     .trim();
-                // Lens unit guard: Gemini Flash occasionally emits "40px lens"
+                // Lens unit guard: some models occasionally emit "40px lens"
                 // instead of "40mm lens" because px/mm tokens collide in training.
                 // Conservative regex: only fixes \d{2,3}px directly followed by
                 // lens vocabulary, leaving legitimate "px" usage untouched.
@@ -365,6 +380,8 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                   if (Array.isArray(fr.prompts)) {
                     fr.prompts = fr.prompts.map((p) => (typeof p === "string" ? sanitize(p) : p));
                   }
+                  if (typeof fr.rewritten_prompt === "string")
+                    fr.rewritten_prompt = sanitize(fr.rewritten_prompt);
                   fr.prompt_version = PROMPT_VERSION;
                 }
                 send("done", finalResult);

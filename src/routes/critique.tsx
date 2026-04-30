@@ -1,13 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import {
+  Check,
   ChevronDown,
   ChevronRight,
   Code2,
+  Copy,
   FileText,
   Loader2,
   Plus,
   ScanSearch,
+  Wand2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,17 +34,20 @@ export const Route = createFileRoute("/critique")({
       { title: "Critique a Prompt — Pixelary" },
       {
         name: "description",
-        content: "Paste a prompt. Get a score, weaknesses, and concrete improvements.",
+        content:
+          "Paste a prompt. Get a score, weaknesses, concrete improvements, and a rewritten prompt.",
       },
       { property: "og:title", content: "Pixelary · Critique" },
       {
         property: "og:description",
-        content: "Paste a prompt. Get a score, weaknesses, and concrete improvements.",
+        content:
+          "Paste a prompt. Get a score, weaknesses, concrete improvements, and a rewritten prompt.",
       },
       { name: "twitter:title", content: "Pixelary · Critique" },
       {
         name: "twitter:description",
-        content: "Paste a prompt. Get a score, weaknesses, and concrete improvements.",
+        content:
+          "Paste a prompt. Get a score, weaknesses, concrete improvements, and a rewritten prompt.",
       },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/critique") }],
@@ -54,6 +60,7 @@ interface CritiqueResult {
   weaknesses?: string[];
   improvements?: string[];
   category?: string;
+  rewritten_prompt?: string;
   prompt_version?: string;
 }
 
@@ -217,7 +224,7 @@ function CritiquePage() {
                 <span className="text-mono-sm text-[color:var(--text-tertiary)] hidden sm:inline">
                   or press{" "}
                   <kbd className="px-1.5 py-0.5 rounded-sm bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[11px]">
-                    ⌘ Enter
+                    {navigator.platform?.toUpperCase().includes("MAC") ? "⌘" : "Ctrl"} Enter
                   </kbd>
                 </span>
               </div>
@@ -265,6 +272,8 @@ function CollapsedInput({ text, onExpand }: { text: string; onExpand: () => void
 
 function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => void }) {
   const [view, setView] = useState<"text" | "json">("text");
+  const [rewrittenCopied, setRewrittenCopied] = useState(false);
+  const navigate = useNavigate();
   const score = typeof result.score === "number" ? result.score : null;
   const scoreColor =
     score === null
@@ -274,6 +283,19 @@ function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => 
         : score >= 5
           ? "var(--text-primary)"
           : "var(--error)";
+
+  const handleCopyRewritten = async () => {
+    if (!result.rewritten_prompt) return;
+    await navigator.clipboard.writeText(result.rewritten_prompt);
+    setRewrittenCopied(true);
+    toast.success("Copied to clipboard");
+    setTimeout(() => setRewrittenCopied(false), 2000);
+  };
+
+  const handleUseRewritten = () => {
+    if (!result.rewritten_prompt) return;
+    navigate({ to: "/app", search: { seed: result.rewritten_prompt } });
+  };
 
   return (
     <div className="space-y-6">
@@ -355,6 +377,37 @@ function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => 
           </>
         )}
       </div>
+
+      {result.rewritten_prompt && (
+        <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-heading-sm">Rewritten prompt</h4>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleCopyRewritten}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
+                aria-label="Copy rewritten prompt"
+              >
+                {rewrittenCopied ? (
+                  <Check className="h-4 w-4 text-[color:var(--success)]" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+          </div>
+          <pre className="rounded-md bg-[color:var(--code-bg)] border border-[color:var(--code-border)] px-5 py-4 text-[13px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto text-[color:var(--code-text)]">
+            {result.rewritten_prompt}
+          </pre>
+          <div className="mt-4">
+            <Button onClick={handleUseRewritten} size="sm" className="gap-2">
+              <Wand2 className="h-3.5 w-3.5" />
+              Use this prompt
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="pt-6 border-t border-[color:var(--border-subtle)]">
         <Button onClick={onNew} variant="ghost" className="gap-2">
