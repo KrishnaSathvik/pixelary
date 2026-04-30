@@ -1,9 +1,9 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
 /**
- * /examples and /examples/:id are deprecated. Library now lives at /.
+ * Auth UI removed. Plumbing (AuthProvider, supabase auth client) stays for Phase 2.
  */
-export const Route = createFileRoute('/examples/{-$id}')({
+export const Route = createFileRoute('/login')({
   beforeLoad: () => {
     throw redirect({ to: '/' });
   },

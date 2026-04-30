@@ -1,225 +1,354 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Header } from "@/components/Header";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Copy, ExternalLink, Search, ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
+import { Header } from '@/components/Header';
+import { fetchLibrary, copyPrompt, openInImago } from '@/lib/library';
+import type { LibraryPrompt } from '@/types/library';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { CATEGORY_GRADIENTS } from '@/data/examples';
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: "Pixelary — Turn rough ideas into pro-grade image prompts" },
+      { title: 'Pixelary — 100+ GPT Image 2 prompts. Copy any.' },
       {
-        name: "description",
+        name: 'description',
         content:
-          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs. Ten category templates for ChatGPT, the OpenAI API, and fal.ai.",
+          '100+ ready-to-use GPT Image 2 prompts. Copy any prompt or open it in Imago. Browse posters, cinematic scenes, UI mockups, infographics, and more.',
       },
-      { property: "og:title", content: "Pixelary — Turn rough ideas into pro-grade image prompts" },
+      { property: 'og:title', content: 'Pixelary — 100+ GPT Image 2 prompts' },
       {
-        property: "og:description",
-        content:
-          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs.",
+        property: 'og:description',
+        content: '100+ ready-to-use GPT Image 2 prompts. Copy any. Open in Imago.',
       },
-      { name: "twitter:title", content: "Pixelary — Turn rough ideas into pro-grade image prompts" },
+      { name: 'twitter:title', content: 'Pixelary — 100+ GPT Image 2 prompts' },
       {
-        name: "twitter:description",
-        content:
-          "AI-powered prompt generator built on patterns from OpenAI's image guide and fal.ai's prompt docs.",
+        name: 'twitter:description',
+        content: '100+ ready-to-use GPT Image 2 prompts. Copy any. Open in Imago.',
       },
     ],
   }),
-  component: LandingPage,
+  component: HomePage,
 });
 
-const EXAMPLE_INPUT = "a hiker in arches";
-const EXAMPLE_OUTPUT = `Lone hiker in dust-coated trail boots and a sun-faded olive shirt, mid-stride along a narrow sandstone ridge, framed beneath the curved sweep of Delicate Arch in Arches National Park, Utah. Late-afternoon light, 4:30pm autumn, warm 4200K side-light raking across iron-rich red rock, deep indigo shadow pooling under the arch. Wide shot, low angle from the basin, 35mm full-frame, Sony A7IV, f/8, foreground rock texture in sharp focus. Soft contrast, fine wind-blown sand visible in the air, no people in the background, 3:2 aspect ratio, photoreal.`;
+const CATEGORIES = [
+  'All',
+  'Posters',
+  'Infographics',
+  'UI Mockups',
+  'Social Posts',
+  'Cinematic',
+  'Storyboards',
+  'Interior/Food/Fashion',
+  'Visual Summaries',
+  'Image Edits',
+  'Open-Ended Creative',
+] as const;
 
-function LandingPage() {
-  const router = useRouter();
-  // Eager-preload the /app route chunk so the generator opens instantly when
-  // the user clicks "Open generator". Without this the user waits ~1s+ for
-  // the route's JS bundle to download on first navigation.
+type CategoryFilter = (typeof CATEGORIES)[number];
+
+function HomePage() {
+  const [prompts, setPrompts] = useState<LibraryPrompt[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [selected, setSelected] = useState<LibraryPrompt | null>(null);
+
   useEffect(() => {
-    router.preloadRoute({ to: "/app" }).catch(() => {});
-  }, [router]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await fetchLibrary();
+        if (!cancelled) setPrompts(data);
+      } catch (err) {
+        console.error(err);
+        if (!cancelled) toast.error("Couldn't load the library");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Debounce search 150ms to smooth keystrokes on slower devices.
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 150);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  const filtered = useMemo(() => {
+    let list = prompts;
+    if (activeCategory !== 'All') {
+      list = list.filter((p) => p.category === activeCategory);
+    }
+    if (debouncedSearch.trim()) {
+      const q = debouncedSearch.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.prompt.toLowerCase().includes(q) ||
+          (p.user_input ?? '').toLowerCase().includes(q) ||
+          (p.tags ?? []).some((t: string) => t.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  }, [prompts, activeCategory, debouncedSearch]);
 
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
 
-
-      {/* HERO — the only place the dot grid appears */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg pointer-events-none" aria-hidden="true" />
-        <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 pt-24 sm:pt-32 pb-20 sm:pb-28 text-center">
-          <h1 className="mt-6 text-display-xl mx-auto max-w-4xl text-[color:var(--text-primary)]">
-            Turn rough ideas into pro-grade image prompts.
+      {/* Hero — two lines, plus a quiet pointer to the Generator */}
+      <section className="border-b border-[color:var(--border-subtle)]">
+        <div className="mx-auto max-w-6xl px-6 pt-10 pb-6 md:pt-14 md:pb-8">
+          <h1 className="text-display-md text-[color:var(--text-primary)]">
+            100+ GPT Image 2 prompts.
           </h1>
-          <p className="mx-auto mt-6 max-w-4xl text-body-lg text-[color:var(--text-secondary)] text-balance">
-            Built on patterns from OpenAI's image generation guide and fal.ai's prompt documentation — distilled into one fast, opinionated tool for OpenAI's GPT Image 2.
+          <p className="mt-2 text-display-md text-[color:var(--text-secondary)]">
+            Copy any. Open in Imago.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to="/app">
-              <Button size="lg" className="gap-2">
-                Open generator
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/library">
-              <Button size="lg" variant="ghost">Browse library</Button>
-            </Link>
+          {/* Search */}
+          <div className="relative mt-8 max-w-2xl">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-tertiary)]" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search prompts…"
+              aria-label="Search prompts"
+              className="w-full rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] py-3 pl-11 pr-4 text-body-md text-[color:var(--text-primary)] placeholder:text-[color:var(--text-tertiary)] focus:border-[color:var(--accent)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]/15"
+            />
           </div>
 
+          {/* Quiet generator link */}
+          <p className="mt-4 text-body-sm text-[color:var(--text-tertiary)]">
+            Need something custom?{' '}
+            <Link
+              to="/app"
+              className="inline-flex items-center gap-1 text-[color:var(--text-secondary)] underline-offset-4 hover:text-[color:var(--text-primary)] hover:underline"
+            >
+              Pixelary builds prompts from rough ideas
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </p>
+        </div>
+
+        {/* Category chips — horizontal scroll on mobile */}
+        <div className="mx-auto max-w-6xl px-6 pb-5">
+          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {CATEGORIES.map((c) => (
+              <button
+                key={c}
+                onClick={() => setActiveCategory(c)}
+                className={`pill shrink-0 font-mono uppercase tracking-wider text-mono-sm transition-colors ${
+                  activeCategory === c
+                    ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
+                    : 'border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]'
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="border-t border-[color:var(--border-subtle)]">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
-          <div className="max-w-2xl mb-16">
-            <p className="eyebrow">How it works</p>
-            <h2 className="mt-4 text-display-md">Three steps. Zero ceremony.</h2>
+      {/* Grid */}
+      <section className="mx-auto max-w-6xl px-6 py-10">
+        {loading ? (
+          <p className="text-body-md text-[color:var(--text-tertiary)]">Loading…</p>
+        ) : filtered.length === 0 ? (
+          <div className="py-20 text-center">
+            <p className="text-body-md text-[color:var(--text-tertiary)]">
+              No prompts match those filters.
+            </p>
+            {(activeCategory !== 'All' || search) && (
+              <button
+                onClick={() => {
+                  setActiveCategory('All');
+                  setSearch('');
+                }}
+                className="mt-4 text-mono-sm uppercase tracking-wider text-[color:var(--accent)] hover:underline"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)]">
-            <Step
-              n="01"
-              title="Paste a rough idea"
-              body="Four words is enough. The vaguer your input, the more our prompt engine has to flex."
-            />
-            <Step
-              n="02"
-              title="We pick the structure"
-              body="Auto-detected category — poster, infographic, cinematic scene — gets its own template."
-            />
-            <Step
-              n="03"
-              title="Copy and ship"
-              body="Production-grade prompt. Drop into ChatGPT, the OpenAI API, or fal.ai unchanged."
-            />
+        ) : (
+          <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((p) => (
+              <PromptCard
+                key={`${p.source}-${p.id}`}
+                prompt={p}
+                onOpen={() => setSelected(p)}
+              />
+            ))}
           </div>
-        </div>
+        )}
       </section>
 
-      {/* FEATURES */}
-      <section className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-subtle)]">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
-          <div className="max-w-2xl mb-16">
-            <p className="eyebrow">Why it works</p>
-            <h2 className="mt-4 text-display-md">Ten templates, one tool.</h2>
-            <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
-              Built on patterns from OpenAI's image generation guide, fal.ai's prompt
-              documentation, and the structural fundamentals that work across modern image
-              models — distilled into ten category templates.
+      <PromptDetailDialog prompt={selected} onClose={() => setSelected(null)} />
+    </div>
+  );
+}
+
+function PromptCard({
+  prompt,
+  onOpen,
+}: {
+  prompt: LibraryPrompt;
+  onOpen: () => void;
+}) {
+  const gradient =
+    CATEGORY_GRADIENTS[prompt.category] ?? CATEGORY_GRADIENTS['Open-Ended Creative'];
+
+  return (
+    <article
+      onClick={onOpen}
+      className="group relative flex cursor-pointer flex-col gap-3 bg-[color:var(--bg-elevated)] p-6 transition-shadow hover:shadow-md-card"
+    >
+      <div
+        className="h-2 w-12 rounded-sm"
+        style={{ background: gradient }}
+        aria-hidden
+      />
+      <p className="eyebrow text-[color:var(--text-tertiary)]">{prompt.category}</p>
+      <h3 className="text-heading-sm text-[color:var(--text-primary)]">{prompt.title}</h3>
+      <p className="line-clamp-3 text-body-md text-[color:var(--text-secondary)]">
+        {prompt.prompt}
+      </p>
+      <div className="mt-auto flex items-center justify-between pt-3">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            copyPrompt(prompt.prompt);
+          }}
+          aria-label="Copy prompt"
+          className="rounded-sm p-1.5 text-[color:var(--text-tertiary)] opacity-0 transition-opacity hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--text-primary)] group-hover:opacity-100"
+        >
+          <Copy className="h-4 w-4" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            openInImago(prompt.prompt);
+          }}
+          className="flex items-center gap-1 text-mono-sm uppercase tracking-wider text-[color:var(--accent-orange)] opacity-0 transition-opacity hover:underline group-hover:opacity-100"
+        >
+          Open in Imago
+          <ExternalLink className="h-3 w-3" />
+        </button>
+      </div>
+    </article>
+  );
+}
+
+function PromptDetailDialog({
+  prompt,
+  onClose,
+}: {
+  prompt: LibraryPrompt | null;
+  onClose: () => void;
+}) {
+  if (!prompt) return null;
+
+  return (
+    <Dialog open={!!prompt} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto bg-[color:var(--bg-elevated)]">
+        <DialogHeader>
+          <p className="eyebrow text-[color:var(--text-tertiary)]">{prompt.category}</p>
+          <DialogTitle className="text-display-md text-[color:var(--text-primary)]">
+            {prompt.title}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="relative mt-6">
+          <pre
+            className="overflow-x-auto whitespace-pre-wrap rounded-md p-4 font-mono text-mono-sm text-[color:var(--text-primary)]"
+            style={{ background: 'var(--code-bg)' }}
+          >
+            {prompt.prompt}
+          </pre>
+          <button
+            onClick={() => copyPrompt(prompt.prompt)}
+            aria-label="Copy prompt"
+            className="absolute right-3 top-3 rounded-sm bg-[color:var(--bg-elevated)] p-2 text-[color:var(--text-tertiary)] shadow-sm-card hover:text-[color:var(--text-primary)]"
+          >
+            <Copy className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button
+            onClick={() => openInImago(prompt.prompt)}
+            className="pill flex items-center gap-2 bg-[color:var(--accent)] text-[color:var(--bg-elevated)] hover:opacity-90"
+          >
+            Open in Imago
+            <ExternalLink className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={() => copyPrompt(prompt.prompt)}
+            className="pill flex items-center gap-2 border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-subtle)]"
+          >
+            <Copy className="h-3.5 w-3.5" />
+            Copy
+          </button>
+        </div>
+
+        {prompt.why_it_works && (
+          <div className="mt-8 border-t border-[color:var(--border-subtle)] pt-6">
+            <p className="eyebrow mb-2 text-[color:var(--text-tertiary)]">Why it works</p>
+            <p className="text-body-md text-[color:var(--text-secondary)]">
+              {prompt.why_it_works}
             </p>
           </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <FeatureCard
-              tag="01 · CATEGORIES"
-              title="Ten templates"
-              body="Posters, UI mockups, cinematic scenes, multi-panel storyboards, abstract & surreal mood pieces, image edits — each gets its own structural template."
-            />
-            <FeatureCard
-              tag="02 · GUARDRAILS"
-              title="Self-checking output"
-              body="Anti-fluff filter strips forbidden adjectives like “stunning” and “ultra-detailed” before delivery."
-            />
-            <FeatureCard
-              tag="03 · PORTABLE"
-              title="Copy-ready format"
-              body="One-click paste into ChatGPT, the OpenAI API, or fal.ai. No reformatting required."
-            />
+        {prompt.variants && prompt.variants.length > 0 && (
+          <div className="mt-6 border-t border-[color:var(--border-subtle)] pt-6">
+            <p className="eyebrow mb-3 text-[color:var(--text-tertiary)]">Variants</p>
+            <ul className="space-y-2">
+              {prompt.variants.map((v: string, i: number) => (
+                <li key={i} className="text-body-md text-[color:var(--text-secondary)]">
+                  {v}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* BEFORE / AFTER */}
-      <section id="example" className="border-t border-[color:var(--border-subtle)]">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-24 sm:py-32">
-          <div className="max-w-2xl mb-16">
-            <p className="eyebrow">Before / after</p>
-            <h2 className="mt-4 text-display-md">A four-word idea, stacked.</h2>
+        {prompt.source_creator && (
+          <div className="mt-8 border-t border-[color:var(--border-subtle)] pt-4">
+            <p className="text-mono-sm text-[color:var(--text-quaternary)]">
+              Originally shared by{' '}
+              {prompt.source_url ? (
+                <a
+                  href={prompt.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] hover:underline"
+                >
+                  {prompt.source_creator}
+                </a>
+              ) : (
+                <span className="text-[color:var(--text-tertiary)]">
+                  {prompt.source_creator}
+                </span>
+              )}
+            </p>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)]">
-            <div className="bg-[color:var(--bg-elevated)] p-8 sm:p-10">
-              <p className="eyebrow">Input</p>
-              <p className="mt-5 font-mono text-[15px] text-[color:var(--text-primary)]">
-                {EXAMPLE_INPUT}
-              </p>
-              <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
-                4 words · no detail
-              </p>
-            </div>
-            <div className="bg-[color:var(--code-bg)] p-8 sm:p-10">
-              <p className="eyebrow">Output</p>
-              <p className="mt-5 font-mono text-[13px] leading-[1.7] text-[color:var(--code-text)] whitespace-pre-wrap">
-                {EXAMPLE_OUTPUT}
-              </p>
-              <p className="mt-8 text-mono-sm text-[color:var(--text-tertiary)]">
-                Cinematic Scene · 8 constraints stacked
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-16 text-center">
-            <Link to="/app">
-              <Button size="lg" className="gap-2">
-                Generate your first prompt
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="border-t border-[color:var(--border-subtle)]">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[11px] font-semibold">
-              P
-            </span>
-            <span className="text-mono-sm text-[color:var(--text-tertiary)]">
-              Pixelary © {new Date().getFullYear()}
-            </span>
-          </div>
-          <nav className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-mono-sm text-[color:var(--text-tertiary)]">
-            <Link to="/app" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Generator</Link>
-            <span aria-hidden>·</span>
-            <Link to="/library" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Library</Link>
-            <span aria-hidden>·</span>
-            <Link to="/blog" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Blog</Link>
-            <span aria-hidden>·</span>
-            <Link to="/login" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Log in</Link>
-          </nav>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-function Step({ n, title, body }: { n: string; title: string; body: string }) {
-  return (
-    <div className="bg-[color:var(--bg)] p-8 sm:p-10">
-      <p className="font-mono text-[13px] font-medium tracking-[0.06em] text-[color:var(--text-tertiary)]">
-        {n}
-      </p>
-      <h3 className="mt-5 text-heading-sm text-[color:var(--text-primary)]">{title}</h3>
-      <p className="mt-3 text-body-md text-[color:var(--text-secondary)]">{body}</p>
-    </div>
-  );
-}
-
-function FeatureCard({ tag, title, body }: { tag: string; title: string; body: string }) {
-  return (
-    <article className="bg-[color:var(--bg-elevated)] border border-[color:var(--border-subtle)] p-7 transition-[box-shadow,border-color] duration-200 ease-out hover:border-[color:var(--border-default)] hover:shadow-sm-card">
-      <p className="font-mono text-[11px] font-medium tracking-[0.08em] text-[color:var(--text-tertiary)]">
-        {tag}
-      </p>
-      <h3 className="mt-5 text-heading-sm text-[color:var(--text-primary)]">{title}</h3>
-      <p className="mt-3 text-body-md text-[color:var(--text-secondary)]">{body}</p>
-    </article>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
