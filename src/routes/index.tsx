@@ -31,21 +31,29 @@ export const Route = createFileRoute('/')({
   gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
-      { title: 'Pixelary — 100+ GPT Image 2 prompts. Copy any.' },
+      { title: 'Pixelary — Production-grade prompts for GPT Image 2' },
       {
         name: 'description',
         content:
-          '100+ ready-to-use GPT Image 2 prompts. Copy any prompt or open it in Imago. Browse posters, cinematic scenes, UI mockups, infographics, and more.',
+          'Production-grade prompts for GPT Image 2. Built from rough ideas, or pick from 100+ ready ones. One click opens any prompt in Imago.',
       },
-      { property: 'og:title', content: 'Pixelary — 100+ GPT Image 2 prompts' },
+      {
+        property: 'og:title',
+        content: 'Pixelary — Production-grade prompts for GPT Image 2',
+      },
       {
         property: 'og:description',
-        content: '100+ ready-to-use GPT Image 2 prompts. Copy any. Open in Imago.',
+        content:
+          'Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.',
       },
-      { name: 'twitter:title', content: 'Pixelary — 100+ GPT Image 2 prompts' },
+      {
+        name: 'twitter:title',
+        content: 'Pixelary — Production-grade prompts for GPT Image 2',
+      },
       {
         name: 'twitter:description',
-        content: '100+ ready-to-use GPT Image 2 prompts. Copy any. Open in Imago.',
+        content:
+          'Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.',
       },
     ],
   }),
