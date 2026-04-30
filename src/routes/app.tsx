@@ -549,7 +549,7 @@ function ResultView({
         </div>
       )}
       {!streaming && (
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={result.prompt} />
+        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={result.prompt} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
       )}
     </div>
   );
@@ -579,12 +579,18 @@ function ActionRow({
   saving,
   isLoggedIn,
   promptText,
+  savedRowId,
+  savedIsPublic,
+  onPublishChange,
 }: {
   onRegenerate: () => void;
   onSave: () => void;
   saving: boolean;
   isLoggedIn: boolean;
   promptText?: string;
+  savedRowId?: string | null;
+  savedIsPublic?: boolean;
+  onPublishChange?: (next: boolean) => void;
 }) {
   const handleOpenInImago = async () => {
     if (!promptText) return;
@@ -609,10 +615,20 @@ function ActionRow({
           Open in Imago
         </Button>
       )}
-      <Button onClick={onSave} disabled={saving} variant="outline" size="sm" className="gap-2">
-        {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-        Save to library
-      </Button>
+      {savedRowId ? (
+        isLoggedIn && (
+          <PublishToLibraryToggle
+            promptId={savedRowId}
+            initialIsPublic={savedIsPublic ?? false}
+            onChange={(v) => onPublishChange?.(v)}
+          />
+        )
+      ) : (
+        <Button onClick={onSave} disabled={saving} variant="outline" size="sm" className="gap-2">
+          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+          Save to library
+        </Button>
+      )}
       <Button onClick={onRegenerate} variant="outline" size="sm" className="gap-2">
         <RefreshCw className="h-3.5 w-3.5" />
         Regenerate
