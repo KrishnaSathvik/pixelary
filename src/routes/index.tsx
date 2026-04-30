@@ -5,7 +5,7 @@ import { Copy, ExternalLink, Search, ArrowRight, ChevronLeft, ChevronRight } fro
 import { z } from 'zod';
 import { zodValidator, fallback } from '@tanstack/zod-adapter';
 import { Header } from '@/components/Header';
-import { fetchLibrary, copyPrompt, openInImago, getCachedLibrary } from '@/lib/library';
+import { fetchLibrary, copyPrompt, openInImago } from '@/lib/library';
 import type { LibraryPrompt } from '@/types/library';
 import {
   Dialog,
