@@ -26,7 +26,7 @@ export const Route = createFileRoute('/')({
   // Load once, then keep the data fresh for 5 minutes. Going back to the
   // Library is now instant — TanStack Router serves the cached loader data
   // without re-fetching from Supabase.
-  loader: () => fetchLibrary(),
+  loader: async (): Promise<LibraryPrompt[]> => fetchLibrary(),
   staleTime: 5 * 60 * 1000,
   gcTime: 30 * 60 * 1000,
   head: () => ({
