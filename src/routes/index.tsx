@@ -336,20 +336,13 @@ function PromptDetailDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="relative mt-6">
+        <div className="mt-6">
           <pre
             className="overflow-x-auto whitespace-pre-wrap rounded-md p-4 font-mono text-mono-sm text-[color:var(--text-primary)]"
             style={{ background: 'var(--code-bg)' }}
           >
             {prompt.prompt}
           </pre>
-          <button
-            onClick={() => copyPrompt(prompt.prompt)}
-            aria-label="Copy prompt"
-            className="absolute right-3 top-3 rounded-sm bg-[color:var(--bg-elevated)] p-2 text-[color:var(--text-tertiary)] shadow-sm-card hover:text-[color:var(--text-primary)]"
-          >
-            <Copy className="h-4 w-4" />
-          </button>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-3">
