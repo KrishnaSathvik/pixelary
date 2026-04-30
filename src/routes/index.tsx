@@ -189,9 +189,7 @@ function HomePage() {
 
       {/* Grid */}
       <section className="mx-auto max-w-6xl px-6 py-10">
-        {loading ? (
-          <p className="text-body-md text-[color:var(--text-tertiary)]">Loading…</p>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-body-md text-[color:var(--text-tertiary)]">
               No prompts match those filters.
