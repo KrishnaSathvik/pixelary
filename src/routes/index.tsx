@@ -301,17 +301,7 @@ function PromptCard({
       <p className="line-clamp-3 text-body-md text-[color:var(--text-secondary)]">
         {prompt.prompt}
       </p>
-      <div className="mt-auto flex items-center justify-between pt-3">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            copyPrompt(prompt.prompt);
-          }}
-          aria-label="Copy prompt"
-          className="rounded-sm p-1.5 text-[color:var(--text-tertiary)] opacity-0 transition-opacity hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--text-primary)] group-hover:opacity-100"
-        >
-          <Copy className="h-4 w-4" />
-        </button>
+      <div className="mt-auto flex items-center justify-end pt-3">
         <button
           onClick={(e) => {
             e.stopPropagation();
