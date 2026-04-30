@@ -210,7 +210,7 @@ function HomePage() {
         ) : (
           <>
             <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
-              {pageItems.map((p) => (
+              {pageItems.map((p: LibraryPrompt) => (
                 <PromptCard
                   key={`${p.source}-${p.id}`}
                   prompt={p}
