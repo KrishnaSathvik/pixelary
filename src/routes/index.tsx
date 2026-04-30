@@ -22,6 +22,7 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute('/')({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: 'Pixelary — 100+ GPT Image 2 prompts. Copy any.' },
