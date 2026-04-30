@@ -64,6 +64,8 @@ function AppPage() {
   const [streaming, setStreaming] = useState(false);
   const [result, setResult] = useState<PromptResult | null>(null);
   const [saving, setSaving] = useState(false);
+  const [savedRowId, setSavedRowId] = useState<string | null>(null);
+  const [savedIsPublic, setSavedIsPublic] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { seed } = Route.useSearch();
 
