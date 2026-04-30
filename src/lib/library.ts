@@ -105,11 +105,19 @@ export async function fetchLibrary(): Promise<LibraryPrompt[]> {
       isAuthed ? fetchUserPrompts() : Promise.resolve([] as LibraryPrompt[]),
     ]);
 
-    const merged = [...curated, ...user].sort((a, b) => {
-      const at = a.created_at ?? '';
-      const bt = b.created_at ?? '';
-      return bt.localeCompare(at);
-    });
+    // Display order:
+    //   1. New curated set (X-sourced, source='curated') — freshest first
+    //   2. Original examples (source='example') — our handcrafted set
+    //   3. User prompts — newest first
+    // Within each bucket, sort by created_at desc.
+    const byDateDesc = (a: LibraryPrompt, b: LibraryPrompt) =>
+      (b.created_at ?? '').localeCompare(a.created_at ?? '');
+
+    const curatedNew = curated.filter((p) => p.source === 'curated').sort(byDateDesc);
+    const examples = curated.filter((p) => p.source === 'example').sort(byDateDesc);
+    const userSorted = [...user].sort(byDateDesc);
+
+    const merged = [...curatedNew, ...examples, ...userSorted];
     _libraryCache = merged;
     return merged;
   })();
