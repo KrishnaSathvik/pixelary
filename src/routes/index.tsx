@@ -65,8 +65,8 @@ function LandingPage() {
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/examples/{-$id}" params={{ id: undefined }}>
-              <Button size="lg" variant="ghost">Browse examples</Button>
+            <Link to="/library">
+              <Button size="lg" variant="ghost">Browse library</Button>
             </Link>
           </div>
 
@@ -188,7 +188,7 @@ function LandingPage() {
           <nav className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-mono-sm text-[color:var(--text-tertiary)]">
             <Link to="/app" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Generator</Link>
             <span aria-hidden>·</span>
-            <Link to="/examples/{-$id}" params={{ id: undefined }} className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Examples</Link>
+            <Link to="/library" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Library</Link>
             <span aria-hidden>·</span>
             <Link to="/blog" className="whitespace-nowrap hover:text-[color:var(--text-primary)] transition">Blog</Link>
             <span aria-hidden>·</span>
