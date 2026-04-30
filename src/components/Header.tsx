@@ -1,29 +1,19 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LogOut, BookMarked, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useAuth } from "@/lib/auth-context";
-import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 export function Header() {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    await signOut();
-    toast.success("Signed out");
-    navigate({ to: "/" });
-  };
-
+  const navigate = useNavigate();
   const closeMobile = () => setMobileOpen(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6 lg:px-12">
-        <Link to="/" className="flex items-center gap-2.5 group">
+      <div className="mx-auto flex h-14 max-w-[1280px] items-center justify-between px-6 lg:px-12">
+        <Link to="/" className="flex items-center gap-2.5">
           <img
             src={logo}
             alt="Pixelary"
@@ -37,16 +27,8 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <Link
-            to="/"
-            className={NAV_CLS}
-            activeProps={{ className: NAV_CLS_ACTIVE }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>
-          <Link to="/library" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Library
+          <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Generate
           </Link>
           <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
             Blog
@@ -54,33 +36,14 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          {user ? (
-            <>
-              <Link to="/library" className="md:hidden">
-                <Button variant="ghost" size="icon" aria-label="Library">
-                  <BookMarked className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/app">
-                <Button size="sm">Open generator</Button>
-              </Link>
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="gap-1.5 hidden sm:inline-flex">
-                <LogOut className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Sign out</span>
-              </Button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="hidden sm:inline-flex">
-                <Button variant="ghost" size="sm">Log in</Button>
-              </Link>
-              <Link to="/app">
-                <Button size="sm">Open generator</Button>
-              </Link>
-            </>
-          )}
+          <Button
+            size="sm"
+            className="hidden md:inline-flex"
+            onClick={() => navigate({ to: "/app" })}
+          >
+            Generate
+          </Button>
 
-          {/* Mobile menu trigger */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
@@ -93,33 +56,14 @@ export function Header() {
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-1">
                 <Link to="/" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
-                  Home
-                </Link>
-                <Link to="/library" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
                   Library
+                </Link>
+                <Link to="/app" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
+                  Generate
                 </Link>
                 <Link to="/blog" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
                   Blog
                 </Link>
-                <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)] flex flex-col gap-2">
-                  {user ? (
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        closeMobile();
-                        handleSignOut();
-                      }}
-                      className="justify-start gap-2"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Sign out
-                    </Button>
-                  ) : (
-                    <Link to="/login" onClick={closeMobile}>
-                      <Button variant="ghost" className="w-full justify-start">Log in</Button>
-                    </Link>
-                  )}
-                </div>
               </nav>
             </SheetContent>
           </Sheet>
