@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { Sparkles, Copy, Check, RefreshCw, Save, Loader2, Wand2, Lightbulb, ExternalLink } from "lucide-react";
+import { PublishToLibraryToggle } from "@/components/generator/PublishToLibraryToggle";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -357,6 +358,9 @@ function AppPage() {
                   onVariantClick={generateVariant}
                   saving={saving}
                   isLoggedIn={!!user}
+                  savedRowId={savedRowId}
+                  savedIsPublic={savedIsPublic}
+                  onPublishChange={setSavedIsPublic}
                 />
               )}
             </div>
@@ -438,6 +442,9 @@ function ResultView({
   onVariantClick,
   saving,
   isLoggedIn,
+  savedRowId,
+  savedIsPublic,
+  onPublishChange,
 }: {
   result: PromptResult;
   streaming?: boolean;
@@ -447,6 +454,9 @@ function ResultView({
   onVariantClick: (hint: string) => void;
   saving: boolean;
   isLoggedIn: boolean;
+  savedRowId: string | null;
+  savedIsPublic: boolean;
+  onPublishChange: (next: boolean) => void;
 }) {
   if (typeof result.score === "number") {
     return (
