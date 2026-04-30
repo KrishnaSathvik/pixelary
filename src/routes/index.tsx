@@ -64,12 +64,24 @@ type CategoryFilter = (typeof CATEGORIES)[number];
 
 function HomePage() {
   const cached = getCachedLibrary();
+  const { page } = Route.useSearch();
+  const navigate = useNavigate({ from: '/' });
   const [prompts, setPrompts] = useState<LibraryPrompt[]>(cached ?? []);
   const [loading, setLoading] = useState(!cached);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [selected, setSelected] = useState<LibraryPrompt | null>(null);
+
+  // Reset to page 1 whenever the filter set changes.
+  const setCategory = (c: CategoryFilter) => {
+    setActiveCategory(c);
+    if (page !== 1) navigate({ search: { page: 1 } });
+  };
+  const setSearchInput = (v: string) => {
+    setSearch(v);
+    if (page !== 1) navigate({ search: { page: 1 } });
+  };
 
   useEffect(() => {
     let cancelled = false;
