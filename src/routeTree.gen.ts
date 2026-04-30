@@ -15,6 +15,7 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LaunchChecklistRouteImport } from './routes/launch-checklist'
+import { Route as CritiqueRouteImport } from './routes/critique'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -52,6 +53,11 @@ const LaunchChecklistRoute = LaunchChecklistRouteImport.update({
   path: '/launch-checklist',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CritiqueRoute = CritiqueRouteImport.update({
+  id: '/critique',
+  path: '/critique',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -87,6 +93,7 @@ const ApiPublicGeneratePromptRoute = ApiPublicGeneratePromptRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
+  '/critique': typeof CritiqueRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
+  '/critique': typeof CritiqueRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRoute
+  '/critique': typeof CritiqueRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/critique'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/app'
+    | '/critique'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/critique'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -175,6 +187,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
+  CritiqueRoute: typeof CritiqueRoute
   LaunchChecklistRoute: typeof LaunchChecklistRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LaunchChecklistRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/critique': {
+      id: '/critique'
+      path: '/critique'
+      fullPath: '/critique'
+      preLoaderRoute: typeof CritiqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -279,6 +299,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
+  CritiqueRoute: CritiqueRoute,
   LaunchChecklistRoute: LaunchChecklistRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
