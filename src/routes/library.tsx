@@ -166,23 +166,50 @@ function LibraryPage() {
         </div>
       </section>
 
-      {/* Sticky filter bar */}
-      <div className="sticky top-16 z-30 border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/95 backdrop-blur">
+      {/* Filter bar — non-sticky so it doesn't cover prompts on scroll */}
+      <div className="border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]">
         <div className="mx-auto max-w-6xl px-6 py-4">
-          {/* Search */}
-          <div className="relative mb-4">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-tertiary)]" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search prompts…"
-              className="w-full rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] py-2 pl-10 pr-4 text-body-md text-[color:var(--text-primary)] placeholder:text-[color:var(--text-quaternary)] focus:border-[color:var(--accent)] focus:outline-none"
-            />
+          {/* Search + Saved/Mine toggles in one row */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative min-w-[240px] flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-tertiary)]" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search prompts…"
+                className="w-full rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] py-2 pl-10 pr-4 text-body-md text-[color:var(--text-primary)] placeholder:text-[color:var(--text-quaternary)] focus:border-[color:var(--accent)] focus:outline-none"
+              />
+            </div>
+            {user && (
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setShowOnlyFavorites((v) => !v)}
+                  className={`pill flex items-center gap-1.5 font-mono uppercase tracking-wider text-mono-sm transition-colors ${
+                    showOnlyFavorites
+                      ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
+                      : 'border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]'
+                  }`}
+                >
+                  <Star className="h-3 w-3" fill={showOnlyFavorites ? 'currentColor' : 'none'} />
+                  Saved
+                </button>
+                <button
+                  onClick={() => setShowOnlyMine((v) => !v)}
+                  className={`pill font-mono uppercase tracking-wider text-mono-sm transition-colors ${
+                    showOnlyMine
+                      ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
+                      : 'border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]'
+                  }`}
+                >
+                  Mine
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Category chips */}
-          <div className="flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
               <button
                 key={c}
@@ -197,36 +224,6 @@ function LibraryPage() {
               </button>
             ))}
           </div>
-
-          {/* Saved + Mine toggles, right-aligned */}
-          {user && (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => setShowOnlyFavorites((v) => !v)}
-                className={`pill flex items-center gap-1.5 font-mono uppercase tracking-wider text-mono-sm transition-colors ${
-                  showOnlyFavorites
-                    ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
-                    : 'border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]'
-                }`}
-              >
-                <Star
-                  className="h-3 w-3"
-                  fill={showOnlyFavorites ? 'currentColor' : 'none'}
-                />
-                Saved
-              </button>
-              <button
-                onClick={() => setShowOnlyMine((v) => !v)}
-                className={`pill font-mono uppercase tracking-wider text-mono-sm transition-colors ${
-                  showOnlyMine
-                    ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
-                    : 'border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]'
-                }`}
-              >
-                Mine
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
