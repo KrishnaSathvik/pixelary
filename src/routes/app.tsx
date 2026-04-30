@@ -427,7 +427,7 @@ function ResultView({
             </div>
           )}
         </div>
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
+        <ActionRow onRegenerate={onRegenerate} />
       </div>
     );
   }
@@ -449,7 +449,7 @@ function ResultView({
         })}
         {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
         {!streaming && (
-          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={(result.prompts ?? []).join("\n\n---\n\n")} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
+          <ActionRow onRegenerate={onRegenerate} promptText={(result.prompts ?? []).join("\n\n---\n\n")} />
         )}
       </div>
     );
@@ -487,7 +487,7 @@ function ResultView({
         </div>
       )}
       {!streaming && (
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={result.prompt} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
+        <ActionRow onRegenerate={onRegenerate} promptText={result.prompt} />
       )}
     </div>
   );
@@ -513,22 +513,10 @@ function Tag({ label, value }: { label: string; value: string }) {
 
 function ActionRow({
   onRegenerate,
-  onSave,
-  saving,
-  isLoggedIn,
   promptText,
-  savedRowId,
-  savedIsPublic,
-  onPublishChange,
 }: {
   onRegenerate: () => void;
-  onSave: () => void;
-  saving: boolean;
-  isLoggedIn: boolean;
   promptText?: string;
-  savedRowId?: string | null;
-  savedIsPublic?: boolean;
-  onPublishChange?: (next: boolean) => void;
 }) {
   const handleOpenInImago = async () => {
     if (!promptText) return;
@@ -553,29 +541,10 @@ function ActionRow({
           Open in Imago
         </Button>
       )}
-      {savedRowId ? (
-        isLoggedIn && (
-          <PublishToLibraryToggle
-            promptId={savedRowId}
-            initialIsPublic={savedIsPublic ?? false}
-            onChange={(v) => onPublishChange?.(v)}
-          />
-        )
-      ) : (
-        <Button onClick={onSave} disabled={saving} variant="outline" size="sm" className="gap-2">
-          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-          Save to library
-        </Button>
-      )}
       <Button onClick={onRegenerate} variant="outline" size="sm" className="gap-2">
         <RefreshCw className="h-3.5 w-3.5" />
         Regenerate
       </Button>
-      {!isLoggedIn && (
-        <Link to="/login" className="text-mono-sm text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] ml-auto">
-          Sign in to save →
-        </Link>
-      )}
     </div>
   );
 }
