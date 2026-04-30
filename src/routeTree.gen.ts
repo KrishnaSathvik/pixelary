@@ -18,7 +18,6 @@ import { Route as LaunchChecklistRouteImport } from './routes/launch-checklist'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
-import { Route as ExamplesChar123IdChar125RouteImport } from './routes/examples.{-$id}'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiPublicGeneratePromptRouteImport } from './routes/api/public/generate-prompt'
 
@@ -67,12 +66,6 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExamplesChar123IdChar125Route =
-  ExamplesChar123IdChar125RouteImport.update({
-    id: '/examples/{-$id}',
-    path: '/examples/{-$id}',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -94,7 +87,6 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
   '/blog/': typeof BlogIndexRoute
   '/api/public/generate-prompt': typeof ApiPublicGeneratePromptRoute
 }
@@ -108,7 +100,6 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
   '/blog': typeof BlogIndexRoute
   '/api/public/generate-prompt': typeof ApiPublicGeneratePromptRoute
 }
@@ -123,7 +114,6 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/examples/{-$id}': typeof ExamplesChar123IdChar125Route
   '/blog/': typeof BlogIndexRoute
   '/api/public/generate-prompt': typeof ApiPublicGeneratePromptRoute
 }
@@ -139,7 +129,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/blog/$slug'
-    | '/examples/{-$id}'
     | '/blog/'
     | '/api/public/generate-prompt'
   fileRoutesByTo: FileRoutesByTo
@@ -153,7 +142,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/blog/$slug'
-    | '/examples/{-$id}'
     | '/blog'
     | '/api/public/generate-prompt'
   id:
@@ -167,7 +155,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/sitemap.xml'
     | '/blog/$slug'
-    | '/examples/{-$id}'
     | '/blog/'
     | '/api/public/generate-prompt'
   fileRoutesById: FileRoutesById
@@ -182,7 +169,6 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  ExamplesChar123IdChar125Route: typeof ExamplesChar123IdChar125Route
   BlogIndexRoute: typeof BlogIndexRoute
   ApiPublicGeneratePromptRoute: typeof ApiPublicGeneratePromptRoute
 }
@@ -252,13 +238,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/examples/{-$id}': {
-      id: '/examples/{-$id}'
-      path: '/examples/{-$id}'
-      fullPath: '/examples/{-$id}'
-      preLoaderRoute: typeof ExamplesChar123IdChar125RouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -286,7 +265,6 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BlogSlugRoute: BlogSlugRoute,
-  ExamplesChar123IdChar125Route: ExamplesChar123IdChar125Route,
   BlogIndexRoute: BlogIndexRoute,
   ApiPublicGeneratePromptRoute: ApiPublicGeneratePromptRoute,
 }
