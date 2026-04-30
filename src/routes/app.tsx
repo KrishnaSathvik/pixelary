@@ -389,25 +389,12 @@ function ResultView({
   result,
   streaming = false,
   onRegenerate,
-  onSave,
   onVariantClick,
-  saving,
-  isLoggedIn,
-  savedRowId,
-  savedIsPublic,
-  onPublishChange,
 }: {
   result: PromptResult;
   streaming?: boolean;
-  onCopy: () => void;
   onRegenerate: () => void;
-  onSave: () => void;
   onVariantClick: (hint: string) => void;
-  saving: boolean;
-  isLoggedIn: boolean;
-  savedRowId: string | null;
-  savedIsPublic: boolean;
-  onPublishChange: (next: boolean) => void;
 }) {
   if (typeof result.score === "number") {
     return (
