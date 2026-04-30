@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Copy, ExternalLink, Search, ArrowRight } from 'lucide-react';
+import { Copy, ExternalLink, Search, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
+import { zodValidator, fallback } from '@tanstack/zod-adapter';
 import { Header } from '@/components/Header';
 import { fetchLibrary, copyPrompt, openInImago, getCachedLibrary } from '@/lib/library';
 import type { LibraryPrompt } from '@/types/library';
@@ -13,7 +15,14 @@ import {
 } from '@/components/ui/dialog';
 import { CATEGORY_GRADIENTS } from '@/data/examples';
 
+const PAGE_SIZE = 9;
+
+const searchSchema = z.object({
+  page: fallback(z.number().int().min(1), 1).default(1),
+});
+
 export const Route = createFileRoute('/')({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: 'Pixelary — 100+ GPT Image 2 prompts. Copy any.' },
@@ -55,12 +64,24 @@ type CategoryFilter = (typeof CATEGORIES)[number];
 
 function HomePage() {
   const cached = getCachedLibrary();
+  const { page } = Route.useSearch();
+  const navigate = useNavigate({ from: '/' });
   const [prompts, setPrompts] = useState<LibraryPrompt[]>(cached ?? []);
   const [loading, setLoading] = useState(!cached);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [selected, setSelected] = useState<LibraryPrompt | null>(null);
+
+  // Reset to page 1 whenever the filter set changes.
+  const setCategory = (c: CategoryFilter) => {
+    setActiveCategory(c);
+    if (page !== 1) navigate({ search: { page: 1 } });
+  };
+  const setSearchInput = (v: string) => {
+    setSearch(v);
+    if (page !== 1) navigate({ search: { page: 1 } });
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -104,6 +125,21 @@ function HomePage() {
     return list;
   }, [prompts, activeCategory, debouncedSearch]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pageItems = useMemo(
+    () => filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [filtered, safePage]
+  );
+
+  const goToPage = (p: number) => {
+    const next = Math.max(1, Math.min(totalPages, p));
+    navigate({ search: { page: next } });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
@@ -124,7 +160,7 @@ function HomePage() {
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search prompts…"
               aria-label="Search prompts"
               className="w-full rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] py-3 pl-11 pr-4 text-body-md text-[color:var(--text-primary)] placeholder:text-[color:var(--text-tertiary)] focus:border-[color:var(--accent)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]/15"
@@ -150,7 +186,7 @@ function HomePage() {
             {CATEGORIES.map((c) => (
               <button
                 key={c}
-                onClick={() => setActiveCategory(c)}
+                onClick={() => setCategory(c)}
                 className={`pill shrink-0 font-mono uppercase tracking-wider text-mono-sm transition-colors ${
                   activeCategory === c
                     ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
@@ -178,6 +214,7 @@ function HomePage() {
                 onClick={() => {
                   setActiveCategory('All');
                   setSearch('');
+                  if (page !== 1) navigate({ search: { page: 1 } });
                 }}
                 className="mt-4 text-mono-sm uppercase tracking-wider text-[color:var(--accent)] hover:underline"
               >
@@ -186,15 +223,48 @@ function HomePage() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((p) => (
-              <PromptCard
-                key={`${p.source}-${p.id}`}
-                prompt={p}
-                onOpen={() => setSelected(p)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map((p) => (
+                <PromptCard
+                  key={`${p.source}-${p.id}`}
+                  prompt={p}
+                  onOpen={() => setSelected(p)}
+                />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <nav
+                className="mt-10 flex items-center justify-between gap-4"
+                aria-label="Pagination"
+              >
+                <p className="text-mono-sm uppercase tracking-wider text-[color:var(--text-tertiary)]">
+                  Page {safePage} of {totalPages} · {filtered.length} prompts
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => goToPage(safePage - 1)}
+                    disabled={safePage === 1}
+                    aria-label="Previous page"
+                    className="pill flex items-center gap-1 border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-subtle)] disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => goToPage(safePage + 1)}
+                    disabled={safePage === totalPages}
+                    aria-label="Next page"
+                    className="pill flex items-center gap-1 border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-subtle)] disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    Next
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </nav>
+            )}
+          </>
         )}
       </section>
 
