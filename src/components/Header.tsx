@@ -1,48 +1,65 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Clock, Menu } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { HistorySheet, useHistoryCount } from "@/components/HistorySheet";
 import logo from "@/assets/logo.png";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
   const closeMobile = () => setMobileOpen(false);
+  const historyCount = useHistoryCount();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-[1280px] items-center justify-between px-6 lg:px-12">
-        <Link to="/" className="flex items-center gap-2.5">
-          <img
-            src={logo}
-            alt="Pixelary"
-            width={28}
-            height={28}
-            className="h-7 w-7 dark:invert"
-          />
-          <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
-            Pixelary
-          </span>
-        </Link>
-
-        <nav className="hidden md:flex items-center gap-1">
-          <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Generate
+        <div className="flex items-center gap-8">
+          <Link to="/" className="flex items-center gap-2.5">
+            <img
+              src={logo}
+              alt="Pixelary"
+              width={28}
+              height={28}
+              className="h-7 w-7 dark:invert"
+            />
+            <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
+              Pixelary
+            </span>
           </Link>
-          <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Blog
-          </Link>
-        </nav>
 
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            className="hidden md:inline-flex"
-            onClick={() => navigate({ to: "/app" })}
-          >
-            Generate
-          </Button>
+          <nav className="hidden md:flex items-center gap-1">
+            <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+              Generate
+            </Link>
+            <Link to="/critique" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+              Critique
+            </Link>
+            <Link to="/" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
+              Library
+            </Link>
+            <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+              Blog
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-1">
+          {historyCount > 0 && (
+            <div className="hidden md:block">
+              <HistorySheet
+                trigger={
+                  <button type="button" className={`${NAV_CLS} inline-flex items-center gap-1.5`}>
+                    <Clock className="h-3.5 w-3.5" />
+                    History
+                    <span className="font-mono text-[10px] text-[color:var(--text-tertiary)]">
+                      {historyCount}
+                    </span>
+                  </button>
+                }
+              />
+            </div>
+          )}
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
@@ -55,15 +72,37 @@ export function Header() {
                 <SheetTitle className="text-left">Menu</SheetTitle>
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-1">
-                <Link to="/" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
-                  Library
-                </Link>
                 <Link to="/app" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
                   Generate
+                </Link>
+                <Link to="/critique" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
+                  Critique
+                </Link>
+                <Link to="/" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
+                  Library
                 </Link>
                 <Link to="/blog" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
                   Blog
                 </Link>
+                {historyCount > 0 && (
+                  <div className="mt-2 pt-2 border-t border-[color:var(--border-subtle)]">
+                    <HistorySheet
+                      trigger={
+                        <button
+                          type="button"
+                          onClick={closeMobile}
+                          className={`${MOBILE_NAV_CLS} w-full inline-flex items-center gap-2`}
+                        >
+                          <Clock className="h-4 w-4" />
+                          History
+                          <span className="ml-auto font-mono text-[11px] text-[color:var(--text-tertiary)]">
+                            {historyCount}
+                          </span>
+                        </button>
+                      }
+                    />
+                  </div>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
