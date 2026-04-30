@@ -78,6 +78,8 @@ function AppPage() {
     setLoading(true);
     setStreaming(false);
     setResult(null);
+    setSavedRowId(null);
+    setSavedIsPublic(false);
     try {
       // The id-preview--* host routes through Lovable's auth bridge and 302-redirects
       // even /api/public/* requests. The stable project--*[-dev].lovable.app host
@@ -202,20 +204,26 @@ function AppPage() {
     if (!result) return;
     setSaving(true);
     const outputPrompt = result.prompt || result.prompts?.join("\n\n---\n\n") || JSON.stringify(result, null, 2);
-    const { error } = await supabase.from("prompts").insert({
-      user_id: user.id,
-      input_text: input.trim(),
-      category: result.category || category,
-      output_prompt: outputPrompt,
-      why_it_works: result.why_it_works || null,
-      variants: result.variants || [],
-      mode,
-    });
+    const { data, error } = await supabase
+      .from("prompts")
+      .insert({
+        user_id: user.id,
+        input_text: input.trim(),
+        category: result.category || category,
+        output_prompt: outputPrompt,
+        why_it_works: result.why_it_works || null,
+        variants: result.variants || [],
+        mode,
+      })
+      .select("id, is_public")
+      .single();
     setSaving(false);
     if (error) {
       toast.error("Failed to save");
       console.error(error);
     } else {
+      setSavedRowId(data.id);
+      setSavedIsPublic(!!data.is_public);
       toast.success("Saved to library");
     }
   };
