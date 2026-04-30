@@ -23,6 +23,12 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute('/')({
   validateSearch: zodValidator(searchSchema),
+  // Load once, then keep the data fresh for 5 minutes. Going back to the
+  // Library is now instant — TanStack Router serves the cached loader data
+  // without re-fetching from Supabase.
+  loader: () => fetchLibrary(),
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
       { title: 'Pixelary — 100+ GPT Image 2 prompts. Copy any.' },
