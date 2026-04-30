@@ -1,11 +1,11 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Copy, ExternalLink, Search, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { toast } from 'sonner';
+
 import { z } from 'zod';
 import { zodValidator, fallback } from '@tanstack/zod-adapter';
 import { Header } from '@/components/Header';
-import { fetchLibrary, copyPrompt, openInImago, getCachedLibrary } from '@/lib/library';
+import { fetchLibrary, copyPrompt, openInImago } from '@/lib/library';
 import type { LibraryPrompt } from '@/types/library';
 import {
   Dialog,
@@ -23,6 +23,12 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute('/')({
   validateSearch: zodValidator(searchSchema),
+  // Load once, then keep the data fresh for 5 minutes. Going back to the
+  // Library is now instant — TanStack Router serves the cached loader data
+  // without re-fetching from Supabase.
+  loader: async (): Promise<LibraryPrompt[]> => fetchLibrary(),
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
       { title: 'Pixelary — 100+ GPT Image 2 prompts. Copy any.' },
@@ -63,11 +69,10 @@ const CATEGORIES = [
 type CategoryFilter = (typeof CATEGORIES)[number];
 
 function HomePage() {
-  const cached = getCachedLibrary();
+  // Loader-provided data — always populated, never blocks paint after first load.
+  const prompts = Route.useLoaderData();
   const { page } = Route.useSearch();
   const navigate = useNavigate({ from: '/' });
-  const [prompts, setPrompts] = useState<LibraryPrompt[]>(cached ?? []);
-  const [loading, setLoading] = useState(!cached);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -83,24 +88,6 @@ function HomePage() {
     if (page !== 1) navigate({ search: { page: 1 } });
   };
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const data = await fetchLibrary();
-        if (!cancelled) setPrompts(data);
-      } catch (err) {
-        console.error(err);
-        if (!cancelled) toast.error("Couldn't load the library");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   // Debounce search 150ms to smooth keystrokes on slower devices.
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 150);
@@ -108,7 +95,7 @@ function HomePage() {
   }, [search]);
 
   const filtered = useMemo(() => {
-    let list = prompts;
+    let list: LibraryPrompt[] = prompts;
     if (activeCategory !== 'All') {
       list = list.filter((p) => p.category === activeCategory);
     }
@@ -202,9 +189,7 @@ function HomePage() {
 
       {/* Grid */}
       <section className="mx-auto max-w-6xl px-6 py-10">
-        {loading ? (
-          <p className="text-body-md text-[color:var(--text-tertiary)]">Loading…</p>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-body-md text-[color:var(--text-tertiary)]">
               No prompts match those filters.
@@ -225,7 +210,7 @@ function HomePage() {
         ) : (
           <>
             <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
-              {pageItems.map((p) => (
+              {pageItems.map((p: LibraryPrompt) => (
                 <PromptCard
                   key={`${p.source}-${p.id}`}
                   prompt={p}
