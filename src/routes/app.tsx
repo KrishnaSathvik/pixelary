@@ -489,7 +489,7 @@ function ResultView({
             </div>
           )}
         </div>
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} />
+        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
       </div>
     );
   }
@@ -511,7 +511,7 @@ function ResultView({
         })}
         {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
         {!streaming && (
-          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={(result.prompts ?? []).join("\n\n---\n\n")} />
+          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={(result.prompts ?? []).join("\n\n---\n\n")} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
         )}
       </div>
     );
