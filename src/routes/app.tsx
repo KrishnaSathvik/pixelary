@@ -437,16 +437,8 @@ interface CodeBlockProps {
 }
 
 function CodeBlock({ text, jsonView, streaming = false }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
   const [view, setView] = useState<"text" | "json">("text");
   const display = view === "json" && jsonView ? JSON.stringify(jsonView, null, 2) : text;
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(display);
-    setCopied(true);
-    toast.success("Copied to clipboard");
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div className="relative">
@@ -488,18 +480,6 @@ function CodeBlock({ text, jsonView, streaming = false }: CodeBlockProps) {
               </button>
             </div>
           )}
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
-            aria-label="Copy"
-          >
-            {copied ? (
-              <Check className="h-4 w-4 text-[color:var(--success)]" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
-          </button>
         </div>
       )}
     </div>
