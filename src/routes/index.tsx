@@ -95,7 +95,7 @@ function HomePage() {
   }, [search]);
 
   const filtered = useMemo(() => {
-    let list = prompts;
+    let list: LibraryPrompt[] = prompts;
     if (activeCategory !== 'All') {
       list = list.filter((p) => p.category === activeCategory);
     }
