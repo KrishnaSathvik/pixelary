@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Copy, ExternalLink, Search, ArrowRight } from 'lucide-react';
+import { Copy, ExternalLink, Search, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
+import { zodValidator, fallback } from '@tanstack/zod-adapter';
 import { Header } from '@/components/Header';
 import { fetchLibrary, copyPrompt, openInImago, getCachedLibrary } from '@/lib/library';
 import type { LibraryPrompt } from '@/types/library';
@@ -12,6 +14,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { CATEGORY_GRADIENTS } from '@/data/examples';
+
+const PAGE_SIZE = 9;
+
+const searchSchema = z.object({
+  page: fallback(z.number().int().min(1), 1).default(1),
+});
 
 export const Route = createFileRoute('/')({
   head: () => ({
