@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Copy, ExternalLink, Search, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/Header';
-import { fetchLibrary, copyPrompt, openInImago } from '@/lib/library';
+import { fetchLibrary, copyPrompt, openInImago, getCachedLibrary } from '@/lib/library';
 import type { LibraryPrompt } from '@/types/library';
 import {
   Dialog,
