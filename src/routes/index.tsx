@@ -184,7 +184,21 @@ function HomePage() {
       </section>
 
       {/* Grid */}
-      <section className="mx-auto max-w-6xl px-6 py-10">
+      <section className="mx-auto max-w-6xl px-6 py-8">
+        {/* Grid header — count on the left, Generator path on the right */}
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <p className="font-mono text-mono-sm uppercase tracking-wider text-[color:var(--text-tertiary)]">
+            {filtered.length} {filtered.length === 1 ? 'prompt' : 'prompts'}
+          </p>
+          <Link
+            to="/app"
+            className="inline-flex items-center gap-1 text-body-sm text-[color:var(--text-secondary)] underline-offset-4 hover:text-[color:var(--text-primary)] hover:underline"
+          >
+            Build your own
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
         {filtered.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-body-md text-[color:var(--text-tertiary)]">
