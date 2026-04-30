@@ -54,8 +54,9 @@ const CATEGORIES = [
 type CategoryFilter = (typeof CATEGORIES)[number];
 
 function HomePage() {
-  const [prompts, setPrompts] = useState<LibraryPrompt[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cached = getCachedLibrary();
+  const [prompts, setPrompts] = useState<LibraryPrompt[]>(cached ?? []);
+  const [loading, setLoading] = useState(!cached);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
