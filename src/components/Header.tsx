@@ -45,22 +45,12 @@ export function Header() {
           >
             Home
           </Link>
-          <Link
-            to="/examples/{-$id}"
-            params={{ id: undefined }}
-            className={NAV_CLS}
-            activeProps={{ className: NAV_CLS_ACTIVE }}
-          >
-            Examples
+          <Link to="/library" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Library
           </Link>
           <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
             Blog
           </Link>
-          {user && (
-            <Link to="/library" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-              Library
-            </Link>
-          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -105,17 +95,12 @@ export function Header() {
                 <Link to="/" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
                   Home
                 </Link>
-                <Link to="/examples/{-$id}" params={{ id: undefined }} onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
-                  Examples
+                <Link to="/library" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
+                  Library
                 </Link>
                 <Link to="/blog" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
                   Blog
                 </Link>
-                {user && (
-                  <Link to="/library" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
-                    Library
-                  </Link>
-                )}
                 <div className="mt-4 pt-4 border-t border-[color:var(--border-subtle)] flex flex-col gap-2">
                   {user ? (
                     <Button

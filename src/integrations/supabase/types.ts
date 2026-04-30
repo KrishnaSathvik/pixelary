@@ -14,14 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
+      curated_prompts: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          prompt: string
+          source: string
+          source_creator: string | null
+          source_url: string | null
+          tags: string[]
+          title: string
+          user_input: string | null
+          variants: Json
+          why_it_works: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id: string
+          prompt: string
+          source: string
+          source_creator?: string | null
+          source_url?: string | null
+          tags?: string[]
+          title: string
+          user_input?: string | null
+          variants?: Json
+          why_it_works?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          prompt?: string
+          source?: string
+          source_creator?: string | null
+          source_url?: string | null
+          tags?: string[]
+          title?: string
+          user_input?: string | null
+          variants?: Json
+          why_it_works?: string | null
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          prompt_id: string
+          prompt_source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          prompt_id: string
+          prompt_source: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          prompt_id?: string
+          prompt_source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       prompts: {
         Row: {
           category: string | null
           created_at: string
           id: string
           input_text: string
+          is_public: boolean
           mode: string | null
           output_prompt: string
+          tags: string[]
+          title: string | null
           user_id: string
           variants: Json | null
           why_it_works: string | null
@@ -31,8 +100,11 @@ export type Database = {
           created_at?: string
           id?: string
           input_text: string
+          is_public?: boolean
           mode?: string | null
           output_prompt: string
+          tags?: string[]
+          title?: string | null
           user_id: string
           variants?: Json | null
           why_it_works?: string | null
@@ -42,8 +114,11 @@ export type Database = {
           created_at?: string
           id?: string
           input_text?: string
+          is_public?: boolean
           mode?: string | null
           output_prompt?: string
+          tags?: string[]
+          title?: string | null
           user_id?: string
           variants?: Json | null
           why_it_works?: string | null

@@ -101,7 +101,7 @@ function LibraryPage() {
           p.title.toLowerCase().includes(q) ||
           p.prompt.toLowerCase().includes(q) ||
           (p.user_input ?? '').toLowerCase().includes(q) ||
-          (p.tags ?? []).some((t) => t.toLowerCase().includes(q))
+          (p.tags ?? []).some((t: string) => t.toLowerCase().includes(q))
       );
     }
 
@@ -454,7 +454,7 @@ function PromptDetailDialog({
           <div className="mt-6 border-t border-[color:var(--border-subtle)] pt-6">
             <p className="eyebrow mb-3 text-[color:var(--text-tertiary)]">Variants</p>
             <ul className="space-y-2">
-              {prompt.variants.map((v, i) => (
+              {prompt.variants.map((v: string, i: number) => (
                 <li
                   key={i}
                   className="text-body-md text-[color:var(--text-secondary)]"
