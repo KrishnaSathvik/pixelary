@@ -13,8 +13,6 @@ import {
 import { Header } from "@/components/Header";
 import { CATEGORIES, MODES, type ModeValue } from "@/lib/promptcraft";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth-context";
 import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 
 interface AppSearch {
@@ -56,16 +54,12 @@ interface PromptResult {
 }
 
 function AppPage() {
-  const { user } = useAuth();
   const [input, setInput] = useState("");
   const [category, setCategory] = useState<string>("auto");
   const [mode, setMode] = useState<ModeValue>("default");
   const [loading, setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [result, setResult] = useState<PromptResult | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [savedRowId, setSavedRowId] = useState<string | null>(null);
-  const [savedIsPublic, setSavedIsPublic] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { seed } = Route.useSearch();
 
