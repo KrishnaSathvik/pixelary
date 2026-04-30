@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Copy, ExternalLink, Search, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Header } from '@/components/Header';
-import { fetchLibrary, copyPrompt, openInImago } from '@/lib/library';
+import { fetchLibrary, copyPrompt, openInImago, getCachedLibrary } from '@/lib/library';
 import type { LibraryPrompt } from '@/types/library';
 import {
   Dialog,
@@ -54,8 +54,9 @@ const CATEGORIES = [
 type CategoryFilter = (typeof CATEGORIES)[number];
 
 function HomePage() {
-  const [prompts, setPrompts] = useState<LibraryPrompt[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cached = getCachedLibrary();
+  const [prompts, setPrompts] = useState<LibraryPrompt[]>(cached ?? []);
+  const [loading, setLoading] = useState(!cached);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');

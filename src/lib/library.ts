@@ -74,16 +74,51 @@ function deriveTitle(input: string | null | undefined, id: string): string {
 }
 
 /**
- * Single read for the Library page. Merges curated + user prompts into one list.
- * Newest first overall.
+ * Module-level cache. Library content is curated and changes rarely, so we
+ * keep the result in memory for the lifetime of the tab. Subsequent visits
+ * to `/` render instantly from cache.
+ */
+let _libraryCache: LibraryPrompt[] | null = null;
+let _libraryInflight: Promise<LibraryPrompt[]> | null = null;
+
+export function getCachedLibrary(): LibraryPrompt[] | null {
+  return _libraryCache;
+}
+
+/**
+ * Single read for the Library page.
+ *
+ * Anonymous users (the default after the auth strip) can't see anything in
+ * `prompts` due to RLS, so we skip that query entirely and only hit
+ * `curated_prompts`. Logged-in users still get the merged view.
  */
 export async function fetchLibrary(): Promise<LibraryPrompt[]> {
-  const [curated, user] = await Promise.all([fetchCurated(), fetchUserPrompts()]);
-  return [...curated, ...user].sort((a, b) => {
-    const at = a.created_at ?? '';
-    const bt = b.created_at ?? '';
-    return bt.localeCompare(at);
-  });
+  if (_libraryCache) return _libraryCache;
+  if (_libraryInflight) return _libraryInflight;
+
+  _libraryInflight = (async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const isAuthed = !!sessionData?.session;
+
+    const [curated, user] = await Promise.all([
+      fetchCurated(),
+      isAuthed ? fetchUserPrompts() : Promise.resolve([] as LibraryPrompt[]),
+    ]);
+
+    const merged = [...curated, ...user].sort((a, b) => {
+      const at = a.created_at ?? '';
+      const bt = b.created_at ?? '';
+      return bt.localeCompare(at);
+    });
+    _libraryCache = merged;
+    return merged;
+  })();
+
+  try {
+    return await _libraryInflight;
+  } finally {
+    _libraryInflight = null;
+  }
 }
 
 /**
