@@ -214,6 +214,7 @@ function HomePage() {
                 onClick={() => {
                   setActiveCategory('All');
                   setSearch('');
+                  if (page !== 1) navigate({ search: { page: 1 } });
                 }}
                 className="mt-4 text-mono-sm uppercase tracking-wider text-[color:var(--accent)] hover:underline"
               >
@@ -222,15 +223,48 @@ function HomePage() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((p) => (
-              <PromptCard
-                key={`${p.source}-${p.id}`}
-                prompt={p}
-                onOpen={() => setSelected(p)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map((p) => (
+                <PromptCard
+                  key={`${p.source}-${p.id}`}
+                  prompt={p}
+                  onOpen={() => setSelected(p)}
+                />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <nav
+                className="mt-10 flex items-center justify-between gap-4"
+                aria-label="Pagination"
+              >
+                <p className="text-mono-sm uppercase tracking-wider text-[color:var(--text-tertiary)]">
+                  Page {safePage} of {totalPages} · {filtered.length} prompts
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => goToPage(safePage - 1)}
+                    disabled={safePage === 1}
+                    aria-label="Previous page"
+                    className="pill flex items-center gap-1 border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-subtle)] disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    Prev
+                  </button>
+                  <button
+                    onClick={() => goToPage(safePage + 1)}
+                    disabled={safePage === totalPages}
+                    aria-label="Next page"
+                    className="pill flex items-center gap-1 border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-subtle)] disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    Next
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </nav>
+            )}
+          </>
         )}
       </section>
 
