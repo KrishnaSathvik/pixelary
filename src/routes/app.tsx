@@ -21,6 +21,8 @@ import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 import { addHistory, getHistory } from "@/lib/history";
+import { absoluteUrl } from "@/lib/site";
+import { readSSEStream } from "@/lib/sse";
 
 interface AppSearch {
   seed?: string;
@@ -39,12 +41,22 @@ export const Route = createFileRoute("/app")({
   head: () => ({
     meta: [
       { title: "Generator — Pixelary" },
-      { name: "description", content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds." },
+      {
+        name: "description",
+        content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
+      },
       { property: "og:title", content: "Pixelary Generator" },
-      { property: "og:description", content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds." },
+      {
+        property: "og:description",
+        content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
+      },
       { name: "twitter:title", content: "Pixelary Generator" },
-      { name: "twitter:description", content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds." },
+      {
+        name: "twitter:description",
+        content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
+      },
     ],
+    links: [{ rel: "canonical", href: absoluteUrl("/app") }],
   }),
   component: AppPage,
 });
@@ -58,13 +70,23 @@ interface PromptResult {
   size?: string;
   quality?: string;
   aspect_ratio?: string;
+  prompt_version?: string;
 }
 
 const EXAMPLE_CHIPS = [
-  { label: "poster", text: "minimalist event poster for a data engineering meetup in SF next month" },
-  { label: "app mockup", text: "iPhone home screen mockup for a meditation app, soft gradient background" },
+  {
+    label: "poster",
+    text: "minimalist event poster for a data engineering meetup in SF next month",
+  },
+  {
+    label: "app mockup",
+    text: "iPhone home screen mockup for a meditation app, soft gradient background",
+  },
   { label: "infographic", text: "infographic explaining how RAG works, 3 steps, mono palette" },
-  { label: "cinematic scene", text: "cinematic shot of empty Tokyo street at dawn, neon reflections in puddles" },
+  {
+    label: "cinematic scene",
+    text: "cinematic shot of empty Tokyo street at dawn, neon reflections in puddles",
+  },
 ];
 
 function AppPage() {
@@ -147,15 +169,25 @@ function AppPage() {
         return;
       }
 
-      const finalResult = await streamPrompt(res, (partial) => setResult(partial), () => {
-        setLoading(false);
-        setStreaming(true);
-      });
+      const finalResult = await streamPrompt(
+        res,
+        (partial) => setResult(partial),
+        () => {
+          setLoading(false);
+          setStreaming(true);
+        },
+      );
       if (finalResult) {
         setResult(finalResult);
         setStreaming(false);
         setInputCollapsed(true);
-        addHistory({ kind: "generate", rough_idea: userInput, result: finalResult as Record<string, unknown> });
+        addHistory({
+          kind: "generate",
+          rough_idea: userInput,
+          result: finalResult as Record<string, unknown>,
+        });
+      } else {
+        toast.error("Generation ended before a final result arrived. Please try again.");
       }
     } catch (err) {
       console.error(err);
@@ -184,6 +216,8 @@ function AppPage() {
         // Drop the first (it's the "safe" one — equivalent to the existing prompt).
         // Keep the next two — stylized + experimental.
         setMoreVariants(finalResult.prompts.slice(1, 3));
+      } else {
+        toast.error("Variations ended before a final result arrived. Please try again.");
       }
     } catch (err) {
       console.error(err);
@@ -240,7 +274,9 @@ function AppPage() {
             </h1>
 
             <div className="mt-8">
-              <label htmlFor="rough-idea" className="sr-only">Rough idea</label>
+              <label htmlFor="rough-idea" className="sr-only">
+                Rough idea
+              </label>
               <Textarea
                 id="rough-idea"
                 ref={textareaRef}
@@ -328,13 +364,7 @@ async function streamPrompt(
   onPartial?: (partial: PromptResult) => void,
   onFirstByte?: () => void,
 ): Promise<PromptResult | null> {
-  if (!res.body) return null;
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  let currentEvent = "";
   let gotFirst = false;
-  let final: PromptResult | null = null;
 
   const applyPartial = (args: string) => {
     if (!onPartial) return;
@@ -350,41 +380,19 @@ async function streamPrompt(
     onPartial(partial);
   };
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    let nl: number;
-    while ((nl = buffer.indexOf("\n")) !== -1) {
-      const line = buffer.slice(0, nl);
-      buffer = buffer.slice(nl + 1);
-      if (line.startsWith("event:")) {
-        currentEvent = line.slice(6).trim();
-      } else if (line.startsWith("data:")) {
-        const payload = line.slice(5).trim();
-        if (!payload) continue;
-        try {
-          const json = JSON.parse(payload);
-          if (currentEvent === "delta" && typeof json.args === "string") {
-            if (!gotFirst) {
-              gotFirst = true;
-              onFirstByte?.();
-            }
-            applyPartial(json.args);
-          } else if (currentEvent === "done") {
-            final = json as PromptResult;
-          } else if (currentEvent === "error") {
-            toast.error(json?.error || "Generation failed");
-          }
-        } catch {
-          /* ignore */
-        }
-      } else if (line === "") {
-        currentEvent = "";
+  return readSSEStream<PromptResult>(res, {
+    onDelta: (json) => {
+      if (typeof json.args !== "string") return;
+      if (!gotFirst) {
+        gotFirst = true;
+        onFirstByte?.();
       }
-    }
-  }
-  return final;
+      applyPartial(json.args);
+    },
+    onError: (json) => {
+      toast.error(typeof json.error === "string" ? json.error : "Generation failed");
+    },
+  });
 }
 
 function CollapsedInput({ text, onExpand }: { text: string; onExpand: () => void }) {
@@ -488,7 +496,11 @@ function CodeBlock({ text, jsonView, streaming = false }: CodeBlockProps) {
             className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[color:var(--bg-elevated)] hover:bg-[color:var(--bg-subtle)] border border-[color:var(--border-default)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
             aria-label="Copy"
           >
-            {copied ? <Check className="h-4 w-4 text-[color:var(--success)]" /> : <Copy className="h-4 w-4" />}
+            {copied ? (
+              <Check className="h-4 w-4 text-[color:var(--success)]" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
           </button>
         </div>
       )}
@@ -529,7 +541,15 @@ function ResultView({
               <div className="font-mono text-[11px] tracking-[0.08em] uppercase text-[color:var(--text-tertiary)] font-medium">
                 {labels[i] || `Variant ${i + 1}`}
               </div>
-              <CodeBlock text={p} streaming={streaming && isLast} jsonView={!streaming ? { variant: labels[i], prompt: p, category: result.category } : undefined} />
+              <CodeBlock
+                text={p}
+                streaming={streaming && isLast}
+                jsonView={
+                  !streaming
+                    ? { variant: labels[i], prompt: p, category: result.category }
+                    : undefined
+                }
+              />
               {!streaming && <ActionRow promptText={p} onRegenerate={onRegenerate} />}
             </div>
           );
@@ -544,23 +564,30 @@ function ResultView({
     <div className="space-y-6">
       {result.category && <CategoryEyebrow category={result.category} />}
       {result.prompt && (
-        <CodeBlock
-          text={result.prompt}
-          streaming={streaming}
-          jsonView={
-            !streaming
-              ? {
-                  prompt: result.prompt,
-                  category: result.category,
-                  size: result.size,
-                  quality: result.quality,
-                  aspect_ratio: result.aspect_ratio,
-                  why_it_works: result.why_it_works,
-                  variants: result.variants,
-                }
-              : undefined
-          }
-        />
+        <div className="space-y-2">
+          {moreVariants && moreVariants.length > 0 && (
+            <div className="font-mono text-[11px] tracking-[0.08em] uppercase text-[color:var(--text-tertiary)] font-medium">
+              Safe
+            </div>
+          )}
+          <CodeBlock
+            text={result.prompt}
+            streaming={streaming}
+            jsonView={
+              !streaming
+                ? {
+                    prompt: result.prompt,
+                    category: result.category,
+                    size: result.size,
+                    quality: result.quality,
+                    aspect_ratio: result.aspect_ratio,
+                    why_it_works: result.why_it_works,
+                    variants: result.variants,
+                  }
+                : undefined
+            }
+          />
+        </div>
       )}
 
       {(result.size || result.quality || result.aspect_ratio) && !streaming && (
@@ -644,7 +671,9 @@ function WhyItWorks({ text, defaultOpen = false }: { text: string; defaultOpen?:
         className="w-full flex items-center justify-between gap-2 text-left text-body-sm text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
       >
         <span className="eyebrow">Why this works</span>
-        <ChevronDown className={`h-4 w-4 text-[color:var(--text-tertiary)] transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`h-4 w-4 text-[color:var(--text-tertiary)] transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
       {open && (
         <p className="mt-3 text-body-md italic leading-relaxed text-[color:var(--text-secondary)]">
@@ -666,9 +695,14 @@ function VariantsCollapsed({ variants }: { variants: string[] }) {
       >
         <span className="eyebrow inline-flex items-center gap-1.5">
           <Lightbulb className="h-3.5 w-3.5" />
-          Variants <span className="font-mono normal-case tracking-normal text-[color:var(--text-tertiary)]">({variants.length})</span>
+          Variants{" "}
+          <span className="font-mono normal-case tracking-normal text-[color:var(--text-tertiary)]">
+            ({variants.length})
+          </span>
         </span>
-        <ChevronDown className={`h-4 w-4 text-[color:var(--text-tertiary)] transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`h-4 w-4 text-[color:var(--text-tertiary)] transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
       {open && (
         <ul className="mt-3 space-y-2">
@@ -736,7 +770,12 @@ function ActionRow({
         </Button>
       )}
       {promptText && (
-        <Button onClick={handleCopy} variant="outline" size={compact ? "sm" : "default"} className="gap-2">
+        <Button
+          onClick={handleCopy}
+          variant="outline"
+          size={compact ? "sm" : "default"}
+          className="gap-2"
+        >
           {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
           {copied ? "Copied" : "Copy"}
         </Button>

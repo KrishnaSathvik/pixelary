@@ -1,17 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Twitter,
-  Github,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { getPostBySlug, getRelatedPosts } from "@/data/posts";
 import { renderMarkdown } from "@/lib/markdown";
-
-const SITE_URL = "https://pixelary.lovable.app";
+import { absoluteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -22,7 +16,7 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData }) => {
     if (!loaderData?.post) return { meta: [{ title: "Post not found" }] };
     const { post } = loaderData;
-    const url = `${SITE_URL}/blog/${post.slug}`;
+    const url = absoluteUrl(`/blog/${post.slug}`);
     const articleJsonLd = {
       "@context": "https://schema.org",
       "@type": "Article",
@@ -88,7 +82,7 @@ function PostPage() {
   const { post } = Route.useLoaderData();
   const related = useMemo(
     () => getRelatedPosts(post.slug, post.category, 2),
-    [post.slug, post.category]
+    [post.slug, post.category],
   );
 
   const { nodes, headings } = useMemo(() => renderMarkdown(post.content), [post.content]);
@@ -105,7 +99,7 @@ function PostPage() {
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         if (visible[0]) setActiveId(visible[0].target.id);
       },
-      { rootMargin: "-100px 0px -65% 0px", threshold: 0 }
+      { rootMargin: "-100px 0px -65% 0px", threshold: 0 },
     );
     headings.forEach((h) => {
       const el = document.getElementById(h.id);
@@ -142,12 +136,8 @@ function PostPage() {
             </span>
           </div>
 
-          <h1 className="mt-6 text-display-lg text-[color:var(--text-primary)]">
-            {post.title}
-          </h1>
-          <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">
-            {post.subtitle}
-          </p>
+          <h1 className="mt-6 text-display-lg text-[color:var(--text-primary)]">{post.title}</h1>
+          <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">{post.subtitle}</p>
 
           <div className="mt-8 flex items-center gap-3 pt-6 border-t border-[color:var(--border-subtle)]">
             <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[12px] font-semibold leading-none">
@@ -249,14 +239,6 @@ function PostPage() {
                 The Pixelary team ships AI image prompt tooling. We obsess over what works in
                 production — not what looks good in a demo.
               </p>
-              <div className="mt-3 flex gap-3 text-[color:var(--text-tertiary)]">
-                <a href="#" className="hover:text-[color:var(--text-primary)]" aria-label="Twitter">
-                  <Twitter className="h-4 w-4" />
-                </a>
-                <a href="#" className="hover:text-[color:var(--text-primary)]" aria-label="GitHub">
-                  <Github className="h-4 w-4" />
-                </a>
-              </div>
             </div>
           </div>
 

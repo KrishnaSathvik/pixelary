@@ -1,25 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { posts } from "@/data/posts";
-import { examples } from "@/data/examples";
-
-const SITE_URL = "https://pixelary.lovable.app";
+import { absoluteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
         const today = new Date().toISOString().split("T")[0];
+        const latestPostDate =
+          posts
+            .map((p) => p.published)
+            .sort()
+            .at(-1) ?? today;
         const urls: { loc: string; lastmod: string; priority: string }[] = [
-          { loc: `${SITE_URL}/`, lastmod: today, priority: "1.0" },
-          { loc: `${SITE_URL}/examples`, lastmod: today, priority: "0.9" },
-          { loc: `${SITE_URL}/blog`, lastmod: today, priority: "0.9" },
-          ...examples.map((e) => ({
-            loc: `${SITE_URL}/examples/${e.id}`,
-            lastmod: today,
-            priority: "0.7",
-          })),
+          { loc: absoluteUrl("/"), lastmod: today, priority: "1.0" },
+          { loc: absoluteUrl("/app"), lastmod: today, priority: "0.9" },
+          { loc: absoluteUrl("/critique"), lastmod: today, priority: "0.8" },
+          { loc: absoluteUrl("/blog"), lastmod: latestPostDate, priority: "0.9" },
           ...posts.map((p) => ({
-            loc: `${SITE_URL}/blog/${p.slug}`,
+            loc: absoluteUrl(`/blog/${p.slug}`),
             lastmod: p.published,
             priority: "0.8",
           })),
@@ -29,7 +28,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 ${urls
   .map(
     (u) =>
-      `  <url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod><priority>${u.priority}</priority></url>`
+      `  <url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod><priority>${u.priority}</priority></url>`,
   )
   .join("\n")}
 </urlset>`;

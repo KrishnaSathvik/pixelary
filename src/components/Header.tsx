@@ -16,37 +16,31 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-[1280px] items-center justify-between px-6 lg:px-12">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2.5">
-            <img
-              src={logo}
-              alt="Pixelary"
-              width={28}
-              height={28}
-              className="h-7 w-7 dark:invert"
-            />
+            <img src={logo} alt="Pixelary" width={28} height={28} className="h-7 w-7 dark:invert" />
             <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
               Pixelary
             </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
+            <Link
+              to="/"
+              className={NAV_CLS}
+              activeProps={{ className: NAV_CLS_ACTIVE }}
+              activeOptions={{ exact: true }}
+            >
+              Library
+            </Link>
             <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
               Generate
             </Link>
             <Link to="/critique" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
               Critique
             </Link>
-            <Link to="/" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
-              Library
-            </Link>
             <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
               Blog
             </Link>
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-1">
-          {historyCount > 0 && (
-            <div className="hidden md:block">
+            {historyCount > 0 && (
               <HistorySheet
                 trigger={
                   <button type="button" className={`${NAV_CLS} inline-flex items-center gap-1.5`}>
@@ -58,30 +52,56 @@ export function Header() {
                   </button>
                 }
               />
-            </div>
-          )}
+            )}
+          </nav>
+        </div>
 
+        <div className="flex items-center gap-1">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] bg-[color:var(--bg)] border-l border-[color:var(--border-subtle)]">
+            <SheetContent
+              side="right"
+              className="w-[280px] bg-[color:var(--bg)] border-l border-[color:var(--border-subtle)]"
+            >
               <SheetHeader>
                 <SheetTitle className="text-left">Menu</SheetTitle>
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-1">
-                <Link to="/app" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
-                  Generate
-                </Link>
-                <Link to="/critique" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
-                  Critique
-                </Link>
-                <Link to="/" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }} activeOptions={{ exact: true }}>
+                <Link
+                  to="/"
+                  onClick={closeMobile}
+                  className={MOBILE_NAV_CLS}
+                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
+                  activeOptions={{ exact: true }}
+                >
                   Library
                 </Link>
-                <Link to="/blog" onClick={closeMobile} className={MOBILE_NAV_CLS} activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}>
+                <Link
+                  to="/app"
+                  onClick={closeMobile}
+                  className={MOBILE_NAV_CLS}
+                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
+                >
+                  Generate
+                </Link>
+                <Link
+                  to="/critique"
+                  onClick={closeMobile}
+                  className={MOBILE_NAV_CLS}
+                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
+                >
+                  Critique
+                </Link>
+                <Link
+                  to="/blog"
+                  onClick={closeMobile}
+                  className={MOBILE_NAV_CLS}
+                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
+                >
                   Blog
                 </Link>
                 {historyCount > 0 && (
@@ -114,8 +134,7 @@ export function Header() {
 
 const NAV_CLS =
   "px-3 py-2 text-sm font-medium text-[color:var(--text-secondary)] transition-colors duration-150 hover:text-[color:var(--text-primary)]";
-const NAV_CLS_ACTIVE =
-  "px-3 py-2 text-sm font-medium text-[color:var(--text-primary)]";
+const NAV_CLS_ACTIVE = "px-3 py-2 text-sm font-medium text-[color:var(--text-primary)]";
 
 const MOBILE_NAV_CLS =
   "px-3 py-2.5 rounded-md text-base font-medium text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--text-primary)] transition-colors";

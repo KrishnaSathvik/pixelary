@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SYSTEM_PROMPT, CATEGORIES, MODES } from "@/lib/promptcraft";
+import { SYSTEM_PROMPT, CATEGORIES, MODES, PROMPT_VERSION } from "@/lib/promptcraft";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,8 +12,10 @@ const corsHeaders = {
 const ALLOWED_CATEGORIES = new Set<string>(CATEGORIES.map((c) => c.value));
 const ALLOWED_MODES = new Set<string>(MODES.map((m) => m.value));
 
-// In-memory IP rate limiter (best-effort; per-instance). Caps abuse from a
-// single IP without requiring auth, which would break the public demo.
+// In-memory IP rate limiter (best-effort; per-instance). For production abuse
+// resistance, pair this with Cloudflare WAF/Rate Limiting, Turnstile, or a
+// Durable Object/KV-backed limiter so counts survive cold starts and regions.
+// Caps abuse from a single IP without requiring auth, which would break the public demo.
 // Limits: 10 requests / minute and 60 requests / hour per IP.
 const RATE_WINDOW_MIN_MS = 60_000;
 const RATE_WINDOW_HOUR_MS = 3_600_000;
@@ -69,7 +71,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           if (rateLimitExceeded(ip)) {
             return new Response(
               JSON.stringify({ error: "Too many requests. Please wait a moment and try again." }),
-              { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } }
+              { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } },
             );
           }
 
@@ -100,7 +102,11 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           // Validate category against allowlist (prevents prompt injection via category field).
           // Unknown values are rejected; absence is fine (auto-detect).
           if (category !== undefined && category !== null) {
-            if (typeof category !== "string" || category.length > 100 || !ALLOWED_CATEGORIES.has(category)) {
+            if (
+              typeof category !== "string" ||
+              category.length > 100 ||
+              !ALLOWED_CATEGORIES.has(category)
+            ) {
               return new Response(JSON.stringify({ error: "Invalid category" }), {
                 status: 400,
                 headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -131,10 +137,10 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             (!category || category === "auto") &&
             CINEMATIC_TRIGGERS.some((re) => re.test(userIdea));
           const effectiveCategory = cinematicForced
-            ? "CHARACTER SHEET / CINEMATIC SCENE"
+            ? "CINEMATIC SCENE"
             : category && category !== "auto"
-            ? category
-            : null;
+              ? category
+              : null;
 
           // Deterministic ASPECT RATIO LOCK: when the user names a ratio
           // (direct "16:9", word "square", or implied "thumbnail"/"story"),
@@ -172,7 +178,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           const userMessage = [
             effectiveCategory ? `Category hint: ${effectiveCategory}` : null,
             cinematicForced
-              ? `LOCKED CATEGORY: The user explicitly requested cinematic framing. Use the CHARACTER SHEET / CINEMATIC SCENE template. Do NOT route to INTERIOR/ARCH/FOOD/FASHION even if the subject is a wedding, kitchen, food, dress, or building.`
+              ? `LOCKED CATEGORY: The user explicitly requested cinematic framing. Use the CINEMATIC SCENE template. Do NOT route to INTERIOR/ARCH/FOOD/FASHION even if the subject is a wedding, kitchen, food, dress, or building.`
               : null,
             lockedRatio
               ? `LOCKED ASPECT RATIO: ${lockedRatio} — The output prompt MUST include the exact phrase "${lockedRatio} aspect ratio" verbatim. Do not substitute a different ratio. Do not omit it.`
@@ -192,7 +198,10 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                 parameters: {
                   type: "object",
                   properties: {
-                    prompt: { type: "string", description: "Single polished prompt (default/JSON modes)" },
+                    prompt: {
+                      type: "string",
+                      description: "Single polished prompt (default/JSON modes)",
+                    },
                     prompts: {
                       type: "array",
                       items: { type: "string" },
@@ -234,7 +243,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                 if (closed) return;
                 try {
                   controller.enqueue(
-                    encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+                    encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`),
                   );
                 } catch {
                   // Client disconnected mid-stream — stop trying.
@@ -268,8 +277,8 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                   aiResponse.status === 429
                     ? "Rate limit reached. Please wait a moment and try again."
                     : aiResponse.status === 402
-                    ? "AI credits exhausted. Please add credits in workspace settings."
-                    : "AI service error";
+                      ? "AI credits exhausted. Please add credits in workspace settings."
+                      : "AI service error";
                 send("error", { error: message });
                 safeClose();
                 return;
@@ -296,8 +305,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                     try {
                       const json = JSON.parse(payload);
                       const delta = json?.choices?.[0]?.delta;
-                      const argDelta =
-                        delta?.tool_calls?.[0]?.function?.arguments ?? "";
+                      const argDelta = delta?.tool_calls?.[0]?.function?.arguments ?? "";
                       if (argDelta) {
                         assembled += argDelta;
                         send("delta", { args: assembled });
@@ -345,17 +353,19 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                 // lens vocabulary, leaving legitimate "px" usage untouched.
                 const fixLensUnits = (s: string): string =>
                   s
-                    .replace(/\b(\d{2,3})px(\s+(?:lens|prime|macro|telephoto|wide|f\/|aperture))/gi, "$1mm$2")
+                    .replace(
+                      /\b(\d{2,3})px(\s+(?:lens|prime|macro|telephoto|wide|f\/|aperture))/gi,
+                      "$1mm$2",
+                    )
                     .replace(/\b(\d{2,3})mm\s+pixel\b/gi, "$1mm");
                 const sanitize = (s: string) => fixLensUnits(stripCliFlags(s));
                 if (finalResult && typeof finalResult === "object") {
                   const fr = finalResult as Record<string, unknown>;
                   if (typeof fr.prompt === "string") fr.prompt = sanitize(fr.prompt);
                   if (Array.isArray(fr.prompts)) {
-                    fr.prompts = fr.prompts.map((p) =>
-                      typeof p === "string" ? sanitize(p) : p,
-                    );
+                    fr.prompts = fr.prompts.map((p) => (typeof p === "string" ? sanitize(p) : p));
                   }
+                  fr.prompt_version = PROMPT_VERSION;
                 }
                 send("done", finalResult);
                 safeClose();
@@ -392,7 +402,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           // Generic client message — full error is logged server-side only.
           return new Response(
             JSON.stringify({ error: "An internal error occurred. Please try again." }),
-            { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+            { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } },
           );
         }
       },

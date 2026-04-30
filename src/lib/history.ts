@@ -8,8 +8,8 @@ export interface HistoryEntry {
   kind: HistoryKind;
   rough_idea: string;
   // Snapshot of the polished output so users can restore without re-generating.
-  // For generate: contains prompt/prompts/category/why_it_works/variants.
-  // For critique: contains score/weaknesses/improvements/category.
+  // For generate: contains prompt/prompts/category/why_it_works/variants/prompt_version.
+  // For critique: contains score/weaknesses/improvements/category/prompt_version.
   result: Record<string, unknown>;
   created_at: number;
 }

@@ -3,11 +3,12 @@ import { ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/data/posts";
+import { absoluteUrl } from "@/lib/site";
 
 const PAGE_TITLE = "The Pixelary Blog — AI Image Prompt Engineering";
 const PAGE_DESCRIPTION =
   "Field-tested techniques for getting better AI images from GPT Image 2, Midjourney, Nano Banana Pro. Frameworks, examples, comparisons.";
-const PAGE_URL = "https://pixelary.lovable.app/blog";
+const PAGE_URL = absoluteUrl("/blog");
 
 export const Route = createFileRoute("/blog/")({
   head: () => {
@@ -86,7 +87,9 @@ function PostCard({
       >
         {post.title}
       </h3>
-      <p className={`mt-4 text-[color:var(--text-secondary)] ${featured ? "text-body-lg" : "text-body-md"}`}>
+      <p
+        className={`mt-4 text-[color:var(--text-secondary)] ${featured ? "text-body-lg" : "text-body-md"}`}
+      >
         {post.excerpt}
       </p>
       <div className="mt-6 flex items-center gap-3 font-mono text-[12px] tracking-[0.04em] text-[color:var(--text-tertiary)]">
@@ -101,12 +104,15 @@ function PostCard({
 
 function BlogIndex() {
   const sorted = [...posts].sort(
-    (a, b) => new Date(b.published).getTime() - new Date(a.published).getTime()
+    (a, b) => new Date(b.published).getTime() - new Date(a.published).getTime(),
   );
   const [featured, ...rest] = sorted;
 
   const categoryCounts = Array.from(
-    posts.reduce((acc, p) => acc.set(p.category, (acc.get(p.category) ?? 0) + 1), new Map<string, number>())
+    posts.reduce(
+      (acc, p) => acc.set(p.category, (acc.get(p.category) ?? 0) + 1),
+      new Map<string, number>(),
+    ),
   );
 
   return (

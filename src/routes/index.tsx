@@ -1,19 +1,15 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { useEffect, useMemo, useState } from 'react';
-import { Copy, ExternalLink, Search, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { Copy, ExternalLink, Search, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
-import { z } from 'zod';
-import { zodValidator, fallback } from '@tanstack/zod-adapter';
-import { Header } from '@/components/Header';
-import { fetchLibrary, copyPrompt, openInImago } from '@/lib/library';
-import type { LibraryPrompt } from '@/types/library';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { CATEGORY_GRADIENTS } from '@/data/examples';
+import { z } from "zod";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { Header } from "@/components/Header";
+import { fetchLibrary, copyPrompt, openInImago } from "@/lib/library";
+import { absoluteUrl } from "@/lib/site";
+import type { LibraryPrompt } from "@/types/library";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CATEGORY_GRADIENTS } from "@/data/examples";
 
 const PAGE_SIZE = 9;
 
@@ -21,7 +17,7 @@ const searchSchema = z.object({
   page: fallback(z.number().int().min(1), 1).default(1),
 });
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   validateSearch: zodValidator(searchSchema),
   // Load once, then keep the data fresh for 5 minutes. Going back to the
   // Library is now instant — TanStack Router serves the cached loader data
@@ -31,47 +27,48 @@ export const Route = createFileRoute('/')({
   gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
-      { title: 'Pixelary — Production-grade prompts for GPT Image 2' },
+      { title: "Pixelary — Production-grade prompts for GPT Image 2" },
       {
-        name: 'description',
+        name: "description",
         content:
-          'Production-grade prompts for GPT Image 2. Built from rough ideas, or pick from 100+ ready ones. One click opens any prompt in Imago.',
+          "Production-grade prompts for GPT Image 2. Built from rough ideas, or pick from 100+ ready ones. One click opens any prompt in Imago.",
       },
       {
-        property: 'og:title',
-        content: 'Pixelary — Production-grade prompts for GPT Image 2',
+        property: "og:title",
+        content: "Pixelary — Production-grade prompts for GPT Image 2",
       },
       {
-        property: 'og:description',
+        property: "og:description",
         content:
-          'Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.',
+          "Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.",
       },
       {
-        name: 'twitter:title',
-        content: 'Pixelary — Production-grade prompts for GPT Image 2',
+        name: "twitter:title",
+        content: "Pixelary — Production-grade prompts for GPT Image 2",
       },
       {
-        name: 'twitter:description',
+        name: "twitter:description",
         content:
-          'Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.',
+          "Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.",
       },
     ],
+    links: [{ rel: "canonical", href: absoluteUrl("/") }],
   }),
   component: HomePage,
 });
 
 const CATEGORIES = [
-  'All',
-  'Posters',
-  'Infographics',
-  'UI Mockups',
-  'Social Posts',
-  'Cinematic',
-  'Storyboards',
-  'Interior/Food/Fashion',
-  'Visual Summaries',
-  'Image Edits',
-  'Open-Ended Creative',
+  "All",
+  "Posters",
+  "Infographics",
+  "UI Mockups",
+  "Social Posts",
+  "Cinematic",
+  "Storyboards",
+  "Interior/Food/Fashion",
+  "Visual Summaries",
+  "Image Edits",
+  "Open-Ended Creative",
 ] as const;
 
 type CategoryFilter = (typeof CATEGORIES)[number];
@@ -80,10 +77,10 @@ function HomePage() {
   // Loader-provided data — always populated, never blocks paint after first load.
   const prompts = Route.useLoaderData();
   const { page } = Route.useSearch();
-  const navigate = useNavigate({ from: '/' });
-  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
-  const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const navigate = useNavigate({ from: "/" });
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>("All");
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selected, setSelected] = useState<LibraryPrompt | null>(null);
 
   // Reset to page 1 whenever the filter set changes.
@@ -104,7 +101,7 @@ function HomePage() {
 
   const filtered = useMemo(() => {
     let list: LibraryPrompt[] = prompts;
-    if (activeCategory !== 'All') {
+    if (activeCategory !== "All") {
       list = list.filter((p) => p.category === activeCategory);
     }
     if (debouncedSearch.trim()) {
@@ -113,8 +110,8 @@ function HomePage() {
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.prompt.toLowerCase().includes(q) ||
-          (p.user_input ?? '').toLowerCase().includes(q) ||
-          (p.tags ?? []).some((t: string) => t.toLowerCase().includes(q))
+          (p.user_input ?? "").toLowerCase().includes(q) ||
+          (p.tags ?? []).some((t: string) => t.toLowerCase().includes(q)),
       );
     }
     return list;
@@ -124,14 +121,14 @@ function HomePage() {
   const safePage = Math.min(page, totalPages);
   const pageItems = useMemo(
     () => filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
-    [filtered, safePage]
+    [filtered, safePage],
   );
 
   const goToPage = (p: number) => {
     const next = Math.max(1, Math.min(totalPages, p));
     navigate({ search: { page: next } });
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -180,8 +177,8 @@ function HomePage() {
                 onClick={() => setCategory(c)}
                 className={`pill shrink-0 font-mono uppercase tracking-wider text-mono-sm transition-colors ${
                   activeCategory === c
-                    ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
-                    : 'border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]'
+                    ? "bg-[color:var(--accent)] text-[color:var(--bg-elevated)]"
+                    : "border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)]"
                 }`}
               >
                 {c}
@@ -196,7 +193,7 @@ function HomePage() {
         {/* Grid header — count on the left, Generator path on the right */}
         <div className="mb-5 flex items-center justify-between gap-4">
           <p className="font-mono text-mono-sm uppercase tracking-wider text-[color:var(--text-tertiary)]">
-            {filtered.length} {filtered.length === 1 ? 'prompt' : 'prompts'}
+            {filtered.length} {filtered.length === 1 ? "prompt" : "prompts"}
           </p>
           <Link
             to="/app"
@@ -212,11 +209,11 @@ function HomePage() {
             <p className="text-body-md text-[color:var(--text-tertiary)]">
               No prompts match those filters.
             </p>
-            {(activeCategory !== 'All' || search) && (
+            {(activeCategory !== "All" || search) && (
               <button
                 onClick={() => {
-                  setActiveCategory('All');
-                  setSearch('');
+                  setActiveCategory("All");
+                  setSearch("");
                   if (page !== 1) navigate({ search: { page: 1 } });
                 }}
                 className="mt-4 text-mono-sm uppercase tracking-wider text-[color:var(--accent)] hover:underline"
@@ -229,11 +226,7 @@ function HomePage() {
           <>
             <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
               {pageItems.map((p: LibraryPrompt) => (
-                <PromptCard
-                  key={`${p.source}-${p.id}`}
-                  prompt={p}
-                  onOpen={() => setSelected(p)}
-                />
+                <PromptCard key={`${p.source}-${p.id}`} prompt={p} onOpen={() => setSelected(p)} />
               ))}
             </div>
 
@@ -276,26 +269,15 @@ function HomePage() {
   );
 }
 
-function PromptCard({
-  prompt,
-  onOpen,
-}: {
-  prompt: LibraryPrompt;
-  onOpen: () => void;
-}) {
-  const gradient =
-    CATEGORY_GRADIENTS[prompt.category] ?? CATEGORY_GRADIENTS['Open-Ended Creative'];
+function PromptCard({ prompt, onOpen }: { prompt: LibraryPrompt; onOpen: () => void }) {
+  const gradient = CATEGORY_GRADIENTS[prompt.category] ?? CATEGORY_GRADIENTS["Open-Ended Creative"];
 
   return (
     <article
       onClick={onOpen}
       className="group relative flex cursor-pointer flex-col gap-3 bg-[color:var(--bg-elevated)] p-6 transition-shadow hover:shadow-md-card"
     >
-      <div
-        className="h-2 w-12 rounded-sm"
-        style={{ background: gradient }}
-        aria-hidden
-      />
+      <div className="h-2 w-12 rounded-sm" style={{ background: gradient }} aria-hidden />
       <p className="eyebrow text-[color:var(--text-tertiary)]">{prompt.category}</p>
       <h3 className="text-heading-sm text-[color:var(--text-primary)]">{prompt.title}</h3>
       <p className="line-clamp-3 text-body-md text-[color:var(--text-secondary)]">
@@ -339,7 +321,7 @@ function PromptDetailDialog({
         <div className="mt-6">
           <pre
             className="overflow-x-auto whitespace-pre-wrap rounded-md p-4 font-mono text-mono-sm text-[color:var(--text-primary)]"
-            style={{ background: 'var(--code-bg)' }}
+            style={{ background: "var(--code-bg)" }}
           >
             {prompt.prompt}
           </pre>
@@ -365,9 +347,7 @@ function PromptDetailDialog({
         {prompt.why_it_works && (
           <div className="mt-8 border-t border-[color:var(--border-subtle)] pt-6">
             <p className="eyebrow mb-2 text-[color:var(--text-tertiary)]">Why it works</p>
-            <p className="text-body-md text-[color:var(--text-secondary)]">
-              {prompt.why_it_works}
-            </p>
+            <p className="text-body-md text-[color:var(--text-secondary)]">{prompt.why_it_works}</p>
           </div>
         )}
 
@@ -387,7 +367,7 @@ function PromptDetailDialog({
         {prompt.source_creator && (
           <div className="mt-8 border-t border-[color:var(--border-subtle)] pt-4">
             <p className="text-mono-sm text-[color:var(--text-quaternary)]">
-              Originally shared by{' '}
+              Originally shared by{" "}
               {prompt.source_url ? (
                 <a
                   href={prompt.source_url}
@@ -398,9 +378,7 @@ function PromptDetailDialog({
                   {prompt.source_creator}
                 </a>
               ) : (
-                <span className="text-[color:var(--text-tertiary)]">
-                  {prompt.source_creator}
-                </span>
+                <span className="text-[color:var(--text-tertiary)]">{prompt.source_creator}</span>
               )}
             </p>
           </div>

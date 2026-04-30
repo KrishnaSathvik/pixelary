@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-const SITE_URL = "https://pixelary.lovable.app";
+import { absoluteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/robots.txt")({
   server: {
@@ -9,7 +8,7 @@ export const Route = createFileRoute("/robots.txt")({
         const body = `User-agent: *
 Allow: /
 
-Sitemap: ${SITE_URL}/sitemap.xml
+Sitemap: ${absoluteUrl("/sitemap.xml")}
 `;
         return new Response(body, {
           headers: {

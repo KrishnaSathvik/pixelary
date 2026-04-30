@@ -2,8 +2,14 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme-context";
+import { absoluteUrl } from "@/lib/site";
 
 import appCss from "../styles.css?url";
+
+const DEFAULT_TITLE = "Pixelary — Pro-grade AI image prompts in seconds";
+const DEFAULT_DESCRIPTION =
+  "Turn rough ideas into copy-ready prompts for GPT Image 2, fal.ai, and OpenAI. Camera, lighting, composition — structured for production-quality output.";
+const DEFAULT_OG_IMAGE = absoluteUrl("/og-default.png");
 
 function NotFoundComponent() {
   return (
@@ -31,7 +37,11 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover",
+      },
       { name: "color-scheme", content: "light" },
       { name: "theme-color", content: "#FAFAF7" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -39,27 +49,18 @@ export const Route = createRootRoute({
       { name: "apple-mobile-web-app-title", content: "Pixelary" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "application-name", content: "Pixelary" },
-      { title: "Pixelary — Pro-grade AI image prompts in seconds" },
-      {
-        name: "description",
-        content:
-          "Convert rough creative ideas into production-grade prompts for OpenAI’s GPT Image 2. Built on the techniques used by the top 1% of prompt engineers.",
-      },
-      { property: "og:title", content: "Pixelary — Pro-grade AI image prompts in seconds" },
-      {
-        property: "og:description",
-        content: "Turn rough ideas into pro-grade image prompts. Copy-ready for ChatGPT, OpenAI API, fal.ai.",
-      },
+      { title: DEFAULT_TITLE },
+      { name: "description", content: DEFAULT_DESCRIPTION },
+      { property: "og:title", content: DEFAULT_TITLE },
+      { property: "og:description", content: DEFAULT_DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VmM13N9K3lf0TxVqINOZgAnvG1H2/social-images/social-1777338004957-pixelary-social.webp" },
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VmM13N9K3lf0TxVqINOZgAnvG1H2/social-images/social-1777338004957-pixelary-social.webp" },
-      { name: "twitter:title", content: "Pixelary — Pro-grade AI image prompts in seconds" },
-      { name: "description", content: "Turn rough ideas into copy-ready prompts for GPT Image 2, fal.ai, and OpenAI. Camera, lighting, composition — structured for production-quality output." },
-      { property: "og:description", content: "Turn rough ideas into copy-ready prompts for GPT Image 2, fal.ai, and OpenAI. Camera, lighting, composition — structured for production-quality output." },
-      { name: "twitter:description", content: "Turn rough ideas into copy-ready prompts for GPT Image 2, fal.ai, and OpenAI. Camera, lighting, composition — structured for production-quality output." },
+      { name: "twitter:image", content: DEFAULT_OG_IMAGE },
+      { name: "twitter:title", content: DEFAULT_TITLE },
+      { name: "twitter:description", content: DEFAULT_DESCRIPTION },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

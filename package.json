@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "preview": "vite preview",
+    "preview": "npm run build && wrangler dev --config dist/server/wrangler.json --ip 127.0.0.1 --inspector-ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

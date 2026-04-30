@@ -1,11 +1,21 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { ChevronDown, ChevronRight, Code2, FileText, Loader2, Plus, ScanSearch } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Code2,
+  FileText,
+  Loader2,
+  Plus,
+  ScanSearch,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import { addHistory, getHistory } from "@/lib/history";
+import { absoluteUrl } from "@/lib/site";
+import { readSSEStream } from "@/lib/sse";
 
 interface CritiqueSearch {
   restore?: string;
@@ -19,12 +29,22 @@ export const Route = createFileRoute("/critique")({
   head: () => ({
     meta: [
       { title: "Critique a Prompt — Pixelary" },
-      { name: "description", content: "Paste a prompt. Get a score, weaknesses, and concrete improvements." },
+      {
+        name: "description",
+        content: "Paste a prompt. Get a score, weaknesses, and concrete improvements.",
+      },
       { property: "og:title", content: "Pixelary · Critique" },
-      { property: "og:description", content: "Paste a prompt. Get a score, weaknesses, and concrete improvements." },
+      {
+        property: "og:description",
+        content: "Paste a prompt. Get a score, weaknesses, and concrete improvements.",
+      },
       { name: "twitter:title", content: "Pixelary · Critique" },
-      { name: "twitter:description", content: "Paste a prompt. Get a score, weaknesses, and concrete improvements." },
+      {
+        name: "twitter:description",
+        content: "Paste a prompt. Get a score, weaknesses, and concrete improvements.",
+      },
     ],
+    links: [{ rel: "canonical", href: absoluteUrl("/critique") }],
   }),
   component: CritiquePage,
 });
@@ -34,6 +54,7 @@ interface CritiqueResult {
   weaknesses?: string[];
   improvements?: string[];
   category?: string;
+  prompt_version?: string;
 }
 
 function CritiquePage() {
@@ -101,37 +122,11 @@ function CritiquePage() {
       }
 
       // Wait for the final "done" event — we don't stream partial scores.
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let currentEvent = "";
-      let final: CritiqueResult | null = null;
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        let nl: number;
-        while ((nl = buffer.indexOf("\n")) !== -1) {
-          const line = buffer.slice(0, nl);
-          buffer = buffer.slice(nl + 1);
-          if (line.startsWith("event:")) {
-            currentEvent = line.slice(6).trim();
-          } else if (line.startsWith("data:")) {
-            const payload = line.slice(5).trim();
-            if (!payload) continue;
-            try {
-              const json = JSON.parse(payload);
-              if (currentEvent === "done") final = json as CritiqueResult;
-              else if (currentEvent === "error") toast.error(json?.error || "Score failed");
-            } catch {
-              /* ignore */
-            }
-          } else if (line === "") {
-            currentEvent = "";
-          }
-        }
-      }
+      const final = await readSSEStream<CritiqueResult>(res, {
+        onError: (json) => {
+          toast.error(typeof json.error === "string" ? json.error : "Score failed");
+        },
+      });
       if (final) {
         setResult(final);
         setCollapsed(true);
@@ -140,6 +135,8 @@ function CritiquePage() {
           rough_idea: text,
           result: final as Record<string, unknown>,
         });
+      } else {
+        toast.error("Scoring ended before a final result arrived. Please try again.");
       }
     } catch (err) {
       console.error(err);
@@ -190,7 +187,9 @@ function CritiquePage() {
             </p>
 
             <div className="mt-8">
-              <label htmlFor="critique-input" className="sr-only">Prompt to score</label>
+              <label htmlFor="critique-input" className="sr-only">
+                Prompt to score
+              </label>
               <Textarea
                 id="critique-input"
                 ref={textareaRef}
@@ -255,7 +254,9 @@ function CollapsedInput({ text, onExpand }: { text: string; onExpand: () => void
         <span className="font-mono text-[10px] tracking-[0.08em] uppercase font-semibold text-[color:var(--text-tertiary)] shrink-0">
           PROMPT
         </span>
-        <span className="text-body-sm text-[color:var(--text-secondary)] truncate flex-1">{text}</span>
+        <span className="text-body-sm text-[color:var(--text-secondary)] truncate flex-1">
+          {text}
+        </span>
         <ChevronRight className="h-4 w-4 text-[color:var(--text-tertiary)] group-hover:text-[color:var(--text-primary)] shrink-0 transition-colors" />
       </div>
     </button>
@@ -269,10 +270,10 @@ function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => 
     score === null
       ? "var(--text-primary)"
       : score >= 8
-      ? "var(--success)"
-      : score >= 5
-      ? "var(--text-primary)"
-      : "var(--error)";
+        ? "var(--success)"
+        : score >= 5
+          ? "var(--text-primary)"
+          : "var(--error)";
 
   return (
     <div className="space-y-6">
