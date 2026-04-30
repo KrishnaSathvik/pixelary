@@ -69,11 +69,10 @@ const CATEGORIES = [
 type CategoryFilter = (typeof CATEGORIES)[number];
 
 function HomePage() {
-  const cached = getCachedLibrary();
+  // Loader-provided data — always populated, never blocks paint after first load.
+  const prompts = Route.useLoaderData();
   const { page } = Route.useSearch();
   const navigate = useNavigate({ from: '/' });
-  const [prompts, setPrompts] = useState<LibraryPrompt[]>(cached ?? []);
-  const [loading, setLoading] = useState(!cached);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -88,24 +87,6 @@ function HomePage() {
     setSearch(v);
     if (page !== 1) navigate({ search: { page: 1 } });
   };
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const data = await fetchLibrary();
-        if (!cancelled) setPrompts(data);
-      } catch (err) {
-        console.error(err);
-        if (!cancelled) toast.error("Couldn't load the library");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   // Debounce search 150ms to smooth keystrokes on slower devices.
   useEffect(() => {
