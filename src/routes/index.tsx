@@ -186,7 +186,7 @@ function HomePage() {
             {CATEGORIES.map((c) => (
               <button
                 key={c}
-                onClick={() => setActiveCategory(c)}
+                onClick={() => setCategory(c)}
                 className={`pill shrink-0 font-mono uppercase tracking-wider text-mono-sm transition-colors ${
                   activeCategory === c
                     ? 'bg-[color:var(--accent)] text-[color:var(--bg-elevated)]'
