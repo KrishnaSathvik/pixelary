@@ -1,7 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
-import { Sparkles, Copy, Check, RefreshCw, Save, Loader2, Wand2, Lightbulb, ExternalLink } from "lucide-react";
-import { PublishToLibraryToggle } from "@/components/generator/PublishToLibraryToggle";
+import { Sparkles, Copy, Check, RefreshCw, Loader2, Wand2, Lightbulb, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -14,8 +13,6 @@ import {
 import { Header } from "@/components/Header";
 import { CATEGORIES, MODES, type ModeValue } from "@/lib/promptcraft";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth-context";
 import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
 
 interface AppSearch {
@@ -57,16 +54,12 @@ interface PromptResult {
 }
 
 function AppPage() {
-  const { user } = useAuth();
   const [input, setInput] = useState("");
   const [category, setCategory] = useState<string>("auto");
   const [mode, setMode] = useState<ModeValue>("default");
   const [loading, setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [result, setResult] = useState<PromptResult | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [savedRowId, setSavedRowId] = useState<string | null>(null);
-  const [savedIsPublic, setSavedIsPublic] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { seed } = Route.useSearch();
 
@@ -79,8 +72,6 @@ function AppPage() {
     setLoading(true);
     setStreaming(false);
     setResult(null);
-    setSavedRowId(null);
-    setSavedIsPublic(false);
     try {
       // The id-preview--* host routes through Lovable's auth bridge and 302-redirects
       // even /api/public/* requests. The stable project--*[-dev].lovable.app host
@@ -195,39 +186,6 @@ function AppPage() {
     await generate(`${input.trim()} — variant: ${variantHint}`);
   };
 
-  const savePrompt = async () => {
-    if (!user) {
-      toast.error("Sign in to save prompts", {
-        action: { label: "Sign in", onClick: () => (window.location.href = "/login") },
-      });
-      return;
-    }
-    if (!result) return;
-    setSaving(true);
-    const outputPrompt = result.prompt || result.prompts?.join("\n\n---\n\n") || JSON.stringify(result, null, 2);
-    const { data, error } = await supabase
-      .from("prompts")
-      .insert({
-        user_id: user.id,
-        input_text: input.trim(),
-        category: result.category || category,
-        output_prompt: outputPrompt,
-        why_it_works: result.why_it_works || null,
-        variants: result.variants || [],
-        mode,
-      })
-      .select("id, is_public")
-      .single();
-    setSaving(false);
-    if (error) {
-      toast.error("Failed to save");
-      console.error(error);
-    } else {
-      setSavedRowId(data.id);
-      setSavedIsPublic(!!data.is_public);
-      toast.success("Saved to library");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
@@ -352,15 +310,8 @@ function AppPage() {
                 <ResultView
                   result={result}
                   streaming={streaming}
-                  onCopy={() => {}}
                   onRegenerate={() => generate()}
-                  onSave={savePrompt}
                   onVariantClick={generateVariant}
-                  saving={saving}
-                  isLoggedIn={!!user}
-                  savedRowId={savedRowId}
-                  savedIsPublic={savedIsPublic}
-                  onPublishChange={setSavedIsPublic}
                 />
               )}
             </div>
@@ -438,25 +389,12 @@ function ResultView({
   result,
   streaming = false,
   onRegenerate,
-  onSave,
   onVariantClick,
-  saving,
-  isLoggedIn,
-  savedRowId,
-  savedIsPublic,
-  onPublishChange,
 }: {
   result: PromptResult;
   streaming?: boolean;
-  onCopy: () => void;
   onRegenerate: () => void;
-  onSave: () => void;
   onVariantClick: (hint: string) => void;
-  saving: boolean;
-  isLoggedIn: boolean;
-  savedRowId: string | null;
-  savedIsPublic: boolean;
-  onPublishChange: (next: boolean) => void;
 }) {
   if (typeof result.score === "number") {
     return (
@@ -489,7 +427,7 @@ function ResultView({
             </div>
           )}
         </div>
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
+        <ActionRow onRegenerate={onRegenerate} />
       </div>
     );
   }
@@ -511,7 +449,7 @@ function ResultView({
         })}
         {result.why_it_works && <WhyItWorks text={result.why_it_works} />}
         {!streaming && (
-          <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={(result.prompts ?? []).join("\n\n---\n\n")} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
+          <ActionRow onRegenerate={onRegenerate} promptText={(result.prompts ?? []).join("\n\n---\n\n")} />
         )}
       </div>
     );
@@ -549,7 +487,7 @@ function ResultView({
         </div>
       )}
       {!streaming && (
-        <ActionRow onRegenerate={onRegenerate} onSave={onSave} saving={saving} isLoggedIn={isLoggedIn} promptText={result.prompt} savedRowId={savedRowId} savedIsPublic={savedIsPublic} onPublishChange={onPublishChange} />
+        <ActionRow onRegenerate={onRegenerate} promptText={result.prompt} />
       )}
     </div>
   );
@@ -575,22 +513,10 @@ function Tag({ label, value }: { label: string; value: string }) {
 
 function ActionRow({
   onRegenerate,
-  onSave,
-  saving,
-  isLoggedIn,
   promptText,
-  savedRowId,
-  savedIsPublic,
-  onPublishChange,
 }: {
   onRegenerate: () => void;
-  onSave: () => void;
-  saving: boolean;
-  isLoggedIn: boolean;
   promptText?: string;
-  savedRowId?: string | null;
-  savedIsPublic?: boolean;
-  onPublishChange?: (next: boolean) => void;
 }) {
   const handleOpenInImago = async () => {
     if (!promptText) return;
@@ -615,29 +541,10 @@ function ActionRow({
           Open in Imago
         </Button>
       )}
-      {savedRowId ? (
-        isLoggedIn && (
-          <PublishToLibraryToggle
-            promptId={savedRowId}
-            initialIsPublic={savedIsPublic ?? false}
-            onChange={(v) => onPublishChange?.(v)}
-          />
-        )
-      ) : (
-        <Button onClick={onSave} disabled={saving} variant="outline" size="sm" className="gap-2">
-          {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-          Save to library
-        </Button>
-      )}
       <Button onClick={onRegenerate} variant="outline" size="sm" className="gap-2">
         <RefreshCw className="h-3.5 w-3.5" />
         Regenerate
       </Button>
-      {!isLoggedIn && (
-        <Link to="/login" className="text-mono-sm text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] ml-auto">
-          Sign in to save →
-        </Link>
-      )}
     </div>
   );
 }
