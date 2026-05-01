@@ -789,6 +789,125 @@ Regenerating with a refined prompt is often faster than fixing a broken edit cha
 Writing CHANGE / PRESERVE / MATCH blocks manually is tedious, especially the exhaustive PRESERVE list. [Depikt's critique tool](/critique) can analyze your edit prompts and flag missing PRESERVE elements before you waste a generation on drift.
 `,
   },
+  {
+    slug: "ai-image-prompt-mistakes",
+    title: "7 AI Image Prompt Mistakes That Waste Your Generations",
+    subtitle: "Common patterns that produce mediocre output — and what to do instead.",
+    category: "Mistakes",
+    author: "Depikt Team",
+    read_time: "6 min",
+    published: "2026-04-24",
+    excerpt:
+      "Most bad AI image results aren't the model's fault. They're prompt mistakes — patterns that feel natural to write but consistently produce generic, flat, or incoherent output. Here are the seven most common ones.",
+    seo_title: "7 AI Image Prompt Mistakes That Waste Your Generations (2026)",
+    seo_description:
+      "The most common AI image prompt mistakes: adjective stacking, missing lighting, vague subjects, wrong aspect ratios, and more. With before/after fixes.",
+    content: `
+## Why most prompts underperform
+
+The gap between a mediocre AI image and a good one is rarely about the model. It's about the prompt. And the same mistakes show up over and over — patterns that feel natural to write but consistently produce flat, generic, or incoherent results.
+
+These aren't edge cases. They're the default way most people write prompts. Fixing them is the single highest-leverage thing you can do.
+
+## Mistake 1: Adjective stacking
+
+**The mistake:**
+\`A stunning, beautiful, breathtaking, ultra-detailed, 8K masterpiece of a mountain landscape, hyper-realistic, epic, amazing\`
+
+**Why it fails:** These adjectives carry no visual information. "Stunning" doesn't tell the model anything about composition, lighting, or color. With GPT Image 2's reasoning layer, these words actively compete with the structural details the model should be attending to.
+
+**The fix:** Replace every adjective with an observable physical detail.
+
+\`Mountain landscape at golden hour, long shadows raking across red sandstone, a single dead tree in the foreground, distant snow-capped peaks, thin cirrus clouds. Wide shot at 24mm, f/8, 3:2 landscape. Kodak Ektar 100.\`
+
+## Mistake 2: No lighting direction
+
+**The mistake:**
+\`Portrait of a woman in a coffee shop, good lighting\`
+
+**Why it fails:** "Good lighting" means nothing. The model picks the most generic, flat lighting it can — usually frontal and shadowless. Flat light kills depth and mood.
+
+**The fix:** Name one specific light source with direction.
+
+\`Portrait of a woman in a coffee shop, soft window light from camera-left, warm tungsten overhead creating slight rim on hair, shallow depth of field\`
+
+One named light source transforms the entire image.
+
+## Mistake 3: Vague subjects
+
+**The mistake:**
+\`A man standing in a city\`
+
+**Why it fails:** A man could be anyone. A city could be anywhere. The model picks the most statistically average interpretation — and average is boring.
+
+**The fix:** Add 3-4 specific details about the subject and 2-3 about the environment.
+
+\`A tall man in his 30s wearing a worn olive field jacket, hands in pockets, looking off-frame to camera-left, standing on a rain-wet sidewalk in lower Manhattan at dusk, yellow taxi blurred in background\`
+
+## Mistake 4: Ignoring aspect ratio
+
+**The mistake:** Not specifying an aspect ratio and hoping the model picks the right one.
+
+**Why it fails:** The model defaults to whatever ratio is most common in its training data for that subject — which is often wrong for your use case. A vertical story gets rendered as a landscape. A hero banner comes out square.
+
+**The fix:** Always end with the exact ratio:
+
+- **16:9** — web hero, YouTube thumbnail, landscape
+- **9:16** — Instagram story, TikTok, vertical
+- **4:5** — Instagram feed, portrait
+- **1:1** — profile photo, square social
+- **2:3** — Pinterest, print portrait
+- **2.39:1** — cinematic widescreen
+
+Lock it. Every time.
+
+## Mistake 5: Asking for multiple competing styles
+
+**The mistake:**
+\`Watercolor painting, photorealistic, anime style, oil painting texture, digital art\`
+
+**Why it fails:** Each style implies a completely different rendering approach. The model tries to satisfy all of them and produces a muddy hybrid that looks like none of them.
+
+**The fix:** Pick one style and commit. If you want variations, generate separate images with different style specifications.
+
+\`Loose watercolor painting on cold-press paper, visible brush strokes, wet-on-wet color bleeds at edges, limited palette of indigo, burnt sienna, and raw umber\`
+
+## Mistake 6: Overloading text requests
+
+**The mistake:**
+\`A poster with the title, subtitle, three bullet points, a paragraph of body text, a footer with contact info, and a QR code\`
+
+**Why it fails:** Image models are not layout engines. They can render 1-3 short text elements reliably. Beyond that, text degrades — characters garble, lines merge, spacing collapses.
+
+**The fix:** Limit text to 1-3 elements, each with explicit placement and styling. For complex layouts with lots of text, generate the visual in AI and add text in Figma or Canva.
+
+\`Event poster, 2:3 portrait. Headline "FUTURE STACK" in bold condensed sans-serif, white, upper third. Date "MARCH 14-16" in thin sans-serif below. Background: deep navy. Verbatim text — no extra characters.\`
+
+## Mistake 7: Changing everything between iterations
+
+**The mistake:** Getting a mediocre result and rewriting the entire prompt from scratch — changing the subject, composition, lighting, and style all at once.
+
+**Why it fails:** When you change four variables simultaneously, you learn nothing. The next result might be better or worse, and you have no idea which change caused it.
+
+**The fix:** Change one variable per iteration. Keep everything else constant. This is how you build intuition for what each lever actually does:
+
+- **Iteration 1:** Change only the lighting direction
+- **Iteration 2:** Change only the focal length
+- **Iteration 3:** Change only the color palette
+
+Slow iteration with single-variable changes beats fast iteration with random rewrites.
+
+## The pattern behind all seven
+
+Every mistake on this list is the same underlying error: giving the model vibes instead of constraints. "Stunning" is a vibe. "Soft window light from camera-left, f/1.8, 50mm" is a constraint.
+
+AI image models produce better output when they're satisfying specific, concrete constraints than when they're trying to interpret abstract quality descriptors. The more precisely you constrain the image, the better it gets — which is counterintuitive but consistently true.
+
+## Skip the mistakes
+
+[Depikt](/app) applies these fixes automatically. Paste a rough idea — even one that makes every mistake on this list — and get back a structured prompt that avoids all seven. It's the fastest way to stop wasting generations.
+`,
+  },
 ];
 
 export const CATEGORY_COLORS: Record<string, string> = {
@@ -798,6 +917,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   "How-to": "from-rose-500/30 to-pink-500/10",
   Comparison: "from-violet-500/30 to-purple-500/10",
   Guide: "from-cyan-500/30 to-blue-500/10",
+  Mistakes: "from-red-500/30 to-orange-500/10",
 };
 
 export function getPostBySlug(slug: string): Post | undefined {
