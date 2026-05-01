@@ -13,48 +13,46 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/85 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-[1280px] items-center justify-between px-6 lg:px-12">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src={logo} alt="Pixelary" width={28} height={28} className="h-7 w-7 dark:invert" />
-            <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
-              Pixelary
-            </span>
-          </Link>
+      <div className="relative mx-auto flex h-14 max-w-[1400px] items-center justify-between px-6 lg:px-12">
+        <Link to="/" className="flex items-center gap-2.5">
+          <img src={logo} alt="Depikt" width={28} height={28} className="h-7 w-7 dark:invert" />
+          <span className="text-[15px] font-semibold tracking-tight text-[color:var(--text-primary)]">
+            Depikt
+          </span>
+        </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
-            <Link
-              to="/"
-              className={NAV_CLS}
-              activeProps={{ className: NAV_CLS_ACTIVE }}
-              activeOptions={{ exact: true }}
-            >
-              Library
-            </Link>
-            <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-              Generate
-            </Link>
-            <Link to="/critique" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-              Critique
-            </Link>
-            <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-              Blog
-            </Link>
-            {historyCount > 0 && (
-              <HistorySheet
-                trigger={
-                  <button type="button" className={`${NAV_CLS} inline-flex items-center gap-1.5`}>
-                    <Clock className="h-3.5 w-3.5" />
-                    History
-                    <span className="font-mono text-[10px] text-[color:var(--text-tertiary)]">
-                      {historyCount}
-                    </span>
-                  </button>
-                }
-              />
-            )}
-          </nav>
-        </div>
+        <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1">
+          <Link
+            to="/"
+            className={NAV_CLS}
+            activeProps={{ className: NAV_CLS_ACTIVE }}
+            activeOptions={{ exact: true }}
+          >
+            Library
+          </Link>
+          <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Generate
+          </Link>
+          <Link to="/critique" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Critique
+          </Link>
+          <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Blog
+          </Link>
+          {historyCount > 0 && (
+            <HistorySheet
+              trigger={
+                <button type="button" className={`${NAV_CLS} inline-flex items-center gap-1.5`}>
+                  <Clock className="h-3.5 w-3.5" />
+                  History
+                  <span className="font-mono text-[10px] text-[color:var(--text-tertiary)]">
+                    {historyCount}
+                  </span>
+                </button>
+              }
+            />
+          )}
+        </nav>
 
         <div className="flex items-center gap-1">
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>

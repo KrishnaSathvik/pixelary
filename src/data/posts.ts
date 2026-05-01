@@ -18,7 +18,7 @@ export const posts: Post[] = [
     title: "GPT Image 2 Prompt Examples: 12 Templates That Actually Work",
     subtitle: "Real prompts across our 10 categories — copy, paste, ship.",
     category: "Examples",
-    author: "Pixelary Team",
+    author: "Depikt Team",
     read_time: "8 min",
     published: "2026-04-27",
     excerpt:
@@ -165,7 +165,7 @@ MATCH: Original lighting direction and intensity on subject (rim from camera-rig
 
 Don't just copy them verbatim. Use them as templates: find the example closest to your use case, swap out the subject specifics for your own, keep the structural skeleton (camera specs, lighting language, aspect ratio), and iterate by changing one variable at a time.
 
-Or paste your rough idea into [Pixelary](/app) and let it generate the structured prompt for you.
+Or paste your rough idea into [Depikt](/app) and let it generate the structured prompt for you.
 `,
   },
   {
@@ -173,7 +173,7 @@ Or paste your rough idea into [Pixelary](/app) and let it generate the structure
     title: "10 ChatGPT Image Prompt Tips for Production-Quality Results",
     subtitle: "Practical techniques drawn from real testing — not magic words.",
     category: "Tips",
-    author: "Pixelary Team",
+    author: "Depikt Team",
     read_time: "8 min",
     published: "2026-04-26",
     excerpt:
@@ -280,7 +280,7 @@ When iterating, keep everything constant except one element — light direction,
 
 ## The faster path
 
-If running through this checklist on every prompt sounds like work, [Pixelary](/app) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
+If running through this checklist on every prompt sounds like work, [Depikt](/app) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
 `,
   },
   {
@@ -288,7 +288,7 @@ If running through this checklist on every prompt sounds like work, [Pixelary](/
     title: "A 6-Layer Framework for Writing AI Image Prompts",
     subtitle: "A repeatable structure for any image type — posters, photoreal, UI mockups, edits.",
     category: "Framework",
-    author: "Pixelary Team",
+    author: "Depikt Team",
     read_time: "7 min",
     published: "2026-04-25",
     excerpt:
@@ -403,9 +403,9 @@ Three categories need a different structure:
 
 For everything else — photoreal, cinematic, character art, interiors, food, fashion, architecture — the 6 layers work as a useful checklist.
 
-## Use the framework or use Pixelary
+## Use the framework or use Depikt
 
-You can apply this manually on every prompt. Or you can paste your rough idea into [Pixelary](/app) and get a structured 6-layer prompt back in seconds. Same framework, automated.
+You can apply this manually on every prompt. Or you can paste your rough idea into [Depikt](/app) and get a structured 6-layer prompt back in seconds. Same framework, automated.
 `,
   },
   {
@@ -413,7 +413,7 @@ You can apply this manually on every prompt. Or you can paste your rough idea in
     title: "How to Write AI Image Prompts That Render Text Correctly",
     subtitle: "The protocol for posters, social graphics, and any image with words on it.",
     category: "How-to",
-    author: "Pixelary Team",
+    author: "Depikt Team",
     read_time: "6 min",
     published: "2026-04-23",
     excerpt:
@@ -491,7 +491,7 @@ Three text elements, each with its own font weight, color, and placement. Hex co
 
 ## The shortcut
 
-Manually applying this protocol on every prompt is tedious. [Pixelary](/app) bakes the entire text-rendering protocol into every poster, social graphic, and typography-heavy prompt it generates. Paste your rough idea, get back a prompt with quotes, placements, weights, and the verbatim trigger already in place.
+Manually applying this protocol on every prompt is tedious. [Depikt](/app) bakes the entire text-rendering protocol into every poster, social graphic, and typography-heavy prompt it generates. Paste your rough idea, get back a prompt with quotes, placements, weights, and the verbatim trigger already in place.
 `,
   },
   {
@@ -499,7 +499,7 @@ Manually applying this protocol on every prompt is tedious. [Pixelary](/app) bak
     title: "GPT Image 2 vs Nano Banana Pro vs Midjourney V8: 2026 Comparison",
     subtitle: "An honest comparison of the three top AI image models in April 2026.",
     category: "Comparison",
-    author: "Pixelary Team",
+    author: "Depikt Team",
     read_time: "9 min",
     published: "2026-04-21",
     excerpt:
@@ -572,7 +572,7 @@ Google's Gemini 3 Pro Image model. Released late 2025, established by April 2026
 
 ## Midjourney V8 — the artistic standard
 
-Released early 2026 with major architectural changes (switched from TPUs to GPUs with PyTorch codebase).
+V8 Alpha launched March 17, 2026 with a ground-up architectural rebuild (switched from TPUs to GPUs with PyTorch codebase). V8.1 followed in mid-April.
 
 **Verified capabilities:**
 - Native 2K (2048x2048) generation — upgraded from V7's 1024x1024
@@ -591,7 +591,7 @@ Released early 2026 with major architectural changes (switched from TPUs to GPUs
 **Weaknesses:**
 - Text rendering still trails GPT Image 2 (handles short words like "STOP" or "CAFE" but struggles with longer text or specific font layouts)
 - Less prompt adherence than GPT Image 2 or Nano Banana Pro
-- No public API — Discord and web only
+- No public API for standard users — enterprise customers can negotiate custom API access
 - 2K resolution is half the linear resolution of Nano Banana Pro's 4K
 - Subscription model rather than pay-per-image
 
@@ -638,7 +638,7 @@ If you're picking just one in April 2026:
 - **Use Midjourney V8** when aesthetic quality is the entire point and you're not constrained by text rendering needs
 - **Use Nano Banana Pro** when you need character consistency across a series or precise edits
 
-[Pixelary](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
+[Depikt](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
 
 ## Sources
 
@@ -650,6 +650,145 @@ If you're picking just one in April 2026:
 - NightCafe Midjourney V8 vs Nano Banana Pro comparison (January 2026)
 `,
   },
+  {
+    slug: "ai-image-editing-change-preserve-match",
+    title: "AI Image Editing: The CHANGE / PRESERVE / MATCH Framework",
+    subtitle: "How to edit AI images without drift, identity loss, or the 'pasted-in' look.",
+    category: "Guide",
+    author: "Depikt Team",
+    read_time: "7 min",
+    published: "2026-04-29",
+    excerpt:
+      "Generating an image from scratch is the easy part. Editing it — swapping backgrounds, fixing details, iterating on composition — is where most people lose hours to drift and artifacts. Here's the framework that prevents that.",
+    seo_title: "AI Image Editing: The CHANGE / PRESERVE / MATCH Framework (2026)",
+    seo_description:
+      "How to edit AI-generated images without drift: the CHANGE / PRESERVE / MATCH structure for background swaps, object removal, style changes, and multi-turn editing chains.",
+    content: `
+## Why editing is harder than generating
+
+Generating an image from a prompt is a single-shot operation. The model has total freedom — it just needs to satisfy your constraints.
+
+Editing is fundamentally different. You're asking the model to change one thing while keeping everything else identical. That's a much harder problem, because "everything else" is a massive set of visual properties: lighting angle, color temperature, skin tones, fabric texture, shadow direction, grain structure, focal plane, and thousands of other details you don't consciously notice until they change.
+
+Without structure, edits drift. Skin tones shift. Backgrounds bleed into subjects. Hair changes texture. Shadows point the wrong way. The result looks "pasted in" — which is worse than just generating from scratch.
+
+## The framework: CHANGE / PRESERVE / MATCH
+
+Every edit prompt should have exactly three blocks:
+
+**CHANGE:** The one thing (or small set of things) you want different. Be specific about what replaces what.
+
+**PRESERVE:** An explicit, exhaustive list of everything that must stay exactly the same. If you don't name it, the model may change it.
+
+**MATCH:** The lighting, color, and grain logic that bridges the old and new elements. This is what prevents the "pasted in" look.
+
+## Why three blocks, not two
+
+Most people write edit prompts with just CHANGE and PRESERVE. They skip MATCH — and that's where the uncanny results come from.
+
+When you swap a studio background for a rainy street, the subject's lighting shouldn't stay studio-flat. The new environment should cast subtle color spill onto the subject — cool blue from neon, warm orange from streetlights. Without the MATCH block, the model either keeps the original lighting (subject looks pasted) or re-lights everything (subject's face changes).
+
+MATCH tells the model: keep the original lighting direction and intensity on the subject, but let the new environment influence color temperature and reflections naturally.
+
+## Example 1: Background swap
+
+**Rough idea:** "Put this portrait in a rainy Tokyo street at night"
+
+\`\`\`
+CHANGE: Replace the background with a rainy Tokyo street at night —
+neon signs reflecting on wet pavement, blurred passing pedestrians,
+soft bokeh from illuminated signage, light rain visible against
+dark sky.
+
+PRESERVE: Subject's face, expression, pose, hair, clothing, body
+framing, skin tones, and exact silhouette — locked as in source.
+
+MATCH: Keep original lighting direction on subject (rim from
+camera-right). Subject's color temperature stays neutral, but add
+subtle cool blue and magenta reflections on clothing and skin from
+neon environment. Match original film grain and depth of field.
+\`\`\`
+
+## Example 2: Object removal
+
+**Rough idea:** "Remove the trash can and power lines"
+
+\`\`\`
+CHANGE: Remove the green trash can in lower-left corner and the
+power line crossing the upper third. Reconstruct the wall behind
+the trash can using the existing brick pattern. Reconstruct the
+sky as a clean continuous gradient matching the surrounding area.
+
+PRESERVE: Every person, the storefront awning, parked car,
+street signs, sidewalk texture, all cast shadows, window
+reflections, and wall graffiti.
+
+MATCH: Golden hour lighting from camera-right, warm color
+temperature, existing film grain and vignette.
+\`\`\`
+
+## Example 3: Style transfer
+
+**Rough idea:** "Make this photo look like a watercolor"
+
+\`\`\`
+CHANGE: Convert the photographic style to loose watercolor
+painting — visible paper texture, soft wet-on-wet color bleeds,
+unpainted white areas where highlights fall, slightly imprecise
+edges.
+
+PRESERVE: Composition, subject placement, relative proportions,
+facial features and expression, clothing silhouette, background
+element positions.
+
+MATCH: Maintain the same value structure (darks and lights in the
+same places). Simplify the color palette to 5-6 watercolor-plausible
+hues. Preserve the original light direction through shadow placement.
+\`\`\`
+
+## Multi-turn editing: the drift problem
+
+Single edits are manageable. The real challenge is multi-turn editing — making 3, 4, 5 changes to the same image across multiple generations. Each turn introduces small drift, and drift compounds.
+
+By turn 3 or 4, the subject's face has subtly changed, the lighting is inconsistent, and the image has lost coherence.
+
+**The fix: restate PRESERVE every turn.** Don't rely on the model remembering what to keep from previous turns. Copy-paste your full PRESERVE block into every edit prompt, updated to include anything new you added in previous turns.
+
+**The second fix: work from the best previous output, not the original.** Each edit should reference the most recent good result, not the original image. This keeps the edit chain grounded.
+
+## When to edit vs. when to regenerate
+
+Edit when:
+- You like 80%+ of the image and want to fix one element
+- The composition, pose, and lighting are right but a detail is wrong
+- You need to swap a background or remove an object
+- You're doing style transfer on a specific composition
+
+Regenerate when:
+- The composition is fundamentally wrong
+- Multiple major elements need changing
+- The pose or framing doesn't work
+- You're on edit turn 4+ and drift has accumulated
+
+Regenerating with a refined prompt is often faster than fixing a broken edit chain.
+
+## Common editing failures and fixes
+
+**"Pasted in" look:** You're missing the MATCH block. Add color spill, reflection, and grain matching from the new environment.
+
+**Face drift after 2-3 edits:** Your PRESERVE block isn't specific enough. Add: "facial bone structure, eye color, skin texture, exact hairline."
+
+**Shadow inconsistency:** Name the light direction in MATCH. "Shadows cast to lower-left, consistent with key light from upper-right."
+
+**Background bleeding into subject edges:** Add to PRESERVE: "exact silhouette edges, no feathering or blending at subject boundary."
+
+**Grain mismatch:** Add to MATCH: "Match ISO grain structure and intensity of the source image."
+
+## The shortcut
+
+Writing CHANGE / PRESERVE / MATCH blocks manually is tedious, especially the exhaustive PRESERVE list. [Depikt's critique tool](/critique) can analyze your edit prompts and flag missing PRESERVE elements before you waste a generation on drift.
+`,
+  },
 ];
 
 export const CATEGORY_COLORS: Record<string, string> = {
@@ -658,6 +797,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   Framework: "from-emerald-500/30 to-teal-500/10",
   "How-to": "from-rose-500/30 to-pink-500/10",
   Comparison: "from-violet-500/30 to-purple-500/10",
+  Guide: "from-cyan-500/30 to-blue-500/10",
 };
 
 export function getPostBySlug(slug: string): Post | undefined {
@@ -665,5 +805,9 @@ export function getPostBySlug(slug: string): Post | undefined {
 }
 
 export function getRelatedPosts(slug: string, category: string, limit = 2): Post[] {
-  return posts.filter((p) => p.slug !== slug && p.category === category).slice(0, limit);
+  const sameCategory = posts.filter((p) => p.slug !== slug && p.category === category);
+  if (sameCategory.length >= limit) return sameCategory.slice(0, limit);
+  // Fall back to recent posts from other categories
+  const others = posts.filter((p) => p.slug !== slug && !sameCategory.includes(p));
+  return [...sameCategory, ...others].slice(0, limit);
 }

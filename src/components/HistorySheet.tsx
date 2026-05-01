@@ -16,10 +16,10 @@ export function useHistoryCount() {
     const update = () => setCount(getHistory().length);
     update();
     const handler = () => update();
-    window.addEventListener("pixelary:history-changed", handler);
+    window.addEventListener("depikt:history-changed", handler);
     window.addEventListener("storage", handler);
     return () => {
-      window.removeEventListener("pixelary:history-changed", handler);
+      window.removeEventListener("depikt:history-changed", handler);
       window.removeEventListener("storage", handler);
     };
   }, []);
@@ -39,8 +39,8 @@ export function HistorySheet({ trigger }: HistorySheetProps) {
     if (!open) return;
     setEntries(getHistory());
     const handler = () => setEntries(getHistory());
-    window.addEventListener("pixelary:history-changed", handler);
-    return () => window.removeEventListener("pixelary:history-changed", handler);
+    window.addEventListener("depikt:history-changed", handler);
+    return () => window.removeEventListener("depikt:history-changed", handler);
   }, [open]);
 
   const restore = (entry: HistoryEntry) => {

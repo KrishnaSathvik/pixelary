@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SYSTEM_PROMPT, CATEGORIES, MODES, PROMPT_VERSION } from "@/lib/pixelary";
+import { SYSTEM_PROMPT, CATEGORIES, MODES, PROMPT_VERSION } from "@/lib/depikt";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -343,7 +343,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                   safeClose();
                   return;
                 }
-                // Strip Midjourney/SD CLI flags — Pixelary targets GPT Image 2,
+                // Strip Midjourney/SD CLI flags — Depikt targets GPT Image 2,
                 // which doesn't use --ar/--style/--v/etc. Belt-and-suspenders sanitize.
                 const stripCliFlags = (s: string): string =>
                   s

@@ -11,7 +11,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/launch-checklist")({
   head: () => ({
     meta: [
-      { title: "Launch Checklist — Pixelary" },
+      { title: "Launch Checklist — Depikt" },
       { name: "description", content: "Post-launch checklist: stress tests, log review, and soft-launch cohort." },
       { name: "robots", content: "noindex" },
     ],
@@ -47,7 +47,7 @@ function LaunchChecklistPage() {
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
-      <main className="mx-auto max-w-[920px] px-6 py-12 lg:px-12 lg:py-16">
+      <main className="mx-auto max-w-[1080px] px-6 py-12 lg:px-12 lg:py-16">
         <div className="mb-10">
           <p className="eyebrow">Post-launch · v1</p>
           <h1 className="mt-3 text-display-md text-[color:var(--text-primary)]">Launch checklist</h1>

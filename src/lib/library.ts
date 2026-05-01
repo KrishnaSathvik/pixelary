@@ -4,7 +4,7 @@ import type { LibraryPrompt, PromptSource } from '@/types/library';
 
 const IMAGO_URL =
   'https://chatgpt.com/g/g-69e7de729cb48191a6aa83ec3af8a6cb-imago' +
-  '?utm_source=pixelary&utm_medium=library';
+  '?utm_source=depikt&utm_medium=library';
 
 /**
  * Read curated content (examples + X-sourced) from `curated_prompts`.

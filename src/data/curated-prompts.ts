@@ -1,7 +1,15 @@
 /**
- * 70 verified GPT Image 2 prompts sourced from cyberbara/awesome-gpt-image,
- * which curates from X creators. All text verbatim. All categories mapped to
- * Pixelary's existing 10 (`EXAMPLE_CATEGORIES` minus "All"):
+ * 120 curated GPT Image 2 prompts. Original 97 sourced from
+ * cyberbara/awesome-gpt-image (X creators, community testing). 23 added to
+ * cover missing categories: action figures, isometric 3D, claymation,
+ * miniature dioramas, cross-sections, product photography, packaging mockups,
+ * illustrated maps, data visualization, motion blur portraits, vintage
+ * photography emulation, logo design, trading cards, double exposure, aerial
+ * drone, food photography, interior design, knolling, anime illustration,
+ * seamless patterns, children's book illustration, emoji sticker packs, and
+ * concert posters.
+ *
+ * All categories mapped to Depikt's existing 10:
  *   Posters, Infographics, UI Mockups, Social Posts, Cinematic, Storyboards,
  *   Interior/Food/Fashion, Visual Summaries, Image Edits, Open-Ended Creative
  *
@@ -239,7 +247,7 @@ export const curatedPrompts: CuratedPrompt[] = [
   {
     id: 'curated-japanese-gacha',
     title: 'Japanese Gacha Screen',
-    category: 'Cinematic',
+    category: 'UI Mockups',
     prompt: '日本のソシャゲのガチャ画面を生成して、',
     why_it_works:
       'Authentic mobile-game gacha pull-screen UI with stars, sparkle effects, character reveal. Works in Japanese for stronger Japanese-aesthetic priors.',
@@ -249,13 +257,57 @@ export const curatedPrompts: CuratedPrompt[] = [
   {
     id: 'curated-100-pixel-grid',
     title: '100 Pixel Art Items Grid',
-    category: 'Cinematic',
+    category: 'Infographics',
     prompt:
       'Create a single image containing a grid of 100 completely unique pixel art items, each with a meaningful label',
     why_it_works:
       '10×10 grid of unique pixel-art items with readable labels. Tests text + visual variety simultaneously.',
     source: 'curated',
     tags: ['game', 'pixel', 'grid'],
+  },
+  {
+    id: 'curated-motion-blur-neon-portrait',
+    title: 'Motion Blur Neon Portrait',
+    category: 'Cinematic',
+    prompt:
+      'Full-frame mirrorless, 35mm f/1.4, 1/15s shutter drag. Subject in tack-sharp focus against surroundings dissolving into swirling motion trails. Contrasting split lighting — cyan neon from the left, red neon from the right — both sources reflected in a rain-slicked asphalt street. Foreground: sharp puddle reflection of the subject. Middle ground: subject standing still, leather jacket catching both color casts. Background: streaked tail lights and blurred neon signage in bokeh. Wet atmosphere, visible mist catching the colored light. 9:16 vertical.',
+    why_it_works:
+      'The shutter-drag specification (1/15s) gives GPT Image 2 a concrete motion-blur instruction rather than vague "motion effect." Split complementary neon lighting (cyan vs red) creates dramatic contrast. Three-plane depth layering (puddle, subject, bokeh) adds dimensionality.',
+    source: 'curated',
+    tags: ['portrait', 'motion-blur', 'neon', 'night'],
+  },
+  {
+    id: 'curated-vintage-daguerreotype',
+    title: 'Vintage Daguerreotype Portrait',
+    category: 'Cinematic',
+    prompt:
+      'Mid-1800s daguerreotype portrait. Metallic silver-plate sheen with subtle iridescent color shifts when viewed at angle. Oval vignette framing with soft feathered edges fading to tarnished black border. Subject in period-appropriate attire — high collar, dark wool coat, cravat. Expression: composed, unsmiling, direct gaze (long exposure demanded stillness). Surface: oxidized silver patina, micro-scratches, age spots, slight foxing at edges. Hand-tinted rosy cheeks and subtle gold highlights on jewelry — the only color in an otherwise monochrome image. Warm sepia-to-cool-silver tonal range. NOT modern, NOT digital, NOT a photograph with a filter. Aspect ratio 4:5 vertical.',
+    why_it_works:
+      'Naming the specific photographic process (daguerreotype) triggers precise visual priors — the metallic sheen and oval vignette are characteristic. The hand-tinted cheeks detail is historically accurate and adds realism. Strong negative constraints ("NOT modern, NOT digital") prevent modern-filter shortcuts.',
+    source: 'curated',
+    tags: ['portrait', 'vintage', 'daguerreotype', 'historical'],
+  },
+  {
+    id: 'curated-double-exposure-portrait',
+    title: 'Double Exposure Forest Portrait',
+    category: 'Cinematic',
+    prompt:
+      'Double exposure portrait photograph. Primary exposure: close-up profile silhouette of a person facing right, strong jawline and hairline clearly defined against a bright backlit background. Second exposure blended inside the silhouette: a dense pine forest with morning fog threading between tree trunks, sunlight filtering through the canopy creating volumetric light rays. The forest fills the figure\'s outline completely. Outside the silhouette: clean white or very light gray, minimal spill. Slight color grading: cool teal shadows in the forest, warm amber highlights where sunlight breaks through. Fine film grain overall. Foreground: sharp silhouette edges. Transition zone: forest details fading organically at the silhouette boundary. Shot on medium format, shallow depth in the forest layer. Aspect ratio 4:5 vertical.',
+    why_it_works:
+      'Double exposure is a specific photographic technique GPT Image 2 handles well when given clear layering instructions. Specifying "primary" and "second" exposure with blending rules prevents the model from just overlaying two images. The "minimal spill outside silhouette" constraint keeps the composition clean.',
+    source: 'curated',
+    tags: ['portrait', 'double-exposure', 'forest', 'conceptual'],
+  },
+  {
+    id: 'curated-aerial-drone-nadir',
+    title: 'Aerial Drone Abstract Landscape',
+    category: 'Cinematic',
+    prompt:
+      'Aerial drone photography looking straight down at 90-degree nadir angle. Subject: a winding turquoise river cutting through a dark volcanic black sand landscape. The river branches into braided channels with sandbars and sediment patterns creating natural abstract compositions. Small patches of bright green moss on the black sand near the river banks. No visible horizon, no sky — pure top-down abstract geography. Shot at 35mm equivalent on a drone at 120m altitude. Color palette: turquoise water against matte black sand with moss-green accents. Midday flat light creating minimal shadows, emphasizing color contrast and pattern over depth. The image should read as an abstract composition first, landscape second. Aspect ratio 3:2 landscape.',
+    why_it_works:
+      'The 90-degree nadir angle removes all horizon and sky, turning landscape into abstract pattern. Specifying altitude (120m) gives the model a concrete scale reference. The "abstract composition first, landscape second" instruction prioritizes visual design over geographic accuracy.',
+    source: 'curated',
+    tags: ['aerial', 'drone', 'landscape', 'abstract', 'nadir'],
   },
 
   // ============================================================
@@ -455,6 +507,17 @@ export const curatedPrompts: CuratedPrompt[] = [
     tags: ['anime', 'character', 'consistency'],
   },
   {
+    id: 'curated-trading-card-collectible',
+    title: 'Trading Card Collectible',
+    category: 'Storyboards',
+    prompt:
+      'Collectible trading card with a dimensional break effect — the character physically bursting through the card border, one arm and shoulder extending beyond the card frame into the viewer\'s space. Card layout: character illustration occupying the top two-thirds, stats panel at the bottom with HP, ATK, DEF values in bold mono font. Holographic foil accent on the card border — rainbow prismatic light catch. Rarity badge in the top-right corner (gold star with "SSR" text). Character name in stylized display font across the bottom of the illustration area. Card corners: rounded with subtle wear marks for authenticity. Background behind the card: pure black to emphasize the dimensional break and holographic reflections. Collectible card game aesthetic — premium, tactile, detailed. Aspect ratio 3:4 vertical.',
+    why_it_works:
+      'The dimensional break effect (character breaking through the card border) is a specific premium-card technique that GPT Image 2 renders convincingly. The holographic foil instruction triggers prismatic light effects. Wear marks on corners add collectible authenticity.',
+    source: 'curated',
+    tags: ['trading-card', 'collectible', 'game', 'holographic'],
+  },
+  {
     id: 'curated-character-reference-sheet',
     title: 'Official Character Reference Sheet',
     category: 'Storyboards',
@@ -464,6 +527,17 @@ export const curatedPrompts: CuratedPrompt[] = [
       'Production-quality character bible. Useful for game devs, comic creators, novelists.',
     source: 'curated',
     tags: ['character', 'reference', 'production'],
+  },
+  {
+    id: 'curated-emoji-sticker-pack',
+    title: 'Emoji Sticker Pack Grid',
+    category: 'Storyboards',
+    prompt:
+      'A 4x4 grid of exactly 16 emoji-style sticker designs of the same character — a round-faced orange tabby cat with large green eyes and a pink nose. White background. Each sticker shows a different emotion or action with a matching text label below: "happy," "angry," "sleepy," "shocked," "crying," "love," "thinking," "eating," "working," "exercising," "coffee," "party," "thumbs up," "confused," "sassy," "sending heart." Character must remain visually identical across all 16 panels — same face shape, same eye color, same fur pattern. Style: thick black outlines, flat bright colors, chibi proportions (large head, tiny body), slight 3D shadow beneath each sticker as if peeling off a sheet. No background per sticker — each floats on white. Aspect ratio 1:1 square.',
+    why_it_works:
+      'Locking character features (face shape, eye color, fur pattern) across 16 panels enforces the consistency needed for a real sticker pack. The "as if peeling off a sheet" shadow instruction adds die-cut authenticity. Chibi proportions and thick outlines match actual messaging-app sticker conventions.',
+    source: 'curated',
+    tags: ['sticker', 'emoji', 'character', 'consistency', 'grid'],
   },
 
   // ============================================================
@@ -547,16 +621,6 @@ export const curatedPrompts: CuratedPrompt[] = [
     tags: ['poster', 'ecommerce', 'product'],
   },
   {
-    id: 'curated-dense-chinese-layout',
-    title: 'Dense Chinese Layout Stress Test',
-    category: 'Posters',
-    prompt: 'Generate an image of [scene/content]',
-    why_it_works:
-      'Tests GPT Image 2\'s ability to render dense Chinese typography in newspaper/magazine layouts. The "Campus Daily" example is the canonical use.',
-    source: 'curated',
-    tags: ['poster', 'typography', 'chinese'],
-  },
-  {
     id: 'curated-medical-prescription',
     title: 'Handwritten Medical Prescription',
     category: 'Posters',
@@ -599,6 +663,28 @@ export const curatedPrompts: CuratedPrompt[] = [
     tags: ['poster', 'calligraphy', 'practice'],
   },
   {
+    id: 'curated-product-packaging-mockup',
+    title: 'Product Packaging Mockup',
+    category: 'Posters',
+    prompt:
+      'Product photography of a kraft paper coffee bag on a raw concrete surface. Condensed serif label reads "SUMMIT BLEND" (spelled letter by letter: S-U-M-M-I-T  B-L-E-N-D) in dark espresso brown ink on a cream paper label, slightly off-center for authenticity. Tin-tie closure at top, bag slightly crumpled with natural fold creases. Scattered whole coffee beans around the base — some in sharp focus foreground, some soft in background. One small burlap swatch visible behind the bag. Side lighting from a window, warm morning color temperature, soft shadows falling right. Shot at 85mm f/4 on full-frame mirrorless, shallow depth of field with sharp focus on the label. Muted earthy palette: kraft brown, concrete gray, cream, espresso. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'The letter-by-letter spelling technique ensures accurate text rendering on the packaging label. Specific material textures (kraft paper, raw concrete, burlap) anchor the tactile quality. The "slightly crumpled with natural fold creases" detail prevents the AI-perfect packaging look.',
+    source: 'curated',
+    tags: ['poster', 'packaging', 'product', 'coffee', 'mockup'],
+  },
+  {
+    id: 'curated-logo-brand-mark',
+    title: 'Logo Brand Mark',
+    category: 'Posters',
+    prompt:
+      'Minimal geometric logo design for a specialty coffee brand. Abstract mark combining a stylized flame and leaf shape that subtly forms the letter "S." Single color (deep forest green) on pure white background. Clean vector-style rendering with precise geometric construction — visible underlying circle and golden-ratio grid guides in light gray behind the mark. Below the mark: brand name "SIERRA ROASTERS" in tracked-out light-weight geometric sans-serif. Generous white space surrounding the mark. No gradients, no shadows, no 3D effects, no textures. Flat, crisp, scalable. Aspect ratio 1:1 square. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Specifying the geometric construction (underlying circles, golden-ratio grid) gives the model structural constraints for clean logo geometry. The strong negative constraints (no gradients, no shadows, no 3D) prevent the common AI tendency to over-embellish logos. Single-color flat rendering mimics professional brand-mark deliverables.',
+    source: 'curated',
+    tags: ['poster', 'logo', 'brand', 'minimal', 'vector'],
+  },
+  {
     id: 'curated-character-relationship-poster',
     title: 'Character Relationship Poster',
     category: 'Posters',
@@ -608,6 +694,17 @@ export const curatedPrompts: CuratedPrompt[] = [
       'Premium IP fan-art relationship maps. Works for Demon Slayer, Game of Thrones, One Piece, anything with a complex cast.',
     source: 'curated',
     tags: ['poster', 'narrative', 'fan-art'],
+  },
+  {
+    id: 'curated-letterpress-concert-poster',
+    title: 'Letterpress Jazz Concert Poster',
+    category: 'Posters',
+    prompt:
+      'Vintage letterpress concert poster on off-white heavyweight cotton paper stock with visible paper texture and slight tooth. Typography-dominant design in exactly 3 ink colors: navy blue, burnt orange, and cream (paper color). Top line: "BLUE NOTE SESSIONS" in large condensed all-caps sans-serif, navy. Second line: "PRESENTS" in small tracked-out light-weight caps, orange. Main act: "THE MIDNIGHT QUARTET" (spelled letter by letter: M-I-D-N-I-G-H-T  Q-U-A-R-T-E-T) in oversized bold slab-serif, navy, filling the width. Supporting text: "LIVE AT THE VELVET ROOM" in medium sans-serif, orange. Date line: "FRIDAY SEPTEMBER 12 / DOORS 8PM / SHOW 9PM" in small mono-spaced type, navy. Bottom: a single geometric illustration of a saxophone in burnt orange, simplified to angular flat shapes. Woodblock/letterpress ink texture — slight ink spread at letter edges, uneven ink density across large type. No photographs, no gradients, no digital effects. Aspect ratio 11:17 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Locking to exactly 3 ink colors mimics real letterpress constraints. The letter-by-letter spelling ensures accurate rendering of the band name. Specifying "ink spread at letter edges" and "uneven ink density" triggers authentic print-process artifacts rather than clean digital type.',
+    source: 'curated',
+    tags: ['poster', 'concert', 'letterpress', 'jazz', 'typography'],
   },
 
   // ============================================================
@@ -731,6 +828,39 @@ export const curatedPrompts: CuratedPrompt[] = [
     source: 'curated',
     tags: ['infographic', 'document', 'exam'],
   },
+  {
+    id: 'curated-exploded-view-watch',
+    title: 'Exploded View Technical Diagram',
+    category: 'Infographics',
+    prompt:
+      'Exploded-view technical diagram of a mechanical wristwatch. All internal components — mainspring barrel, escape wheel, balance wheel, gear train, crown stem, crystal, case back, dial, hands — deconstructed and floating in precise vertical alignment with generous spacing between layers. Each component connected by thin color-coded leader lines (red for movement, blue for case, green for dial assembly) to labeled callout boxes with part name and material. Isometric perspective at 30 degrees. Background: engineering blueprint grid with fine white lines on deep navy. Subtle ambient occlusion shadow beneath each floating part. Technical illustration style — NOT photorealistic, NOT a photograph. Aspect ratio 3:4 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Exploded-view diagrams are a proven GPT Image 2 strength. Color-coded leader lines by subsystem (movement, case, dial) add information hierarchy. The blueprint grid background and isometric angle anchor the technical illustration style.',
+    source: 'curated',
+    tags: ['infographic', 'technical', 'exploded-view', 'watch'],
+  },
+  {
+    id: 'curated-illustrated-travel-map',
+    title: 'Illustrated Travel Map',
+    category: 'Infographics',
+    prompt:
+      'Hand-drawn illustrated map in ink-and-watercolor style. Parchment-toned background with subtle paper texture and torn edges. Exactly 8 landmark buildings rendered as tiny isometric 3D illustrations, each labeled with its name in a hand-lettered serif font. Winding roads and pathways connecting landmarks with dotted travel lines. Compass rose in the top-right corner with ornate cardinal directions. Decorative elements: cherry blossom branches along borders, small ink-wash clouds, a wax-seal emblem in one corner. Warm palette — ochre, terracotta, sage green, dusty rose, cream. The map should feel like a keepsake illustration from a travel journal, NOT a Google Maps screenshot. Aspect ratio 4:3 landscape. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Locking exactly 8 landmarks prevents the model from generating too many or too few. The isometric 3D instruction for miniature buildings is a specific rendering style GPT Image 2 handles well. "NOT a Google Maps screenshot" prevents digital-map defaults.',
+    source: 'curated',
+    tags: ['infographic', 'map', 'illustrated', 'travel'],
+  },
+  {
+    id: 'curated-data-viz-bar-chart',
+    title: 'Data Visualization Bar Chart',
+    category: 'Infographics',
+    prompt:
+      'Horizontal bar chart infographic with exactly 5 bars. Title at top in bold condensed sans-serif: "Global Coffee Consumption by Region" (spelled letter by letter: C-O-N-S-U-M-P-T-I-O-N). Bar values: "Europe: 3.2M tons", "Asia: 2.8M tons", "North America: 1.9M tons", "South America: 1.5M tons", "Africa: 0.7M tons". Bars filled with a navy-to-teal gradient, longest bar at top, shortest at bottom. Bold white value labels inside each bar. Category labels in dark charcoal left-aligned. Subtle gridlines behind bars. Source attribution line at bottom in small light-gray text: "Source: International Coffee Organization, 2025". Editorial data-visualization style — clean, modern, magazine-quality. White background. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Locking exactly 5 bars with specific values prevents hallucinated data. The letter-by-letter spelling technique improves text accuracy on the longer word. Editorial data-viz styling ("magazine-quality") steers away from generic chart defaults.',
+    source: 'curated',
+    tags: ['infographic', 'data-viz', 'chart', 'editorial'],
+  },
 
   // ============================================================
   // VISUAL SUMMARIES (travel, codex, article visualizations)
@@ -744,16 +874,6 @@ export const curatedPrompts: CuratedPrompt[] = [
       'Compact 3-day itinerary infographic — places, timings, transport. Excellent for travel content.',
     source: 'curated',
     tags: ['summary', 'travel', 'guide'],
-  },
-  {
-    id: 'curated-codex-chalkboard',
-    title: 'Codex Chalkboard Article Visualization',
-    category: 'Visual Summaries',
-    prompt: 'A picture says a thousand words. GPT Image 2 creates them.',
-    why_it_works:
-      'Meta-prompt — generates an editorial visualization of the prompt itself. Conceptual showcase rather than practical tool.',
-    source: 'curated',
-    tags: ['summary', 'editorial', 'meta'],
   },
 
   // ============================================================
@@ -804,15 +924,70 @@ export const curatedPrompts: CuratedPrompt[] = [
     tags: ['fashion', 'editorial', 'japanese'],
   },
   {
+    id: 'curated-product-hero-shot',
+    title: 'Product Hero Shot',
+    category: 'Interior/Food/Fashion',
+    prompt:
+      'Product hero shot on a polished white marble surface with subtle gray veining. Product placed at 45-degree angle to camera. Single key light from upper-left creating a clean highlight on the product surface and a soft graduated shadow falling to the lower-right. Subtle fill light from the right preventing pure black shadows. One or two contextual props placed behind and slightly out of focus — a sprig of dried lavender and a folded linen cloth. Background: clean, softly lit, neutral warm gray fading to white. Shot at 100mm macro on full-frame mirrorless, f/5.6, tight depth of field with razor-sharp focus on the product label. Color temperature: warm daylight. Aspect ratio 4:5 vertical.',
+    why_it_works:
+      'The 45-degree product angle is the industry-standard hero-shot convention. Specifying key light position and fill light prevents flat lighting. The 100mm macro at f/5.6 gives the exact depth-of-field look used in professional product photography. Minimal contextual props add lifestyle context without competing with the product.',
+    source: 'curated',
+    tags: ['product', 'hero-shot', 'photography', 'commercial'],
+  },
+  {
+    id: 'curated-flat-lay-product',
+    title: 'Flat-Lay Product Photography',
+    category: 'Interior/Food/Fashion',
+    prompt:
+      'Top-down 90-degree flat-lay product photography. Product centered on a natural linen fabric surface with visible weave texture. Exactly 3 complementary items arranged in a balanced asymmetric composition around the product — a ceramic dish with dried botanicals, a small amber glass bottle, and a handmade paper card. All items within a tight circular arrangement, no item touching another, generous negative space at edges. Soft overhead diffused lighting creating minimal shadows — shadowless beauty-dish effect. Muted earth-tone palette: linen beige, warm white, amber, sage, terracotta. Editorial lifestyle style — clean, curated, magazine-quality. Aspect ratio 1:1 square.',
+    why_it_works:
+      'Locking exactly 3 complementary items prevents the common flat-lay overcrowding problem. The 90-degree top-down angle and "no item touching another" instruction enforce clean composition. Naming the specific light modifier (beauty dish) triggers the correct shadowless overhead aesthetic.',
+    source: 'curated',
+    tags: ['product', 'flat-lay', 'photography', 'editorial'],
+  },
+  {
     id: 'curated-basketball-court-flash',
     title: 'Basketball Court Direct Flash',
     category: 'Interior/Food/Fashion',
     prompt:
-      '35mm color film photography with harsh direct on-camera flash, specular highlights on skin and clothing, strong catchlights in eyes, high contrast flash illumination, authentic film grain and color shift, high fashion fresh sporty editorial style, person in white tank top and white high-waisted basketball shorts, white knee-high sports socks, leaning pose against the basketball hoop pole on the outdoor court at dusk, harsh direct on-camera flash creating sharp specular highlights and strong catchlights, background with blurred basketball court and hoop under dusk sky, high contrast film color grading with natural flash look, extremely sharp yet soft skin rendering with authentic 35mm direct flash aesthetic, no plastic skin, no digital over-sharpening, no airbrushing, authentic 35mm direct flash film basketball court look --ar 9:16',
+      '35mm color film photography with harsh direct on-camera flash, specular highlights on skin and clothing, strong catchlights in eyes, high contrast flash illumination, authentic film grain and color shift, high fashion fresh sporty editorial style, person in white tank top and white high-waisted basketball shorts, white knee-high sports socks, leaning pose against the basketball hoop pole on the outdoor court at dusk, harsh direct on-camera flash creating sharp specular highlights and strong catchlights, background with blurred basketball court and hoop under dusk sky, high contrast film color grading with natural flash look, extremely sharp yet soft skin rendering with authentic 35mm direct flash aesthetic, no plastic skin, no digital over-sharpening, no airbrushing, authentic 35mm direct flash film basketball court look. Aspect ratio 9:16 vertical.',
     why_it_works:
       'Direct-flash editorial look. Harsh flash + film grain combo is a specific aesthetic GPT Image 2 nails when given the explicit lighting cues.',
     source: 'curated',
     tags: ['fashion', 'editorial', 'flash'],
+  },
+  {
+    id: 'curated-overhead-ramen-bowl',
+    title: 'Overhead Ramen Food Photography',
+    category: 'Interior/Food/Fashion',
+    prompt:
+      'Overhead food photography of a steaming tonkotsu ramen bowl on a dark slate surface. Rich milky pork broth with a visible fat sheen on the surface. Toppings arranged deliberately: two slices of chashu pork with caramelized sear marks, one soft-boiled egg halved showing a jammy orange yolk, a sheet of nori standing upright, sliced scallions scattered, black sesame seeds, and a small pile of bean sprouts. Steam rising from the broth caught by a single warm key light from upper-right, visible against the dark background. Chopsticks resting across the bowl rim at a diagonal. One small ceramic dish of chili oil partially visible at frame edge. Foreground: sharp focus on the egg yolk. Background: slate texture softening into darkness. Shot at 50mm f/2.8 on full-frame mirrorless, warm color temperature. Dark moody food-magazine style — NOT bright, NOT airy, NOT flat-lay overhead. Three-quarter overhead angle, not straight down. Aspect ratio 1:1 square.',
+    why_it_works:
+      'Naming specific toppings with visual details (jammy yolk, caramelized sear marks, fat sheen) gives the model concrete rendering targets. The "dark moody" negative constraints prevent the bright-and-airy Instagram default. Single key light direction creates the dramatic food-magazine look.',
+    source: 'curated',
+    tags: ['food', 'photography', 'ramen', 'moody'],
+  },
+  {
+    id: 'curated-midcentury-living-room',
+    title: 'Mid-Century Modern Living Room',
+    category: 'Interior/Food/Fashion',
+    prompt:
+      'Architectural interior photography of a mid-century modern living room. Walnut credenza against an olive green accent wall. Low-profile sofa in warm camel leather with tapered wooden legs. Lounge chair in black leather with bent plywood shell, positioned at 45 degrees. Arched brass floor lamp casting a warm pool of light downward. Large abstract canvas on the wall — muted earth tones, color field style. Kilim rug with geometric pattern on white oak herringbone flooring. Floor-to-ceiling windows on the right showing dusk sky, warm interior light reflecting on glass. Foreground: coffee table with a ceramic vase and two stacked books. Middle ground: seating arrangement. Background: windows and dusk light. Shot at 24mm f/8, tripod-level perspective from seated eye height, full-frame mirrorless. Mixed lighting: warm tungsten interior + cool blue dusk through windows. Architectural Digest editorial style. Aspect ratio 16:9 landscape.',
+    why_it_works:
+      'Specific furniture descriptions with material callouts (walnut, camel leather, bent plywood) trigger accurate mid-century rendering. Mixed warm/cool lighting from interior lamps vs dusk windows creates the editorial magazine look. Seated eye height perspective is the standard for interior photography.',
+    source: 'curated',
+    tags: ['interior', 'architecture', 'midcentury', 'editorial'],
+  },
+  {
+    id: 'curated-knolling-edc',
+    title: 'Knolling EDC Layout',
+    category: 'Interior/Food/Fashion',
+    prompt:
+      'Knolling photography — top-down organized arrangement of everyday carry items on a dark gray concrete surface. All items aligned to a strict invisible grid with parallel edges and equal spacing. Items in 4 rows: Row 1: leather bifold wallet, brass key ring with 3 keys, stainless steel pen. Row 2: mechanical wristwatch with brown leather strap, wireless earbuds in matte black charging case, folding pocket knife with wood handle. Row 3: A6 kraft-cover notebook, phone face-down in matte black, tortoiseshell reading glasses. Row 4: tin of mints, brass challenge coin, USB-C cable coiled in a flat circle. Every item casting a short uniform shadow to the lower-right from a single overhead light slightly offset left. Muted warm palette: browns, blacks, brass, concrete gray. Shot at 90-degree overhead angle, 50mm equivalent, f/8 for edge-to-edge sharpness. No vignette, clean even lighting. Aspect ratio 1:1 square.',
+    why_it_works:
+      'Knolling requires "strict invisible grid" and "parallel edges" instructions — without these the model will scatter items naturally. Specifying exact row contents prevents over- or under-generation. The uniform shadow direction (lower-right, single source) prevents inconsistent lighting across the grid.',
+    source: 'curated',
+    tags: ['knolling', 'edc', 'product', 'organized', 'photography'],
   },
 
   // ============================================================
@@ -850,5 +1025,384 @@ export const curatedPrompts: CuratedPrompt[] = [
       'Real workflow — B&W manga page → colored, localized version. Practical use case for translators and indie comics.',
     source: 'curated',
     tags: ['edit', 'comic', 'translate'],
+  },
+
+  // ============================================================
+  // OPEN-ENDED CREATIVE (abstract, surreal, mood, experimental)
+  // ============================================================
+  {
+    id: 'curated-abstract-grief',
+    title: 'Abstract Emotion: Grief',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Ink wash on handmade washi paper depicting "what loss looks like." Heavy use of negative space — the empty paper IS the subject. Bleached bone-white and diluted sumi ink only. Composition: a single dense cluster of ink pooling at bottom-left, feathering upward into nothing. Mood: hollow, still, the moment after. NOT a photograph — NOT photorealistic. Color field painting tradition, Rothko-influenced emotional weight through emptiness. Aspect ratio 3:4 vertical.',
+    why_it_works:
+      'Negative constraints ("NOT a photograph") steer away from photorealistic defaults. Naming the medium (ink wash on washi) and art-movement anchor (Rothko color field) gives GPT Image 2 strong non-photographic priors. The emotional intent is stated explicitly rather than through adjectives.',
+    source: 'curated',
+    tags: ['abstract', 'emotion', 'ink-wash'],
+  },
+  {
+    id: 'curated-surreal-time-running-out',
+    title: 'Surreal Concept: Time Running Out',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Gouache on heavyweight watercolor paper. Melting clock faces dripping downward like thick honey, warm amber and burnt sienna liquefying into a cold cerulean void below. Surrealism tradition, Dalí-influenced soft-watch vocabulary without naming the artist. Visible brushstrokes, slight paper buckle from wet media. Palette: warm amber, raw sienna, cadmium orange melting into cold Prussian blue, cerulean, and slate. Composition: top two-thirds warm and dissolving, bottom third cold and still. Internal glow from the melting forms. Aspect ratio 4:5 vertical. No text, no logos.',
+    why_it_works:
+      'Material-specific language (gouache, paper buckle, brushstrokes) anchors the output in physical art media. Color names from actual paint tubes (cadmium orange, Prussian blue) trigger richer palette generation than generic color words.',
+    source: 'curated',
+    tags: ['surreal', 'time', 'gouache'],
+  },
+  {
+    id: 'curated-mood-3am-insomnia',
+    title: 'Mood Piece: 3AM Insomnia',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Charcoal on warm-toned paper, smudged and rough. A figure barely visible in a dark room, lit only by the harsh blue-white glow of a phone screen casting sharp shadows across rumpled bedsheets. Grainy texture, heavy charcoal buildup in the darks, paper tooth visible in the highlights. Memphis geometric accents — a zigzag border, a triangle pillow, a checkerboard blanket edge — breaking the realism just enough. Mood: wired exhaustion, the buzz of a mind that will not stop. Muted palette except for that single cold light source. Aspect ratio 9:16 vertical. NOT a photograph.',
+    why_it_works:
+      'Mixing a traditional medium (charcoal on toned paper) with a design movement (Memphis geometric) creates visual tension that mirrors the emotional content. The single light source constraint gives GPT Image 2 clear rendering direction.',
+    source: 'curated',
+    tags: ['mood', 'charcoal', 'memphis'],
+  },
+  {
+    id: 'curated-vaporwave-ruin',
+    title: 'Vaporwave Ruin',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Abandoned Greek temple columns — cracked marble, overgrown with pixelated vines rendered in retrowave color palette: hot magenta, electric cyan, deep purple gradients. CRT scanline overlay across the entire image. Pixel dithering artifacts along shadow edges. A setting sun rendered as a horizontal-striped gradient circle behind the columns. Floor: cracked marble tiles reflecting neon light in puddles. No text, no logos. Vaporwave aesthetic tradition. Aspect ratio 16:9 landscape.',
+    why_it_works:
+      'Concrete collision of two visual languages (classical ruins + vaporwave digital artifacts) creates a distinctive image. Specific technical artifacts (CRT scanlines, pixel dithering) give the model clear post-processing instructions.',
+    source: 'curated',
+    tags: ['vaporwave', 'ruins', 'retro-digital'],
+  },
+  {
+    id: 'curated-synesthesia-hearing-colors',
+    title: 'Synesthesia: Hearing Colors',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Mixed media collage: torn magazine fragments, spray paint splatters, and embroidery thread on kraft paper. Each "sound" is mapped to a pigment splash — a bass note as a deep burgundy pool, a cymbal crash as a spatter of metallic gold, a violin sustain as a pulled thread of vermillion. Riso-print texture overlay with slight registration misalignment between color layers. Palette: burgundy, metallic gold, vermillion, teal, warm gray kraft. Composition: chaotic but balanced, heaviest elements bottom-center, lighter splashes radiating outward. Aspect ratio 1:1 square. NOT a photograph — NOT digital art.',
+    why_it_works:
+      'Naming specific collage materials (torn magazine, spray paint, embroidery thread) gives the model concrete visual elements to render. The sound-to-color mapping creates narrative structure within abstract work.',
+    source: 'curated',
+    tags: ['synesthesia', 'collage', 'mixed-media'],
+  },
+  {
+    id: 'curated-dreamscape-childhood-memory',
+    title: 'Dreamscape: Childhood Memory',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Oil pastel on kraft paper. A backyard scene remembered wrong — the swing set is too tall, the grass is gold instead of green, the sky bleeds peach and lavender at the edges. Overexposed warm tones as if the memory itself is sun-bleached. Soft blurred edges on everything except one sharp detail: a red rubber ball in the foreground. Visible pastel strokes, waxy texture, paper grain showing through. Magical realism literary tradition — the ordinary made strange through scale and color shifts. Palette: warm gold, peach, lavender, sage, one saturated red. Aspect ratio 4:3 landscape.',
+    why_it_works:
+      'The "remembered wrong" framing gives GPT Image 2 permission to distort reality intentionally. One sharp detail (red ball) amid soft focus creates a focal hierarchy. Oil pastel medium prevents photorealistic rendering.',
+    source: 'curated',
+    tags: ['dreamscape', 'memory', 'oil-pastel'],
+  },
+  {
+    id: 'curated-emotion-map-anxiety-spiral',
+    title: 'Emotion Map: Anxiety Spiral',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Screen print, exactly 3 colors: black, warm red, off-white. Concentric irregular rings tightening toward center — not perfect circles but hand-drawn wobbling ovals that get progressively tighter and more distorted as they approach the middle. Bauhaus geometric influence in the overall structure, but with deliberate imperfection in execution. The center is dense black, nearly solid. The outer rings have breathing room. Slight ink bleed where colors overlap. Visible screen-print mesh texture. Composition: centered, square format. Mood: constriction, tightening, the feeling of walls closing in. Aspect ratio 1:1 square.',
+    why_it_works:
+      'Limited color palette (exactly 3) forces the model to work with constraint rather than excess. The physical print process (screen print, ink bleed, mesh texture) anchors the output in a real medium. Bauhaus gives structural vocabulary.',
+    source: 'curated',
+    tags: ['emotion', 'screenprint', 'bauhaus'],
+  },
+  {
+    id: 'curated-action-figure-blister-pack',
+    title: 'Action Figure Blister Pack',
+    category: 'Cinematic',
+    prompt:
+      'Commercial product photography of a collectible action figure in sealed retail packaging. Transparent molded plastic blister shell mounted on a printed cardboard backing card. The figure inside: 6-inch scale, detailed paint application, multiple points of articulation. Exactly 4 accessories displayed in individual smaller blisters beside the figure — a weapon, a shield, an alternate head, and a display stand. Cardboard backing features character name in bold condensed type, series logo, age rating badge, and a dynamic character illustration. Overhead studio lighting with soft reflections on the plastic shell surface. Shot on white seamless backdrop, 45-degree angle, slight shadow underneath. Photorealistic CGI rendering style. Aspect ratio 3:4 vertical.',
+    why_it_works:
+      'The specific packaging anatomy (blister shell, cardboard backing, 4 accessories in individual blisters) triggers product-photography priors. Locking exactly 4 accessories prevents over-generation. The "photorealistic CGI rendering" style tag keeps it looking like a real product shot.',
+    source: 'curated',
+    tags: ['product', 'action-figure', 'packaging', 'toy'],
+  },
+  {
+    id: 'curated-isometric-3d-room',
+    title: 'Isometric 3D Room',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Isometric 3D rendering of a home office at exactly 30-degree angle. No perspective distortion — true isometric projection. Room contents: L-shaped desk with monitor, mechanical keyboard, and desk lamp; ergonomic chair; bookshelf with color-organized books; potted monstera plant; small rug with geometric pattern; cat sleeping on a cushion. Rounded geometry edges on all furniture — soft, toylike feel. Ambient occlusion shadows creating subtle depth beneath objects. Pastel palette: soft mint walls, warm wood floors, cream furniture, dusty rose accents. Cutaway view with no ceiling and two walls removed for interior visibility. Clean, rendered look — NOT a photograph, NOT hand-drawn. Aspect ratio 1:1 square.',
+    why_it_works:
+      'Specifying "true isometric projection" and "no perspective distortion" gives the model exact geometric constraints. The cutaway instruction (no ceiling, two walls removed) is the standard isometric room convention. Rounded edges + pastel palette create the trendy low-poly aesthetic.',
+    source: 'curated',
+    tags: ['isometric', '3d', 'room', 'interior'],
+  },
+  {
+    id: 'curated-claymation-scene',
+    title: 'Claymation Scene',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Stop-motion claymation scene of a tiny bakery kitchen. All characters and objects sculpted from modeling clay with visible fingerprints, tool marks, and slight surface irregularities in the clay. A baker character (round head, dot eyes, simple smile) pulling a tray from a miniature oven. Countertop with tiny clay croissants, baguettes, and a flour-dusted rolling pin. Hand-painted imperfections on props — slightly uneven colors, visible brush strokes on the backdrop. Miniature diorama set built on a wooden tabletop, visible set edges and support structures at the periphery. Warm, slightly orange-tinted practical lighting from above as if from a real animation studio lamp. Earthy textures throughout — raw clay, balsa wood, felt fabric backdrops. Shallow depth of field with macro lens bokeh. Aspect ratio 16:9 landscape.',
+    why_it_works:
+      'Naming specific claymation artifacts (fingerprints, tool marks, visible set edges) prevents the model from generating clean 3D renders. The "visible set edges and support structures" instruction adds behind-the-scenes authenticity. Warm practical lighting mimics real stop-motion studio conditions.',
+    source: 'curated',
+    tags: ['claymation', 'stop-motion', 'miniature', 'diorama'],
+  },
+  {
+    id: 'curated-miniature-diorama-product-ad',
+    title: 'Miniature Diorama Product Ad',
+    category: 'Cinematic',
+    prompt:
+      'Tilt-shift photography of a miniature diorama product advertisement. An oversized product bottle (approximately 30cm tall in the scene) placed on a construction site populated by tiny HO-scale figurine workers in yellow safety coveralls and hard hats. Three workers operating miniature cranes and forklifts around the base of the bottle. Two workers on scaffolding mid-bottle applying a label. One worker at the top with a flag. Foreground: sharp gravel texture and tiny orange traffic cones. Background: soft-focus miniature city skyline. Studio lighting with a single large softbox from upper-left creating clean shadows. Photorealistic CGI with tilt-shift blur (sharp band across the middle third, soft blur top and bottom). Aspect ratio 4:5 vertical.',
+    why_it_works:
+      'The scale juxtaposition (oversized bottle + tiny workers) is a proven advertising concept. Specifying HO-scale figurines gives the model a concrete miniature reference. Tilt-shift blur parameters (sharp middle third) create the characteristic miniature-photography effect.',
+    source: 'curated',
+    tags: ['miniature', 'diorama', 'product', 'tilt-shift', 'advertising'],
+  },
+  {
+    id: 'curated-nature-abstraction-ocean-current',
+    title: 'Nature Abstraction: Ocean Current',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Cyanotype process on cotton rag paper. Fluid organic forms suggesting deep ocean currents — swirling, layered, translucent. Deep Prussian blue gradients from nearly white to near-black, the natural range of the cyanotype process. Ukiyo-e wave influence in the curling forms but without literal wave depiction. Visible paper fiber texture, slight chemical staining at edges, uneven coating marks from hand-applied emulsion. Composition: horizontal flow from left to right, denser forms at center. Luminous quality where light passes through thinner emulsion layers. Aspect ratio 3:2 landscape. No text.',
+    why_it_works:
+      'Cyanotype is a specific photographic printing process with a distinctive blue palette — naming it gives the model a precise visual target. The ukiyo-e influence provides compositional DNA without requesting literal copies.',
+    source: 'curated',
+    tags: ['nature', 'cyanotype', 'ocean'],
+  },
+  {
+    id: 'curated-anime-knight-illustration',
+    title: 'Anime Character Illustration',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Full-body anime character illustration on a clean white background. Female knight in ornate silver plate armor with sapphire blue accents and a flowing crimson half-cape attached at one shoulder. Hair: long silver-white, windswept to the right with individual strand detail. Expression: determined, slight confident smirk, heterochromia eyes (left eye gold, right eye blue). Weapon: a longsword held at her side, blade edge emitting faint blue light particles dissolving upward. Armor detail: layered pauldrons, engraved breastplate with a phoenix motif, articulated gauntlets with gem insets. Pose: three-quarter stance, weight on back foot, chin slightly raised. Art style: clean cel-shaded anime illustration with sharp ink-weight line work, soft gradient shading, and subtle ambient occlusion at armor joints. Color palette: silver, sapphire, crimson, warm gold accents. NOT photorealistic, NOT 3D rendered, NOT semi-realistic. Aspect ratio 3:4 vertical.',
+    why_it_works:
+      'Exhaustive character description (heterochromia, specific armor pieces, cape attachment point) prevents the model from defaulting to generic anime. The triple negative constraint ("NOT photorealistic, NOT 3D rendered, NOT semi-realistic") locks the output to clean 2D cel-shaded style. Particle effects on the sword add visual interest without complicating the composition.',
+    source: 'curated',
+    tags: ['anime', 'character', 'illustration', 'fantasy', 'cel-shaded'],
+  },
+  {
+    id: 'curated-seamless-botanical-pattern',
+    title: 'Seamless Botanical Pattern',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Seamless repeating pattern tile for textile or wallpaper. Botanical motif: hand-drawn line illustrations of wildflowers — lavender sprigs, daisies, poppy seed heads, fern fronds, and small berries on thin stems. Line work: fine black ink on a warm cream background, consistent stroke weight throughout. Arrangement: scattered organic placement with even visual density across the entire tile, no obvious grid or repeat seam visible at edges. Small leaves and dots fill gaps between larger flower elements to maintain uniform density. Style: modern botanical illustration with vintage herbarium influence — precise, delicate, naturalist. NOT photorealistic, NOT watercolor — clean precise ink lines only. The pattern must tile seamlessly at all four edges — elements that cross the left edge must continue from the right edge at the same position. Aspect ratio 1:1 square.',
+    why_it_works:
+      'The explicit seamless-tiling instruction ("elements that cross the left edge must continue from the right") is the key constraint for usable pattern tiles. Specifying "even visual density" and gap-filling elements prevents the common problem of patterns with sparse corners. The ink-only medium constraint prevents watercolor bleed effects that break tiling.',
+    source: 'curated',
+    tags: ['pattern', 'seamless', 'botanical', 'textile', 'illustration'],
+  },
+  {
+    id: 'curated-childrens-book-fox',
+    title: 'Children\'s Book Illustration',
+    category: 'Open-Ended Creative',
+    prompt:
+      'Children\'s picture book illustration. A small fox wearing a red rain coat and yellow rain boots standing at the edge of a large puddle, looking down at its own reflection. Behind the fox: a dense autumn forest with trees in warm orange, yellow, and russet. The puddle reflects the fox and a different sky — the reflection shows a starry night sky with a crescent moon instead of the overcast daytime sky above, as if the puddle is a portal to another world. Fallen leaves floating on the puddle surface, some overlapping the reflected stars. Soft diffused light, no harsh shadows. Art style: hand-painted gouache with visible brush texture, slightly rounded and simplified forms, warm palette with one cool accent (the starry reflection). Outlines in warm brown, not black — gentle, not harsh. Aimed at ages 3-7: gentle, wonder-inducing, cozy atmosphere. NOT anime, NOT photorealistic, NOT digital-clean. Aspect ratio 4:3 landscape.',
+    why_it_works:
+      'The puddle-as-portal concept gives the image narrative depth beyond a simple scene. Specifying "warm brown outlines, not black" is a key children\'s illustration technique that softens the image. The medium constraint (gouache with visible brush texture) prevents the sterile digital look. Age-range targeting (3-7) helps the model calibrate visual complexity.',
+    source: 'curated',
+    tags: ['childrens-book', 'illustration', 'gouache', 'fantasy', 'storybook'],
+  },
+
+  // ============================================================
+  // VISUAL SUMMARIES (additional)
+  // ============================================================
+  {
+    id: 'curated-book-summary-card',
+    title: 'Book Summary Card',
+    category: 'Visual Summaries',
+    prompt:
+      'Create a visual one-pager summarizing a non-fiction book. Layout: book cover thumbnail top-left, book title and author in bold serif below. Exactly 5 key-takeaway cards arranged vertically, each with a numbered circle icon and a 1-sentence summary. Bottom strip: "Who should read this" tag pills and a 5-star rating visual. Color scheme: warm cream background, dark charcoal text, accent color pulled from the book cover. Clean editorial style — NOT an ad, NOT an infographic poster. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Locking the module count ("exactly 5 key-takeaway cards") prevents the model from inventing extra sections. The negative constraint ("NOT an ad, NOT an infographic poster") steers toward editorial rather than commercial aesthetics.',
+    source: 'curated',
+    tags: ['summary', 'book', 'one-pager'],
+  },
+  {
+    id: 'curated-recipe-visual-guide',
+    title: 'Recipe Visual Guide',
+    category: 'Visual Summaries',
+    prompt:
+      'Step-by-step visual recipe guide. Top section: dish name in bold sans-serif, prep time and cook time badges, difficulty indicator. Second row: ingredient grid showing exactly 8 ingredients with labeled illustrations, each in its own rounded card. Main section: exactly 6 numbered photo panels arranged 2×3 showing the cooking process from prep to plating, each panel with a short action caption below ("dice the onions," "sear until golden"). Bottom: serving suggestion photo with garnish callout. Warm kitchen lighting throughout. Clean white background, food-magazine editorial style. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Locked module counts (exactly 8 ingredients, exactly 6 steps) prevent the model from generating inconsistent panel counts. The 2×3 grid specification gives precise layout instruction.',
+    source: 'curated',
+    tags: ['summary', 'recipe', 'step-by-step'],
+  },
+  {
+    id: 'curated-meeting-notes-visualization',
+    title: 'Meeting Notes Visualization',
+    category: 'Visual Summaries',
+    prompt:
+      'Sketchnote-style meeting summary on white background with hand-drawn marker aesthetic. Top: meeting title in bold hand-lettered style with date badge. Layout: exactly 4 sections arranged in quadrants. Top-left: "Key Decisions" with checkbox icons and short phrases. Top-right: "Discussion Points" with speech-bubble icons. Bottom-left: "Action Items" in highlighted badge format with owner initials. Bottom-right: "Next Steps" with arrow icons and timeline dots. Hand-drawn divider lines between sections. Color palette: black ink, one highlight color (coral or teal), light gray for secondary elements. Small doodle icons throughout — lightbulbs, arrows, stars, checkmarks. Aspect ratio 16:9 landscape. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'The sketchnote medium anchors the visual style. Locking exactly 4 quadrant sections prevents layout drift. Hand-drawn aesthetic with specific icon types (lightbulbs, arrows) guides the illustration vocabulary.',
+    source: 'curated',
+    tags: ['summary', 'meeting', 'sketchnote'],
+  },
+  {
+    id: 'curated-cross-section-volcano',
+    title: 'Cross-Section Educational Diagram',
+    category: 'Visual Summaries',
+    prompt:
+      'Labeled geological cross-section diagram of a stratovolcano. The mountain shown in full profile with the right half cut away to reveal internal structure. Visible layers from bottom to top: underground magma chamber (glowing orange-red), vertical conduit/pipe connecting chamber to summit, alternating lava flow layers and ash deposit strata in the cone walls (color-coded: dark basalt layers, lighter ash layers, thin pyroclastic bands). Surface features: snow-capped summit, active crater with steam plume, secondary vent on the flank with a small lava flow. Exactly 8 labeled callout lines pointing to: magma chamber, conduit, crater, lava flow, ash layer, pyroclastic deposits, secondary vent, groundwater table. Clean white background. Textbook-quality scientific illustration style — precise, educational, clear line work. NOT photorealistic, NOT artistic. Color palette: earth tones for the mountain, glowing warm tones for magma, cool blues for water table. Aspect ratio 16:9 landscape. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Cross-section diagrams leverage GPT Image 2\'s strength in layered compositions. Locking exactly 8 callout labels prevents over- or under-labeling. Color-coding by material type (basalt vs ash vs magma) adds information hierarchy. The "textbook-quality" style tag steers toward clean educational illustration.',
+    source: 'curated',
+    tags: ['summary', 'cross-section', 'educational', 'geology'],
+  },
+  {
+    id: 'curated-product-comparison-chart',
+    title: 'Product Comparison Chart',
+    category: 'Visual Summaries',
+    prompt:
+      'Side-by-side product comparison chart for exactly 3 products. Clean, modern editorial layout on white background. Top row: product images with names in bold sans-serif. Below: exactly 8 feature rows with alternating light-gray and white backgrounds. Each cell contains a checkmark, X mark, or short value. "Best Value" badge on one column, "Premium Pick" badge on another. Bottom row: price callout in large bold type for each product. Subtle drop shadows on the column cards. Color scheme: white, light gray, dark charcoal text, green for checkmarks, red for X marks, one brand accent color for badges. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Triple module-count locking (exactly 3 products, exactly 8 feature rows) keeps the layout tight and predictable. Badge callouts add editorial hierarchy without cluttering the grid.',
+    source: 'curated',
+    tags: ['summary', 'comparison', 'chart'],
+  },
+  {
+    id: 'curated-year-in-review-personal',
+    title: 'Year In Review Personal',
+    category: 'Visual Summaries',
+    prompt:
+      'Annual personal recap card. Top: year in large display font with a short tagline. Section 1: exactly 12 monthly thumbnail illustrations in a 4×3 grid, each a tiny scene representing a highlight with the month name below. Section 2: "By the Numbers" row with exactly 4 stats counters (books read, miles traveled, photos taken, new recipes tried) displayed as large numbers with small labels. Section 3: "Milestone Moments" — exactly 3 badge-style callouts with icons (graduation cap, airplane, heart) and short descriptions. Bottom: a short reflective quote in italic serif. Warm, personal color palette: soft coral, cream, sage green, charcoal. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Multiple locked counts (12 thumbnails, 4 stats, 3 milestones) structure the layout precisely. The warm personal palette differentiates it from corporate year-in-review templates.',
+    source: 'curated',
+    tags: ['summary', 'year-review', 'personal'],
+  },
+
+  // ============================================================
+  // IMAGE EDITS (additional)
+  // ============================================================
+  {
+    id: 'curated-season-swap',
+    title: 'Season Swap: Summer To Winter',
+    category: 'Image Edits',
+    prompt:
+      'CHANGE: Transform this summer outdoor scene into deep winter. Add snow coverage on all horizontal surfaces, bare skeletal trees replacing green foliage, visible breath vapor on any people, overcast pewter-gray sky, cold blue-white color grade overall. Add frost patterns on glass surfaces and icicles on overhangs.\nPRESERVE: All people — faces, expressions, poses, clothing silhouettes. All architecture — building shapes, windows, doors, structural details. Overall composition and framing. No objects added or removed beyond seasonal elements.\nMATCH: Original depth of field, original camera angle, shadow direction consistent with overcast winter light.',
+    why_it_works:
+      'The 3-block CHANGE/PRESERVE/MATCH structure explicitly locks what must stay while specifying every seasonal detail to add. Naming specific winter elements (frost patterns, icicles, breath vapor) prevents vague snow overlays.',
+    source: 'curated',
+    tags: ['edit', 'season', 'winter'],
+  },
+  {
+    id: 'curated-time-period-shift',
+    title: 'Time Period Shift: Renaissance',
+    category: 'Image Edits',
+    prompt:
+      'CHANGE: Restyle this modern portrait as a Renaissance oil painting. Apply aged canvas texture with fine craquelure. Shift lighting to chiaroscuro — single strong light source from upper left, deep shadow on opposite side. Replace modern clothing with period-appropriate Renaissance garments (velvet doublet, lace collar, or draped silk). Add a dark umber background with subtle sfumato atmospheric haze.\nPRESERVE: Subject\'s face — bone structure, expression, eye color, skin tone, facial hair if present. Exact head pose and body angle. Hand position if visible.\nMATCH: Warm Renaissance palette — raw umber, burnt sienna, gold ochre, deep burgundy. Oil paint surface texture with visible brushwork in clothing folds.',
+    why_it_works:
+      'Art-historical vocabulary (chiaroscuro, sfumato, craquelure) triggers precise rendering. The PRESERVE block locks facial identity while the CHANGE block transforms everything else. Specific paint colors from actual oil paint tubes guide palette.',
+    source: 'curated',
+    tags: ['edit', 'renaissance', 'style-transfer'],
+  },
+  {
+    id: 'curated-weather-overlay-rain',
+    title: 'Weather Overlay: Dramatic Rain',
+    category: 'Image Edits',
+    prompt:
+      'CHANGE: Add dramatic rainfall to this outdoor scene. Include visible rain streaks at a slight diagonal, wet reflective sheen on all pavement and horizontal surfaces, puddles forming in low spots with ripple patterns, overcast sky replacement if sky is visible. Darken overall exposure by roughly one stop. Add subtle mist at ground level.\nPRESERVE: All subjects — people, animals, vehicles in their exact positions, poses, and appearances. All building details, signage, and structural elements. Original composition and framing.\nMATCH: Rain streak direction consistent across the entire image. Reflection angles matching overhead light source. Color temperature shifted slightly cooler but consistent with original white balance.',
+    why_it_works:
+      'Specific rain physics (streak angle, puddle ripples, wet reflective sheen) prevent the model from just adding white lines. The exposure and color temperature instructions ensure the rain integrates naturally rather than being overlaid.',
+    source: 'curated',
+    tags: ['edit', 'weather', 'rain'],
+  },
+  {
+    id: 'curated-remove-replace-background',
+    title: 'Remove And Replace Background',
+    category: 'Image Edits',
+    prompt:
+      'CHANGE: Remove the existing background entirely. Replace with a clean gradient studio backdrop — smooth transition from medium gray at top to lighter warm gray at bottom. No texture, no props, no environment. Professional product-photography style negative space.\nPRESERVE: Subject exactly as-is — hair edges, clothing details, accessories, skin tone, facial expression, body pose. Maintain all fine edge details including individual hair strands and fabric fringe.\nMATCH: Lighting direction on the subject must remain identical — do not re-light. Shadow angles on the subject preserved. A soft ground shadow cast onto the new backdrop matching the original shadow direction and softness.',
+    why_it_works:
+      'Explicitly naming edge-detail preservation (hair strands, fabric fringe) prevents the common AI artifact of mushy edges after background removal. The ground shadow instruction ensures the subject looks placed in the new environment rather than floating.',
+    source: 'curated',
+    tags: ['edit', 'background', 'studio'],
+  },
+  {
+    id: 'curated-color-grade-shift-portra',
+    title: 'Color Grade Shift: Kodak Portra 400',
+    category: 'Image Edits',
+    prompt:
+      'CHANGE: Apply a Kodak Portra 400 film color grade to this photo. Warm skin tones shifted toward peach and honey. Soft, reduced contrast with gently lifted blacks (shadows should not be pure black — lift to dark charcoal). Fine organic film grain visible at 100% crop. Slightly muted greens shifting toward olive. Blues gently desaturated. Highlight rolloff smooth and creamy, no hard clipping.\nPRESERVE: All composition, framing, subjects, poses, expressions, and environmental details. No cropping, no element changes.\nMATCH: Original exposure level maintained. Original depth of field and focus plane unchanged. Grain should be uniform and consistent across the image, not patchy.',
+    why_it_works:
+      'Film stock names (Portra 400) are effective visual shorthand because they reference widely documented aesthetics. The specific color shifts (peach skin, olive greens, desaturated blues) make the grade reproducible rather than vague.',
+    source: 'curated',
+    tags: ['edit', 'color-grade', 'film'],
+  },
+
+  // ============================================================
+  // SOCIAL POSTS (additional)
+  // ============================================================
+  {
+    id: 'curated-product-launch-carousel',
+    title: 'Product Launch Carousel First Slide',
+    category: 'Social Posts',
+    prompt:
+      'Instagram carousel first slide. Product centered on a smooth gradient background transitioning from soft peach to warm coral. Bold sans-serif headline text at top: "Introducing [Product Name]" in white with subtle drop shadow. Product shown at three-quarter angle with soft studio lighting and gentle reflection below. Bottom: small tagline text in light weight font. No other text, no clutter, no badges. Clean negative space. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'The "no other text, no clutter, no badges" negative constraints prevent the common AI tendency to overpopulate social graphics. Specific gradient colors and typography weights give precise design direction.',
+    source: 'curated',
+    tags: ['social', 'product', 'carousel'],
+  },
+  {
+    id: 'curated-quote-card',
+    title: 'Inspirational Quote Card',
+    category: 'Social Posts',
+    prompt:
+      'Instagram quote card. Centered serif text in dark charcoal on a textured handmade-paper background with visible fiber and slight cream variations. The quote reads: "[Your quote here]" in medium-weight serif, 3-4 lines, generous line spacing. Author attribution below in small caps sans-serif with an em dash prefix: "— [Author Name]". No decorative elements, no borders, no icons, no gradients. Just text on paper. Subtle vignette darkening at corners. Aspect ratio 1:1 square. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'Maximum restraint — the negative constraints (no decorative elements, no borders, no icons) force a Kinfolk-magazine minimalism that stands out in cluttered social feeds. Paper texture adds warmth without visual noise.',
+    source: 'curated',
+    tags: ['social', 'quote', 'minimal'],
+  },
+  {
+    id: 'curated-event-countdown',
+    title: 'Event Countdown Story',
+    category: 'Social Posts',
+    prompt:
+      'Instagram story countdown graphic. Large bold countdown number (e.g., "3") centered and oversized, filling most of the frame, in heavy sans-serif white font with a subtle glow. Below the number: "DAYS LEFT" in tracked-out small caps. Below that: event name in medium weight. Below that: date in light weight. Background: rich gradient from deep navy to electric indigo. Subtle particle/confetti dots scattered sparsely. No photos, no product images, no logos. Aspect ratio 9:16 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'The oversized number creates immediate visual impact in Stories. Tracked-out small caps and weight hierarchy (heavy → medium → light) create professional typographic cadence.',
+    source: 'curated',
+    tags: ['social', 'countdown', 'story'],
+  },
+  {
+    id: 'curated-before-after-split',
+    title: 'Before/After Split Post',
+    category: 'Social Posts',
+    prompt:
+      'Social media before/after post. Single image split by a crisp diagonal divider line (45 degrees, top-left to bottom-right) with a thin white stroke. Left half labeled "BEFORE" in small caps at the top, right half labeled "AFTER" in small caps at the top. Left side: muted, desaturated tones. Right side: vibrant, polished result. Small product or brand mention in a pill-shaped badge at bottom center. Clean, modern, no excessive text. Aspect ratio 1:1 square. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'The diagonal divider specification (45 degrees, top-left to bottom-right) prevents the common horizontal or vertical split defaults. Color treatment difference (desaturated vs vibrant) across halves reinforces the transformation narrative.',
+    source: 'curated',
+    tags: ['social', 'before-after', 'transformation'],
+  },
+  {
+    id: 'curated-meme-template',
+    title: 'Custom Meme Template',
+    category: 'Social Posts',
+    prompt:
+      'Custom meme image. A [describe the scene or character reaction — e.g., "golden retriever sitting at a desk wearing reading glasses looking confused at a laptop screen"]. Shot as a candid photo with natural indoor lighting, slightly out of focus background. Leave clear space at top and bottom for text overlay zones — no text in the image itself, just the reaction scene. The expression and body language should clearly convey [target emotion — e.g., "bewildered confusion"]. Aspect ratio 1:1 square. No text, no watermarks, no logos.',
+    why_it_works:
+      'Specifying clear text-overlay zones while keeping the image text-free gives the user flexibility to add their own captions. The fill-in-the-blank structure makes this a reusable template for any meme concept.',
+    source: 'curated',
+    tags: ['social', 'meme', 'template'],
+  },
+  {
+    id: 'curated-twitter-thread-hook',
+    title: 'Twitter/X Thread Hook Image',
+    category: 'Social Posts',
+    prompt:
+      'Twitter/X thread header image. Bold claim text in large white sans-serif font centered on a dark contrasting background (deep navy or charcoal). Text reads: "[Your hook statement here]" — maximum 8-10 words, punchy and direct. A relevant topic icon or simple illustration to the left of the text, rendered in a single accent color (electric blue, coral, or emerald). Subtle grid or dot pattern in the background at low opacity. Clean, high-contrast, no photos, no gradients, no clutter. Aspect ratio 16:9 landscape. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'High-contrast text on dark backgrounds stops the scroll in Twitter feeds. The single accent color icon adds visual interest without competing with the text. Word count constraint (8-10 words) forces punchy copy.',
+    source: 'curated',
+    tags: ['social', 'twitter', 'thread'],
+  },
+  {
+    id: 'curated-linkedin-carousel-slide',
+    title: 'LinkedIn Carousel Slide',
+    category: 'Social Posts',
+    prompt:
+      'LinkedIn knowledge carousel slide. Clean white background. Left edge: vertical accent sidebar in a professional brand color (navy, teal, or burgundy), 15% of width. Top-right: slide number in a circle badge ("03"). Below: bold sans-serif header text in dark charcoal, one line. Below: exactly 3 bullet points with small circle icons, each bullet is one concise sentence in regular weight. Bottom-right: small author name and title in light gray. No photos, no stock images, no decorative elements beyond the sidebar. Professional, authoritative, minimal. Aspect ratio 4:5 vertical. "Verbatim text — no extra characters, no substitutions, no duplicate text, no text artifacts."',
+    why_it_works:
+      'The vertical sidebar creates brand consistency across carousel slides. Locking to exactly 3 bullets prevents information overload. The "no photos, no stock images" constraint keeps it text-focused, matching LinkedIn carousel best practices.',
+    source: 'curated',
+    tags: ['social', 'linkedin', 'carousel'],
   },
 ];

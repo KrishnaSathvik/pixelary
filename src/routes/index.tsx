@@ -11,7 +11,7 @@ import type { LibraryPrompt } from "@/types/library";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CATEGORY_GRADIENTS } from "@/data/examples";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 12;
 
 const searchSchema = z.object({
   page: fallback(z.number().int().min(1), 1).default(1),
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
   gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
-      { title: "Pixelary — Production-grade prompts for GPT Image 2" },
+      { title: "Production-grade prompts for GPT Image 2 — Depikt" },
       {
         name: "description",
         content:
@@ -35,16 +35,18 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Pixelary — Production-grade prompts for GPT Image 2",
+        content: "Production-grade prompts for GPT Image 2 — Depikt",
       },
       {
         property: "og:description",
         content:
           "Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: absoluteUrl("/og-default.png") },
       {
         name: "twitter:title",
-        content: "Pixelary — Production-grade prompts for GPT Image 2",
+        content: "Production-grade prompts for GPT Image 2 — Depikt",
       },
       {
         name: "twitter:description",
@@ -142,7 +144,7 @@ function HomePage() {
         subline is supporting, Imago is a feature mention, not a pitch.
       */}
       <section className="border-b border-[color:var(--border-subtle)]">
-        <div className="mx-auto max-w-6xl px-6 pt-10 pb-5 md:pt-14 md:pb-6">
+        <div className="mx-auto max-w-[1400px] px-6 pt-10 pb-5 md:pt-14 md:pb-6">
           <h1 className="text-display-md text-[color:var(--text-primary)]">
             Production-grade prompts for GPT Image 2.
           </h1>
@@ -169,7 +171,7 @@ function HomePage() {
         </div>
 
         {/* Category chips — clustered with search, immediately above the grid */}
-        <div className="mx-auto max-w-6xl px-6 pb-5">
+        <div className="mx-auto max-w-[1400px] px-6 pb-5">
           <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {CATEGORIES.map((c) => (
               <button
@@ -189,7 +191,7 @@ function HomePage() {
       </section>
 
       {/* Grid */}
-      <section className="mx-auto max-w-6xl px-6 py-8">
+      <section className="mx-auto max-w-[1400px] px-6 py-8">
         {/* Grid header — count on the left, Generator path on the right */}
         <div className="mb-5 flex items-center justify-between gap-4">
           <p className="font-mono text-mono-sm uppercase tracking-wider text-[color:var(--text-tertiary)]">
@@ -224,7 +226,7 @@ function HomePage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {pageItems.map((p: LibraryPrompt) => (
                 <PromptCard key={`${p.source}-${p.id}`} prompt={p} onOpen={() => setSelected(p)} />
               ))}

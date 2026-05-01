@@ -25,7 +25,7 @@ export const Route = createFileRoute("/blog/$slug")({
       datePublished: post.published,
       dateModified: post.published,
       author: { "@type": "Organization", name: post.author },
-      publisher: { "@type": "Organization", name: "Pixelary" },
+      publisher: { "@type": "Organization", name: "Depikt" },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
     };
     return {
@@ -112,7 +112,7 @@ function PostPage() {
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
 
-      <article className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12">
+      <article className="mx-auto max-w-[1400px] px-6 lg:px-12 py-10">
         <Link
           to="/blog"
           className="inline-flex items-center gap-1.5 text-mono-sm text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] transition-colors"
@@ -120,75 +120,116 @@ function PostPage() {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to blog
         </Link>
 
-        {/* Header — narrow column, no hero image */}
-        <header className="mt-10 max-w-[680px]">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
-              {post.category}
-            </span>
-            <span className="text-[color:var(--text-quaternary)]">·</span>
-            <span className="font-mono text-[12px] tabular-nums text-[color:var(--text-tertiary)]">
-              {formatDate(post.published)}
-            </span>
-            <span className="text-[color:var(--text-quaternary)]">·</span>
-            <span className="font-mono text-[12px] tabular-nums text-[color:var(--text-tertiary)]">
-              {post.read_time}
-            </span>
-          </div>
+        {/* Single grid wraps everything: header, content, and bottom blocks flow in the left column */}
+        <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_240px]">
+          <div className="min-w-0">
+            {/* Post header */}
+            <header>
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
+                  {post.category}
+                </span>
+                <span className="text-[color:var(--text-quaternary)]">·</span>
+                <span className="font-mono text-[12px] tabular-nums text-[color:var(--text-tertiary)]">
+                  {formatDate(post.published)}
+                </span>
+                <span className="text-[color:var(--text-quaternary)]">·</span>
+                <span className="font-mono text-[12px] tabular-nums text-[color:var(--text-tertiary)]">
+                  {post.read_time}
+                </span>
+              </div>
 
-          <h1 className="mt-6 text-display-lg text-[color:var(--text-primary)]">{post.title}</h1>
-          <p className="mt-5 text-body-lg text-[color:var(--text-secondary)]">{post.subtitle}</p>
+              <h1 className="mt-5 text-display-lg text-[color:var(--text-primary)]">{post.title}</h1>
+              <p className="mt-4 text-body-lg text-[color:var(--text-secondary)]">{post.subtitle}</p>
+            </header>
 
-          <div className="mt-8 flex items-center gap-3 pt-6 border-t border-[color:var(--border-subtle)]">
-            <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[12px] font-semibold leading-none">
-              P
-            </span>
-            <div>
-              <p className="text-body-sm font-medium text-[color:var(--text-primary)]">
-                {post.author}
-              </p>
-              <p className="text-mono-sm text-[color:var(--text-tertiary)]">Pixelary team</p>
+            {/* Mobile TOC */}
+            {headings.length > 0 && (
+              <div className="mt-8 lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setTocOpen((v) => !v)}
+                  className="flex w-full items-center justify-between rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-4 py-3 text-body-sm font-medium"
+                >
+                  <span>On this page</span>
+                  <ArrowRight
+                    className={`h-4 w-4 transition-transform ${tocOpen ? "rotate-90" : ""}`}
+                  />
+                </button>
+                {tocOpen && (
+                  <ul className="mt-2 space-y-1 rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-4 text-body-sm">
+                    {headings.map((h) => (
+                      <li key={h.id} className={h.level === 3 ? "pl-3" : ""}>
+                        <a
+                          href={`#${h.id}`}
+                          onClick={() => setTocOpen(false)}
+                          className="block py-1 text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
+                        >
+                          {h.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            {/* Article body */}
+            <div className="mt-10 border-t border-[color:var(--border-subtle)] pt-10">
+              <div className="prose-content">{nodes}</div>
             </div>
-          </div>
-        </header>
 
-        {/* Mobile TOC */}
-        {headings.length > 0 && (
-          <div className="mt-10 lg:hidden">
-            <button
-              type="button"
-              onClick={() => setTocOpen((v) => !v)}
-              className="flex w-full items-center justify-between rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-4 py-3 text-body-sm font-medium"
-            >
-              <span>On this page</span>
-              <ArrowRight
-                className={`h-4 w-4 transition-transform ${tocOpen ? "rotate-90" : ""}`}
-              />
-            </button>
-            {tocOpen && (
-              <ul className="mt-2 space-y-1 rounded-md border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-4 text-body-sm">
-                {headings.map((h) => (
-                  <li key={h.id} className={h.level === 3 ? "pl-3" : ""}>
-                    <a
-                      href={`#${h.id}`}
-                      onClick={() => setTocOpen(false)}
-                      className="block py-1 text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
+            {/* CTA */}
+            <div className="mt-14 rounded-md border border-[color:var(--accent)] bg-[color:var(--accent)] px-8 py-8 sm:px-10 sm:py-10 text-center">
+              <p className="font-mono text-[11px] font-medium tracking-[0.1em] uppercase text-white/60">
+                Generate yours
+              </p>
+              <h3 className="mt-2 text-heading-md text-white">
+                Generate polished prompts in seconds.
+              </h3>
+              <p className="mt-2 text-body-sm text-white/70">
+                Paste a rough idea. Get back a structured prompt that ships.
+              </p>
+              <Link to="/app" className="mt-5 inline-block">
+                <Button
+                  size="default"
+                  variant="secondary"
+                  className="bg-white text-[color:var(--accent)] hover:bg-[color:var(--bg-subtle)] border-transparent"
+                >
+                  Open Depikt <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+
+            {/* Related posts */}
+            {related.length > 0 && (
+              <div className="mt-12">
+                <p className="eyebrow">More in {post.category}</p>
+                <div className="mt-4 grid gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)] sm:grid-cols-2">
+                  {related.map((r) => (
+                    <Link
+                      key={r.slug}
+                      to="/blog/$slug"
+                      params={{ slug: r.slug }}
+                      className="group block bg-[color:var(--bg-elevated)] p-6 hover:bg-[color:var(--bg-subtle)] transition-colors"
                     >
-                      {h.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                      <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
+                        {r.category}
+                      </span>
+                      <h5 className="mt-3 text-heading-sm text-[color:var(--text-primary)] group-hover:underline underline-offset-4">
+                        {r.title}
+                      </h5>
+                      <p className="mt-2 text-body-sm text-[color:var(--text-secondary)] line-clamp-2">
+                        {r.excerpt}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
-        )}
 
-        {/* Content + sticky TOC */}
-        <div className="mt-12 grid gap-16 lg:grid-cols-[680px_240px] lg:justify-between">
-          <div className="min-w-0 max-w-[680px]">
-            <div className="prose-content">{nodes}</div>
-          </div>
-
+          {/* Sidebar */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-8">
               {headings.length > 0 && (
@@ -213,83 +254,8 @@ function PostPage() {
                 </div>
               )}
 
-              <div className="border-l-2 border-[color:var(--accent)] pl-4">
-                <p className="eyebrow">Try Pixelary</p>
-                <p className="mt-2 text-body-sm text-[color:var(--text-secondary)]">
-                  Generate prompts that follow every rule in this article.
-                </p>
-                <Link to="/app" className="mt-3 inline-block">
-                  <Button size="sm">Open generator</Button>
-                </Link>
-              </div>
             </div>
           </aside>
-        </div>
-
-        {/* Bottom blocks — narrow column */}
-        <div className="mt-24 max-w-[680px] space-y-12">
-          {/* Author */}
-          <div className="flex items-start gap-4 border-t border-[color:var(--border-subtle)] pt-8">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-[color:var(--accent)] text-[color:var(--accent-text)] font-mono text-[14px] font-semibold leading-none">
-              P
-            </span>
-            <div className="flex-1">
-              <h4 className="text-heading-sm">{post.author}</h4>
-              <p className="mt-1.5 text-body-md text-[color:var(--text-secondary)]">
-                The Pixelary team ships AI image prompt tooling. We obsess over what works in
-                production — not what looks good in a demo.
-              </p>
-            </div>
-          </div>
-
-          {/* Big CTA */}
-          <div className="border border-[color:var(--accent)] bg-[color:var(--accent)] p-10 text-center rounded-md">
-            <p className="font-mono text-[11px] font-medium tracking-[0.1em] uppercase text-white/60">
-              Generate yours
-            </p>
-            <h3 className="mt-3 text-heading-lg text-white">
-              Generate polished prompts in seconds.
-            </h3>
-            <p className="mt-3 text-body-md text-white/75">
-              Paste a rough idea. Get back a structured prompt that ships.
-            </p>
-            <Link to="/app" className="mt-6 inline-block">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="bg-white text-[color:var(--accent)] hover:bg-[color:var(--bg-subtle)] border-transparent"
-              >
-                Open Pixelary <ArrowRight className="ml-1.5 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Related posts */}
-          {related.length > 0 && (
-            <div>
-              <p className="eyebrow">More in {post.category}</p>
-              <div className="mt-4 grid gap-px bg-[color:var(--border-subtle)] border border-[color:var(--border-subtle)] sm:grid-cols-2">
-                {related.map((r) => (
-                  <Link
-                    key={r.slug}
-                    to="/blog/$slug"
-                    params={{ slug: r.slug }}
-                    className="group block bg-[color:var(--bg-elevated)] p-6 hover:bg-[color:var(--bg-subtle)] transition-colors"
-                  >
-                    <span className="font-mono text-[11px] font-medium tracking-[0.08em] uppercase text-[color:var(--text-tertiary)]">
-                      {r.category}
-                    </span>
-                    <h5 className="mt-3 text-heading-sm text-[color:var(--text-primary)] group-hover:underline underline-offset-4">
-                      {r.title}
-                    </h5>
-                    <p className="mt-2 text-body-sm text-[color:var(--text-secondary)] line-clamp-2">
-                      {r.excerpt}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </article>
     </div>

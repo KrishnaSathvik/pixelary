@@ -6,7 +6,7 @@ import { absoluteUrl } from "@/lib/site";
 
 import appCss from "../styles.css?url";
 
-const DEFAULT_TITLE = "Pixelary — Pro-grade AI image prompts in seconds";
+const DEFAULT_TITLE = "Depikt — Pro-grade AI image prompts in seconds";
 const DEFAULT_DESCRIPTION =
   "Turn rough ideas into copy-ready prompts for GPT Image 2, fal.ai, and OpenAI. Camera, lighting, composition — structured for production-quality output.";
 const DEFAULT_OG_IMAGE = absoluteUrl("/og-default.png");
@@ -46,9 +46,9 @@ export const Route = createRootRoute({
       { name: "theme-color", content: "#FAFAF7" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "Pixelary" },
+      { name: "apple-mobile-web-app-title", content: "Depikt" },
       { name: "mobile-web-app-capable", content: "yes" },
-      { name: "application-name", content: "Pixelary" },
+      { name: "application-name", content: "Depikt" },
       { title: DEFAULT_TITLE },
       { name: "description", content: DEFAULT_DESCRIPTION },
       { property: "og:title", content: DEFAULT_TITLE },
@@ -65,8 +65,11 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
-      { rel: "apple-touch-icon", href: "/favicon.png" },
+      { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

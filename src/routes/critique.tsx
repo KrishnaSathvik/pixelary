@@ -31,19 +31,21 @@ export const Route = createFileRoute("/critique")({
   },
   head: () => ({
     meta: [
-      { title: "Critique a Prompt — Pixelary" },
+      { title: "Critique a Prompt — Depikt" },
       {
         name: "description",
         content:
           "Paste a prompt. Get a score, weaknesses, concrete improvements, and a rewritten prompt.",
       },
-      { property: "og:title", content: "Pixelary · Critique" },
+      { property: "og:title", content: "Critique a Prompt — Depikt" },
       {
         property: "og:description",
         content:
           "Paste a prompt. Get a score, weaknesses, concrete improvements, and a rewritten prompt.",
       },
-      { name: "twitter:title", content: "Pixelary · Critique" },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: absoluteUrl("/og-default.png") },
+      { name: "twitter:title", content: "Critique a Prompt — Depikt" },
       {
         name: "twitter:description",
         content:
@@ -174,7 +176,7 @@ function CritiquePage() {
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
-      <div className="mx-auto max-w-[760px] px-6 py-12 sm:py-16">
+      <div className="mx-auto max-w-[960px] px-6 py-12 sm:py-16">
         {collapsed && savedInput ? (
           <CollapsedInput
             text={savedInput}

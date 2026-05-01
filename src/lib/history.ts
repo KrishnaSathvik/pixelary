@@ -14,7 +14,7 @@ export interface HistoryEntry {
   created_at: number;
 }
 
-const KEY = "pixelary.history";
+const KEY = "depikt.history";
 const MAX_ENTRIES = 20;
 
 export function getHistory(): HistoryEntry[] {
@@ -44,7 +44,7 @@ export function addHistory(entry: Omit<HistoryEntry, "id" | "created_at">): Hist
     const current = getHistory();
     const next = [full, ...current].slice(0, MAX_ENTRIES);
     window.localStorage.setItem(KEY, JSON.stringify(next));
-    window.dispatchEvent(new CustomEvent("pixelary:history-changed"));
+    window.dispatchEvent(new CustomEvent("depikt:history-changed"));
   } catch {
     // Quota exceeded or storage disabled — silently drop. History is best-effort.
   }
@@ -56,7 +56,7 @@ export function removeHistory(id: string) {
   try {
     const next = getHistory().filter((e) => e.id !== id);
     window.localStorage.setItem(KEY, JSON.stringify(next));
-    window.dispatchEvent(new CustomEvent("pixelary:history-changed"));
+    window.dispatchEvent(new CustomEvent("depikt:history-changed"));
   } catch {
     /* noop */
   }
@@ -66,7 +66,7 @@ export function clearHistory() {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(KEY);
-    window.dispatchEvent(new CustomEvent("pixelary:history-changed"));
+    window.dispatchEvent(new CustomEvent("depikt:history-changed"));
   } catch {
     /* noop */
   }

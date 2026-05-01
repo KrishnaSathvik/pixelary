@@ -1,6 +1,6 @@
-# Pixelary
+# Depikt
 
-Pixelary is a production-focused prompt tool for AI image generation. It turns rough creative ideas into structured, copy-ready prompts for GPT Image 2, fal.ai, and OpenAI image workflows.
+Depikt is a production-focused prompt tool for AI image generation. It turns rough creative ideas into structured, copy-ready prompts for GPT Image 2, fal.ai, and OpenAI image workflows.
 
 The app includes a curated prompt library, a live prompt generator, a prompt critique flow, local history, blog content, and SEO metadata for launch.
 
@@ -86,7 +86,7 @@ The generator and critique pages both call `/api/public/generate-prompt` with se
 
 The endpoint:
 
-- validates category and mode against shared definitions from `src/lib/pixelary.ts`
+- validates category and mode against shared definitions from `src/lib/depikt.ts`
 - applies a lightweight per-IP rate limit
 - sends streaming `delta` events for generator output
 - sends a final `done` event with the parsed result
@@ -95,9 +95,9 @@ The endpoint:
 
 Client-side SSE parsing lives in `src/lib/sse.ts` and is shared by Generate and Critique.
 
-## Pixelary prompt engine
+## Depikt prompt engine
 
-The main prompt-engineering logic lives in `src/lib/pixelary.ts`.
+The main prompt-engineering logic lives in `src/lib/depikt.ts`.
 
 It defines:
 
@@ -106,7 +106,7 @@ It defines:
 - `PROMPT_VERSION`
 - the system prompt used by the generation endpoint
 
-When changing prompt behavior, bump `PROMPT_VERSION` so generated outputs and local history can be traced back to the Pixelary revision that produced them.
+When changing prompt behavior, bump `PROMPT_VERSION` so generated outputs and local history can be traced back to the Depikt revision that produced them.
 
 ## History
 

@@ -39,17 +39,19 @@ export const Route = createFileRoute("/app")({
   },
   head: () => ({
     meta: [
-      { title: "Generator — Pixelary" },
+      { title: "Generator — Depikt" },
       {
         name: "description",
         content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
       },
-      { property: "og:title", content: "Pixelary Generator" },
+      { property: "og:title", content: "Generator — Depikt" },
       {
         property: "og:description",
         content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
       },
-      { name: "twitter:title", content: "Pixelary Generator" },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: absoluteUrl("/og-default.png") },
+      { name: "twitter:title", content: "Generator — Depikt" },
       {
         name: "twitter:description",
         content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
@@ -254,7 +256,7 @@ function AppPage() {
   return (
     <div className="min-h-screen bg-[color:var(--bg)]">
       <Header />
-      <div className="mx-auto max-w-[760px] px-6 py-12 sm:py-16">
+      <div className="mx-auto max-w-[960px] px-6 py-12 sm:py-16">
         {/* INPUT */}
         {inputCollapsed && savedRoughIdea ? (
           <CollapsedInput
