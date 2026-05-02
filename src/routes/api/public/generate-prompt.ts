@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SYSTEM_PROMPT, CATEGORIES, MODES, PROMPT_VERSION } from "@/lib/depikt";
+import { curatedPrompts, type CuratedPrompt } from "@/data/curated-prompts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -52,6 +53,73 @@ function rateLimitExceeded(ip: string): boolean {
     }
   }
   return false;
+}
+
+// Category index for curated prompts — built once on cold start.
+const categoryIndex = new Map<string, CuratedPrompt[]>();
+curatedPrompts.forEach((p) => {
+  const list = categoryIndex.get(p.category) || [];
+  list.push(p);
+  categoryIndex.set(p.category, list);
+});
+
+// Map system-prompt category names to curated-library category names.
+const CATEGORY_TO_LIBRARY: Record<string, string> = {
+  "CINEMATIC SCENE": "Cinematic",
+  "POSTER/COVER": "Posters",
+  "INFOGRAPHIC/DIAGRAM": "Infographics",
+  "UI MOCKUP": "UI Mockups",
+  "SOCIAL POST": "Social Posts",
+  "STORYBOARD/MULTI-PANEL": "Storyboards",
+  "INTERIOR/ARCH/FOOD/FASHION": "Interior/Food/Fashion",
+  "VISUAL SUMMARY": "Visual Summaries",
+  "IMAGE EDIT": "Image Edits",
+  "OPEN-ENDED CREATIVE": "Open-Ended Creative",
+};
+
+// Pick up to `count` random examples from a library category.
+function pickExamples(libraryCategory: string, count: number): CuratedPrompt[] {
+  const pool = categoryIndex.get(libraryCategory);
+  if (!pool || pool.length === 0) return [];
+  // Fisher-Yates partial shuffle for unbiased selection.
+  const copy = pool.slice();
+  const n = Math.min(count, copy.length);
+  for (let i = 0; i < n; i++) {
+    const j = i + Math.floor(Math.random() * (copy.length - i));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, n);
+}
+
+// Select examples for a given effectiveCategory (system-prompt name).
+// When null (auto-detect), pick 1 example each from the 4 most common categories.
+function getExamplesForCategory(effectiveCategory: string | null, count: number): CuratedPrompt[] {
+  if (effectiveCategory) {
+    const libCat = CATEGORY_TO_LIBRARY[effectiveCategory];
+    if (libCat) return pickExamples(libCat, count);
+    return [];
+  }
+  // Auto-detect: grab 1 example from each of the 4 largest categories.
+  const sorted = [...categoryIndex.entries()].sort((a, b) => b[1].length - a[1].length);
+  const result: CuratedPrompt[] = [];
+  for (const [cat] of sorted.slice(0, 4)) {
+    result.push(...pickExamples(cat, 1));
+  }
+  return result;
+}
+
+// Format selected examples into a block for the user message.
+function formatExamplesBlock(examples: CuratedPrompt[]): string {
+  if (examples.length === 0) return "";
+  const lines = examples.map((ex, i) => {
+    const parts = [
+      `[${i + 1}] ${ex.title} (${ex.category})`,
+      `Prompt: ${ex.prompt}`,
+    ];
+    if (ex.why_it_works) parts.push(`Why it works: ${ex.why_it_works}`);
+    return parts.join("\n");
+  });
+  return `REFERENCE EXAMPLES (study structure and detail level, do not copy):\n\n${lines.join("\n\n")}`;
 }
 
 interface RequestBody {
@@ -175,7 +243,12 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
             }
           }
 
+          // Select category-matched reference examples from the curated library.
+          const examples = getExamplesForCategory(effectiveCategory, 4);
+          const examplesBlock = formatExamplesBlock(examples);
+
           const userMessage = [
+            examplesBlock || null,
             effectiveCategory ? `Category hint: ${effectiveCategory}` : null,
             cinematicForced
               ? `LOCKED CATEGORY: The user explicitly requested cinematic framing. Use the CINEMATIC SCENE template. Do NOT route to INTERIOR/ARCH/FOOD/FASHION even if the subject is a wedding, kitchen, food, dress, or building.`
