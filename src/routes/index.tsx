@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Production-grade prompts for GPT Image 2. Built from rough ideas, or pick from 100+ ready ones. One click opens any prompt in Imago.",
+          "Production-grade prompts for GPT Image 2. Built from rough ideas, or pick from 200+ ready ones. One click opens any prompt in Imago.",
       },
       {
         property: "og:title",
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.",
+          "Built from rough ideas. Or pick from 200+ ready ones. One click opens any prompt in Imago.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Built from rough ideas. Or pick from 100+ ready ones. One click opens any prompt in Imago.",
+          "Built from rough ideas. Or pick from 200+ ready ones. One click opens any prompt in Imago.",
       },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/") }],
@@ -149,7 +149,7 @@ function HomePage() {
             Production-grade prompts for GPT Image 2.
           </h1>
           <p className="mt-3 max-w-3xl text-body-lg text-[color:var(--text-secondary)]">
-            Built from rough ideas. Or pick from 100+ ready ones.
+            Built from rough ideas. Or pick from 200+ ready ones.
           </p>
           <p className="mt-3 flex items-center gap-2 text-body-sm text-[color:var(--text-tertiary)]">
             <span className="text-[color:var(--accent-orange)]">→</span>
