@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
-import { addHistory, getHistory } from "@/lib/history";
+import { addHistoryEntry, getHistoryById } from "@/lib/history-db";
 import { absoluteUrl } from "@/lib/site";
 import { readSSEStream } from "@/lib/sse";
 
@@ -81,14 +81,16 @@ function CritiquePage() {
       textareaRef.current?.focus();
       return;
     }
-    const entry = getHistory().find((e) => e.id === restore);
-    if (entry && entry.kind === "critique") {
-      setInput(entry.rough_idea);
-      setSavedInput(entry.rough_idea);
-      setResult(entry.result as CritiqueResult);
-      setCollapsed(true);
-    }
-    navigate({ to: "/critique", search: {}, replace: true });
+    (async () => {
+      const entry = await getHistoryById(restore);
+      if (entry && entry.kind === "critique") {
+        setInput(entry.roughIdea);
+        setSavedInput(entry.roughIdea);
+        setResult(entry.result as CritiqueResult);
+        setCollapsed(true);
+      }
+      navigate({ to: "/critique", search: {}, replace: true });
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restore]);
 
@@ -139,9 +141,9 @@ function CritiquePage() {
       if (final) {
         setResult(final);
         setCollapsed(true);
-        addHistory({
+        addHistoryEntry({
           kind: "critique",
-          rough_idea: text,
+          roughIdea: text,
           result: final as Record<string, unknown>,
         });
       } else {

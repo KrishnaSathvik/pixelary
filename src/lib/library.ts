@@ -14,7 +14,7 @@ async function fetchCurated(): Promise<LibraryPrompt[]> {
   const { data, error } = await supabase
     .from('curated_prompts')
     .select(
-      'id, title, category, user_input, prompt, why_it_works, variants, source, source_creator, source_url, tags, created_at'
+      'id, title, category, user_input, prompt, why_it_works, variants, source, source_creator, source_url, tags, thumbnail_url, created_at'
     )
     .order('created_at', { ascending: false });
 
@@ -81,6 +81,14 @@ function deriveTitle(input: string | null | undefined, id: string): string {
 let _libraryCache: LibraryPrompt[] | null = null;
 let _libraryInflight: Promise<LibraryPrompt[]> | null = null;
 
+// Clear module cache on HMR so dev reloads fetch fresh data.
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    _libraryCache = null;
+    _libraryInflight = null;
+  });
+}
+
 export function getCachedLibrary(): LibraryPrompt[] | null {
   return _libraryCache;
 }
@@ -105,19 +113,16 @@ export async function fetchLibrary(): Promise<LibraryPrompt[]> {
       isAuthed ? fetchUserPrompts() : Promise.resolve([] as LibraryPrompt[]),
     ]);
 
-    // Display order:
-    //   1. New curated set (X-sourced, source='curated') — freshest first
-    //   2. Original examples (source='example') — our handcrafted set
-    //   3. User prompts — newest first
-    // Within each bucket, sort by created_at desc.
+    // Display order: thumbnails first (newest-first within each group),
+    // then no-thumbnail cards at the end.
     const byDateDesc = (a: LibraryPrompt, b: LibraryPrompt) =>
       (b.created_at ?? '').localeCompare(a.created_at ?? '');
 
-    const curatedNew = curated.filter((p) => p.source === 'curated').sort(byDateDesc);
-    const examples = curated.filter((p) => p.source === 'example').sort(byDateDesc);
-    const userSorted = [...user].sort(byDateDesc);
+    const all = [...curated, ...user];
+    const withThumb = all.filter((p) => !!p.thumbnail_url).sort(byDateDesc);
+    const withoutThumb = all.filter((p) => !p.thumbnail_url).sort(byDateDesc);
 
-    const merged = [...curatedNew, ...examples, ...userSorted];
+    const merged = [...withThumb, ...withoutThumb];
     _libraryCache = merged;
     return merged;
   })();

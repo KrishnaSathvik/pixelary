@@ -1,15 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Clock, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { HistorySheet, useHistoryCount } from "@/components/HistorySheet";
 import logo from "@/assets/logo.png";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = () => setMobileOpen(false);
-  const historyCount = useHistoryCount();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/85 backdrop-blur-md">
@@ -39,19 +37,6 @@ export function Header() {
           <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
             Blog
           </Link>
-          {historyCount > 0 && (
-            <HistorySheet
-              trigger={
-                <button type="button" className={`${NAV_CLS} inline-flex items-center gap-1.5`}>
-                  <Clock className="h-3.5 w-3.5" />
-                  History
-                  <span className="font-mono text-[10px] text-[color:var(--text-tertiary)]">
-                    {historyCount}
-                  </span>
-                </button>
-              }
-            />
-          )}
         </nav>
 
         <div className="flex items-center gap-1">
@@ -102,25 +87,6 @@ export function Header() {
                 >
                   Blog
                 </Link>
-                {historyCount > 0 && (
-                  <div className="mt-2 pt-2 border-t border-[color:var(--border-subtle)]">
-                    <HistorySheet
-                      trigger={
-                        <button
-                          type="button"
-                          onClick={closeMobile}
-                          className={`${MOBILE_NAV_CLS} w-full inline-flex items-center gap-2`}
-                        >
-                          <Clock className="h-4 w-4" />
-                          History
-                          <span className="ml-auto font-mono text-[11px] text-[color:var(--text-tertiary)]">
-                            {historyCount}
-                          </span>
-                        </button>
-                      }
-                    />
-                  </div>
-                )}
               </nav>
             </SheetContent>
           </Sheet>

@@ -22,6 +22,7 @@ export interface LibraryPrompt {
   source_creator?: string | null;
   source_url?: string | null;
   tags?: string[];
+  thumbnail_url?: string | null;
   created_at?: string;
   // Owner info, only present for source='user' rows.
   user_id?: string | null;

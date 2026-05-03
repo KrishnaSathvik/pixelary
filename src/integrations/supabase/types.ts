@@ -24,6 +24,7 @@ export type Database = {
           source_creator: string | null
           source_url: string | null
           tags: string[]
+          thumbnail_url: string | null
           title: string
           user_input: string | null
           variants: Json
@@ -38,6 +39,7 @@ export type Database = {
           source_creator?: string | null
           source_url?: string | null
           tags?: string[]
+          thumbnail_url?: string | null
           title: string
           user_input?: string | null
           variants?: Json
@@ -52,6 +54,7 @@ export type Database = {
           source_creator?: string | null
           source_url?: string | null
           tags?: string[]
+          thumbnail_url?: string | null
           title?: string
           user_input?: string | null
           variants?: Json

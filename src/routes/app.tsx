@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
 import { extractPartialString, extractPartialStringArray } from "@/lib/partial-json";
-import { addHistory, getHistory } from "@/lib/history";
+import { addHistoryEntry, getHistoryById } from "@/lib/history-db";
 import { absoluteUrl } from "@/lib/site";
 import { readSSEStream } from "@/lib/sse";
 
@@ -106,15 +106,17 @@ function AppPage() {
   // Restore from history (does not re-generate)
   useEffect(() => {
     if (!restore) return;
-    const entry = getHistory().find((e) => e.id === restore);
-    if (entry && entry.kind === "generate") {
-      setInput(entry.rough_idea);
-      setSavedRoughIdea(entry.rough_idea);
-      setResult(entry.result as PromptResult);
-      setInputCollapsed(true);
-    }
-    // Strip the restore param so a refresh doesn't replay it
-    navigate({ to: "/app", search: {}, replace: true });
+    (async () => {
+      const entry = await getHistoryById(restore);
+      if (entry && entry.kind === "generate") {
+        setInput(entry.roughIdea);
+        setSavedRoughIdea(entry.roughIdea);
+        setResult(entry.result as PromptResult);
+        setInputCollapsed(true);
+      }
+      // Strip the restore param so a refresh doesn't replay it
+      navigate({ to: "/app", search: {}, replace: true });
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restore]);
 
@@ -181,9 +183,9 @@ function AppPage() {
         setResult(finalResult);
         setStreaming(false);
         setInputCollapsed(true);
-        addHistory({
+        addHistoryEntry({
           kind: "generate",
-          rough_idea: userInput,
+          roughIdea: userInput,
           result: finalResult as Record<string, unknown>,
         });
       } else {
