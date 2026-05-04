@@ -141,7 +141,13 @@ export async function fetchLibrary(): Promise<LibraryPrompt[]> {
 export async function openInImago(prompt: string) {
   try {
     await navigator.clipboard.writeText(prompt);
-    toast.success('Prompt copied — paste with ⌘V in Imago', { duration: 4000 });
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    toast.success(
+      isMobile
+        ? 'Prompt copied — long-press to paste in Imago'
+        : 'Prompt copied — paste in Imago with ⌘V',
+      { duration: 4000 },
+    );
   } catch {
     toast.error('Couldn\'t copy. Use the Copy button first, then open Imago.');
   }

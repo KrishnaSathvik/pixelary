@@ -6,9 +6,9 @@ import { absoluteUrl } from "@/lib/site";
 
 import appCss from "../styles.css?url";
 
-const DEFAULT_TITLE = "Depikt — Pro-grade AI image prompts in seconds";
+const DEFAULT_TITLE = "Image prompt generator — turn rough ideas into production-grade AI prompts";
 const DEFAULT_DESCRIPTION =
-  "Turn rough ideas into copy-ready prompts for GPT Image 2, fal.ai, and OpenAI. Camera, lighting, composition — structured for production-quality output.";
+  "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 290+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.";
 const DEFAULT_OG_IMAGE = absoluteUrl("/og-default.png");
 
 function NotFoundComponent() {
@@ -61,14 +61,6 @@ export const Route = createRootRoute({
       { name: "twitter:image", content: DEFAULT_OG_IMAGE },
       { name: "twitter:title", content: DEFAULT_TITLE },
       { name: "twitter:description", content: DEFAULT_DESCRIPTION },
-      { title: "Depikt" },
-      { property: "og:title", content: "Depikt" },
-      { name: "twitter:title", content: "Depikt" },
-      { name: "description", content: "Depikt is a production-focused prompt tool for AI image generation. It turns rough creative ideas into structured, copy-ready prompts for GPT Image 2." },
-      { property: "og:description", content: "Depikt is a production-focused prompt tool for AI image generation. It turns rough creative ideas into structured, copy-ready prompts for GPT Image 2." },
-      { name: "twitter:description", content: "Depikt is a production-focused prompt tool for AI image generation. It turns rough creative ideas into structured, copy-ready prompts for GPT Image 2." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VmM13N9K3lf0TxVqINOZgAnvG1H2/social-images/social-1777667038812-og-default.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VmM13N9K3lf0TxVqINOZgAnvG1H2/social-images/social-1777667038812-og-default.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

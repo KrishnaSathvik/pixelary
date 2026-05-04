@@ -446,46 +446,45 @@ function CodeBlock({ text, jsonView, streaming = false }: CodeBlockProps) {
 
   return (
     <div className="relative">
-      <pre className="rounded-lg bg-[color:var(--code-bg)] text-[color:var(--code-text)] px-6 py-5 pr-40 text-[14px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto border border-[color:var(--code-border)]">
+      {/* View toggle — sits above the code block on mobile, overlays on desktop */}
+      {!streaming && jsonView && (
+        <div className="flex justify-end mb-2 sm:mb-0 sm:absolute sm:top-3 sm:right-3 sm:z-10">
+          <div className="flex items-center rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-0.5">
+            <button
+              type="button"
+              onClick={() => setView("text")}
+              aria-pressed={view === "text"}
+              className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
+                view === "text"
+                  ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
+                  : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
+              }`}
+              aria-label="Text view"
+            >
+              <FileText className="h-3 w-3" /> Text
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("json")}
+              aria-pressed={view === "json"}
+              className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
+                view === "json"
+                  ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
+                  : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
+              }`}
+              aria-label="JSON view"
+            >
+              <Code2 className="h-3 w-3" /> JSON
+            </button>
+          </div>
+        </div>
+      )}
+      <pre className="rounded-lg bg-[color:var(--code-bg)] text-[color:var(--code-text)] px-4 py-4 sm:px-6 sm:py-5 sm:pr-40 text-[13px] sm:text-[14px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto border border-[color:var(--code-border)]">
         {display}
         {streaming && (
           <span className="inline-block w-1.5 h-4 -mb-0.5 ml-0.5 bg-[color:var(--accent)] animate-pulse align-middle" />
         )}
       </pre>
-      {!streaming && (
-        <div className="absolute top-3 right-3 flex items-center gap-1">
-          {jsonView && (
-            <div className="flex items-center rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-0.5">
-              <button
-                type="button"
-                onClick={() => setView("text")}
-                aria-pressed={view === "text"}
-                className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
-                  view === "text"
-                    ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
-                    : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
-                }`}
-                aria-label="Text view"
-              >
-                <FileText className="h-3 w-3" /> Text
-              </button>
-              <button
-                type="button"
-                onClick={() => setView("json")}
-                aria-pressed={view === "json"}
-                className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
-                  view === "json"
-                    ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
-                    : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
-                }`}
-                aria-label="JSON view"
-              >
-                <Code2 className="h-3 w-3" /> JSON
-              </button>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
@@ -681,14 +680,15 @@ function ActionRow({
   compact?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
+  const [imagoHint, setImagoHint] = useState(false);
   const handleOpenInImago = async () => {
     if (!promptText) return;
     try {
       await navigator.clipboard.writeText(promptText);
-      toast.success("Prompt copied — paste into Imago with ⌘V / Ctrl+V");
     } catch {
       toast.error("Couldn't copy automatically — copy manually before pasting");
     }
+    setImagoHint(true);
     window.open(
       "https://chatgpt.com/g/g-69e7de729cb48191a6aa83ec3af8a6cb-imago",
       "_blank",
@@ -704,29 +704,46 @@ function ActionRow({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      {promptText && (
-        <Button onClick={handleOpenInImago} size={compact ? "sm" : "default"} className="gap-2">
-          <ExternalLink className="h-3.5 w-3.5" />
-          Open in Imago
-        </Button>
-      )}
-      {promptText && (
-        <Button
-          onClick={handleCopy}
-          variant="outline"
-          size={compact ? "sm" : "default"}
-          className="gap-2"
-        >
-          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-          {copied ? "Copied" : "Copy"}
-        </Button>
-      )}
-      {!compact && (
-        <Button onClick={onRegenerate} variant="outline" size="default" className="gap-2">
-          <RefreshCw className="h-3.5 w-3.5" />
-          Regenerate
-        </Button>
+    <div className="space-y-2">
+      <div className="flex flex-wrap items-center gap-2">
+        {promptText && (
+          <Button onClick={handleOpenInImago} size={compact ? "sm" : "default"} className="gap-2">
+            <ExternalLink className="h-3.5 w-3.5" />
+            Open in Imago
+          </Button>
+        )}
+        {promptText && (
+          <Button
+            onClick={handleCopy}
+            variant="outline"
+            size={compact ? "sm" : "default"}
+            className="gap-2"
+          >
+            {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? "Copied" : "Copy"}
+          </Button>
+        )}
+        {!compact && (
+          <Button onClick={onRegenerate} variant="outline" size="default" className="gap-2">
+            <RefreshCw className="h-3.5 w-3.5" />
+            Regenerate
+          </Button>
+        )}
+      </div>
+      {imagoHint && (
+        <div className="flex items-center gap-2 rounded-md bg-[color:var(--accent)]/8 border border-[color:var(--accent)]/20 px-3 py-2">
+          <Check className="h-3.5 w-3.5 shrink-0 text-[color:var(--accent)]" />
+          <p className="text-[12px] text-[color:var(--text-secondary)]">
+            Prompt copied to clipboard. Paste it in Imago{" "}
+            <span className="hidden sm:inline">
+              with{" "}
+              <kbd className="px-1 py-0.5 rounded bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[10px]">
+                {navigator.platform?.toUpperCase().includes("MAC") ? "⌘V" : "Ctrl+V"}
+              </kbd>
+            </span>
+            <span className="sm:hidden">by long-pressing the text field and tapping Paste</span>
+          </p>
+        </div>
       )}
     </div>
   );

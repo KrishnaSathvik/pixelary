@@ -46,31 +46,31 @@ export const Route = createFileRoute("/")({
   gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
-      { title: "Production-grade prompts for GPT Image 2 — Depikt" },
+      { title: "Image prompt generator — turn rough ideas into production-grade AI prompts" },
       {
         name: "description",
         content:
-          "Production-grade prompts for GPT Image 2. Built from rough ideas, or pick from 290 ready ones. One click opens any prompt in Imago.",
+          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 290+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
       },
       {
         property: "og:title",
-        content: "Production-grade prompts for GPT Image 2 — Depikt",
+        content: "Image prompt generator — turn rough ideas into production-grade AI prompts",
       },
       {
         property: "og:description",
         content:
-          "Built from rough ideas. Or pick from 290 ready ones. One click opens any prompt in Imago.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 290+ ready-to-use prompts across 10 categories.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
       {
         name: "twitter:title",
-        content: "Production-grade prompts for GPT Image 2 — Depikt",
+        content: "Image prompt generator — turn rough ideas into production-grade AI prompts",
       },
       {
         name: "twitter:description",
         content:
-          "Built from rough ideas. Or pick from 290 ready ones. One click opens any prompt in Imago.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 290+ ready-to-use prompts across 10 categories.",
       },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/") }],
