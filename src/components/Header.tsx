@@ -1,14 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import logo from "@/assets/logo.png";
 
-export function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const closeMobile = () => setMobileOpen(false);
+const NAV_ITEMS = [
+  { to: "/" as const, label: "Library", exact: true },
+  { to: "/app" as const, label: "Generate" },
+  { to: "/gallery" as const, label: "Gallery" },
+  { to: "/critique" as const, label: "Critique" },
+  { to: "/blog" as const, label: "Blog" },
+];
 
+export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[color:var(--border-subtle)] bg-[color:var(--bg)]/85 backdrop-blur-md">
       <div className="relative mx-auto flex h-14 max-w-[1400px] items-center justify-between px-6 lg:px-12">
@@ -19,90 +20,36 @@ export function Header() {
           </span>
         </Link>
 
+        {/* Desktop: centered nav */}
         <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1">
-          <Link
-            to="/"
-            className={NAV_CLS}
-            activeProps={{ className: NAV_CLS_ACTIVE }}
-            activeOptions={{ exact: true }}
-          >
-            Library
-          </Link>
-          <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Generate
-          </Link>
-          <Link to="/gallery" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Gallery
-          </Link>
-          <Link to="/critique" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Critique
-          </Link>
-          <Link to="/blog" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
-            Blog
-          </Link>
-        </nav>
-
-        <div className="flex items-center gap-1">
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[280px] bg-[color:var(--bg)] border-l border-[color:var(--border-subtle)]"
+          {NAV_ITEMS.map(({ to, label, exact }) => (
+            <Link
+              key={to}
+              to={to}
+              className={NAV_CLS}
+              activeProps={{ className: NAV_CLS_ACTIVE }}
+              activeOptions={exact ? { exact: true } : undefined}
             >
-              <SheetHeader>
-                <SheetTitle className="text-left">Menu</SheetTitle>
-              </SheetHeader>
-              <nav className="mt-6 flex flex-col gap-1">
-                <Link
-                  to="/"
-                  onClick={closeMobile}
-                  className={MOBILE_NAV_CLS}
-                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
-                  activeOptions={{ exact: true }}
-                >
-                  Library
-                </Link>
-                <Link
-                  to="/app"
-                  onClick={closeMobile}
-                  className={MOBILE_NAV_CLS}
-                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
-                >
-                  Generate
-                </Link>
-                <Link
-                  to="/gallery"
-                  onClick={closeMobile}
-                  className={MOBILE_NAV_CLS}
-                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
-                >
-                  Gallery
-                </Link>
-                <Link
-                  to="/critique"
-                  onClick={closeMobile}
-                  className={MOBILE_NAV_CLS}
-                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
-                >
-                  Critique
-                </Link>
-                <Link
-                  to="/blog"
-                  onClick={closeMobile}
-                  className={MOBILE_NAV_CLS}
-                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
-                >
-                  Blog
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </div>
+              {label}
+            </Link>
+          ))}
+        </nav>
       </div>
+
+      {/* Mobile: scrollable nav row */}
+      <nav className="flex md:hidden overflow-x-auto border-t border-[color:var(--border-subtle)] px-4 no-scrollbar">
+        {NAV_ITEMS.map(({ to, label, exact }) => (
+          <Link
+            key={to}
+            to={to}
+            className={MOBILE_NAV_CLS}
+            activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
+            activeOptions={exact ? { exact: true } : undefined}
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }
@@ -112,6 +59,6 @@ const NAV_CLS =
 const NAV_CLS_ACTIVE = "px-3 py-2 text-sm font-medium text-[color:var(--text-primary)]";
 
 const MOBILE_NAV_CLS =
-  "px-3 py-2.5 rounded-md text-base font-medium text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--text-primary)] transition-colors";
+  "shrink-0 px-3 py-2.5 text-sm font-medium text-[color:var(--text-secondary)] transition-colors";
 const MOBILE_NAV_CLS_ACTIVE =
-  "px-3 py-2.5 rounded-md text-base font-medium bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]";
+  "shrink-0 px-3 py-2.5 text-sm font-medium text-[color:var(--text-primary)] border-b-2 border-[color:var(--accent)]";

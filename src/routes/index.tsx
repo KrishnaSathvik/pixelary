@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 330+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
+          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 350+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
       },
       {
         property: "og:title",
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 330+ ready-to-use prompts across 10 categories.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 350+ ready-to-use prompts across 10 categories.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
@@ -70,7 +70,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 330+ ready-to-use prompts across 10 categories.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 350+ ready-to-use prompts across 10 categories.",
       },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/") }],
@@ -189,7 +189,7 @@ function HomePage() {
             Curated prompt library for GPT Image 2.
           </h1>
           <p className="mt-3 max-w-3xl text-body-lg text-[color:var(--text-secondary)]">
-            330 sample prompts collected from across the web. Pick one that fits your
+            350+ sample prompts collected from across the web. Pick one that fits your
             vision, or use the Generator to craft your own from a rough idea.
           </p>
 
@@ -252,7 +252,7 @@ function HomePage() {
       ) : (
         <section className="mx-auto max-w-[1400px] px-6 py-8">
           {/* Grid header */}
-          <div className="mb-5 flex items-center justify-between gap-4">
+          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <p className="text-[11px] text-[color:var(--text-tertiary)]">
               Images are sample outputs — your results will vary.
             </p>
@@ -479,9 +479,6 @@ function PromptCard({
           />
           {/* Gradient overlay for text readability */}
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
-          <span className="absolute top-3 left-3 rounded bg-black/40 px-1.5 py-0.5 font-mono text-[9px] tracking-[0.06em] uppercase text-white/70 backdrop-blur-sm">
-            Sample
-          </span>
         </div>
       ) : (
         <div className="px-6 pt-6">
@@ -494,18 +491,10 @@ function PromptCard({
         <p className="line-clamp-2 text-body-sm text-[color:var(--text-secondary)]">
           {prompt.prompt}
         </p>
-        <div className="mt-auto flex items-center justify-end pt-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              openInImago(prompt.prompt);
-            }}
-            className="flex items-center gap-1 text-mono-sm uppercase tracking-wider text-[color:var(--accent-orange)] opacity-0 transition-opacity hover:underline group-hover:opacity-100"
-          >
-            Open in Imago
-            <ExternalLink className="h-3 w-3" />
-          </button>
-        </div>
+        <span className="mt-auto flex items-center gap-1 pt-2 text-mono-sm uppercase tracking-wider text-[color:var(--accent)]">
+          View prompt
+          <ArrowRight className="h-3 w-3" />
+        </span>
       </div>
     </article>
   );

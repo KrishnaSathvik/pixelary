@@ -264,7 +264,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
 
           const userMessage = [
             referenceImageUrl
-              ? `REFERENCE IMAGE: A reference image is attached. Analyze its visual style, composition, color palette, lighting, mood, and any notable techniques. Incorporate these observations into the generated prompt so the output will match this aesthetic. Do NOT describe the image contents literally — extract the *style* and *feel*.`
+              ? `REFERENCE IMAGE: A reference image is attached. Follow the REFERENCE IMAGE instructions in your system prompt.`
               : null,
             examplesBlock || null,
             effectiveCategory ? `Category hint: ${effectiveCategory}` : null,

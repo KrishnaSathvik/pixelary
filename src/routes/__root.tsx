@@ -8,7 +8,7 @@ import appCss from "../styles.css?url";
 
 const DEFAULT_TITLE = "Image prompt generator — turn rough ideas into production-grade AI prompts";
 const DEFAULT_DESCRIPTION =
-  "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 290+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.";
+  "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 350+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.";
 const DEFAULT_OG_IMAGE = absoluteUrl("/og-default.png");
 
 function NotFoundComponent() {
