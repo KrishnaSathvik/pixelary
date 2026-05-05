@@ -31,6 +31,9 @@ export function Header() {
           <Link to="/app" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
             Generate
           </Link>
+          <Link to="/gallery" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
+            Gallery
+          </Link>
           <Link to="/critique" className={NAV_CLS} activeProps={{ className: NAV_CLS_ACTIVE }}>
             Critique
           </Link>
@@ -70,6 +73,14 @@ export function Header() {
                   activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
                 >
                   Generate
+                </Link>
+                <Link
+                  to="/gallery"
+                  onClick={closeMobile}
+                  className={MOBILE_NAV_CLS}
+                  activeProps={{ className: MOBILE_NAV_CLS_ACTIVE }}
+                >
+                  Gallery
                 </Link>
                 <Link
                   to="/critique"

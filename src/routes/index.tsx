@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 290+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
+          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 330+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
       },
       {
         property: "og:title",
@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 290+ ready-to-use prompts across 10 categories.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 330+ ready-to-use prompts across 10 categories.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
@@ -70,7 +70,7 @@ export const Route = createFileRoute("/")({
       {
         name: "twitter:description",
         content:
-          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 290+ ready-to-use prompts across 10 categories.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 330+ ready-to-use prompts across 10 categories.",
       },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/") }],
@@ -189,7 +189,7 @@ function HomePage() {
             Curated prompt library for GPT Image 2.
           </h1>
           <p className="mt-3 max-w-3xl text-body-lg text-[color:var(--text-secondary)]">
-            290 sample prompts collected from across the web. Pick one that fits your
+            330 sample prompts collected from across the web. Pick one that fits your
             vision, or use the Generator to craft your own from a rough idea.
           </p>
 
@@ -482,9 +482,6 @@ function PromptCard({
           <span className="absolute top-3 left-3 rounded bg-black/40 px-1.5 py-0.5 font-mono text-[9px] tracking-[0.06em] uppercase text-white/70 backdrop-blur-sm">
             Sample
           </span>
-          <p className="absolute bottom-3 left-4 font-mono text-[10px] tracking-[0.08em] uppercase text-white/80">
-            {prompt.category}
-          </p>
         </div>
       ) : (
         <div className="px-6 pt-6">
@@ -493,9 +490,6 @@ function PromptCard({
       )}
 
       <div className="flex flex-1 flex-col gap-2 p-4 pt-3">
-        {!prompt.thumbnail_url && (
-          <p className="eyebrow text-[color:var(--text-tertiary)]">{prompt.category}</p>
-        )}
         <h3 className="text-heading-sm text-[color:var(--text-primary)] line-clamp-2">{prompt.title}</h3>
         <p className="line-clamp-2 text-body-sm text-[color:var(--text-secondary)]">
           {prompt.prompt}

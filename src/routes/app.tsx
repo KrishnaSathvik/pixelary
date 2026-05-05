@@ -13,6 +13,8 @@ import {
   ChevronRight,
   Code2,
   FileText,
+  ImagePlus,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,19 +24,23 @@ import { extractPartialString, extractPartialStringArray } from "@/lib/partial-j
 import { addHistoryEntry, getHistoryById } from "@/lib/history-db";
 import { absoluteUrl } from "@/lib/site";
 import { readSSEStream } from "@/lib/sse";
+import { resizeImageToBase64, urlToBase64 } from "@/lib/image-utils";
 
 interface AppSearch {
   seed?: string;
   restore?: string;
+  ref?: string;
 }
 
 export const Route = createFileRoute("/app")({
   validateSearch: (search: Record<string, unknown>): AppSearch => {
     const seed = search.seed;
     const restore = search.restore;
+    const ref = search.ref;
     return {
       seed: typeof seed === "string" && seed.length > 0 && seed.length <= 4000 ? seed : undefined,
       restore: typeof restore === "string" && restore.length > 0 ? restore : undefined,
+      ref: typeof ref === "string" && ref.startsWith("/gallery/") ? ref : undefined,
     };
   },
   head: () => ({
@@ -96,12 +102,33 @@ function AppPage() {
   const [result, setResult] = useState<PromptResult | null>(null);
   const [savedRoughIdea, setSavedRoughIdea] = useState("");
   const [inputCollapsed, setInputCollapsed] = useState(false);
+  // Reference image state
+  const [referenceImage, setReferenceImage] = useState<string | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   // Lazy "more variations" state — appended to the original output
   const [moreLoading, setMoreLoading] = useState(false);
   const [moreVariants, setMoreVariants] = useState<string[] | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { seed, restore } = Route.useSearch();
+  const { seed, restore, ref } = Route.useSearch();
   const navigate = useNavigate();
+
+  const handleImageFile = async (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Image too large (max 10MB)");
+      return;
+    }
+    setImageLoading(true);
+    try {
+      const dataUrl = await resizeImageToBase64(file, 1024, 0.8);
+      setReferenceImage(dataUrl);
+    } catch {
+      toast.error("Failed to process image");
+    } finally {
+      setImageLoading(false);
+    }
+  };
 
   // Restore from history (does not re-generate)
   useEffect(() => {
@@ -119,6 +146,18 @@ function AppPage() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restore]);
+
+  // Load reference image from URL (gallery flow)
+  useEffect(() => {
+    if (!ref) return;
+    setImageLoading(true);
+    urlToBase64(ref)
+      .then((dataUrl) => setReferenceImage(dataUrl))
+      .catch(() => toast.error("Failed to load reference image"))
+      .finally(() => setImageLoading(false));
+    navigate({ to: "/app", search: {}, replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref]);
 
   // Seed from query param (auto-generates)
   useEffect(() => {
@@ -156,7 +195,7 @@ function AppPage() {
       const res = await fetch(getEndpoint("/api/public/generate-prompt"), {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-        body: JSON.stringify({ userInput, category: "auto", mode: "default" }),
+        body: JSON.stringify({ userInput, referenceImageUrl: referenceImage || undefined, category: "auto", mode: "default" }),
       });
 
       if (!res.ok || !res.body) {
@@ -207,7 +246,7 @@ function AppPage() {
       const res = await fetch(getEndpoint("/api/public/generate-prompt"), {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-        body: JSON.stringify({ userInput: savedRoughIdea, category: "auto", mode: "BATCH" }),
+        body: JSON.stringify({ userInput: savedRoughIdea, referenceImageUrl: referenceImage || undefined, category: "auto", mode: "BATCH" }),
       });
       if (!res.ok || !res.body) {
         toast.error("Couldn't generate variations");
@@ -241,6 +280,7 @@ function AppPage() {
     setResult(null);
     setMoreVariants(null);
     setSavedRoughIdea("");
+    setReferenceImage(null);
     setInputCollapsed(false);
     setTimeout(() => {
       textareaRef.current?.focus();
@@ -279,15 +319,81 @@ function AppPage() {
               <label htmlFor="rough-idea" className="sr-only">
                 Rough idea
               </label>
-              <Textarea
-                id="rough-idea"
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="e.g. cinematic shot of empty Tokyo street at dawn"
-                className="min-h-[200px] resize-y bg-[color:var(--bg-elevated)] border-[color:var(--border-default)] text-[15px] font-mono leading-[1.65] focus-visible:border-[color:var(--accent)] focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/15 px-5 py-4"
-              />
+              <div
+                onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) handleImageFile(file);
+                }}
+              >
+                <Textarea
+                  id="rough-idea"
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onPaste={(e) => {
+                    const file = e.clipboardData.files?.[0];
+                    if (file && file.type.startsWith("image/")) {
+                      e.preventDefault();
+                      handleImageFile(file);
+                    }
+                  }}
+                  placeholder="e.g. cinematic shot of empty Tokyo street at dawn"
+                  className="min-h-[200px] resize-y bg-[color:var(--bg-elevated)] border-[color:var(--border-default)] text-[15px] font-mono leading-[1.65] focus-visible:border-[color:var(--accent)] focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/15 px-5 py-4"
+                />
+              </div>
+
+              {/* Reference image preview / upload button */}
+              <div className="mt-3">
+                {imageLoading ? (
+                  <div className="flex items-center gap-2 text-mono-sm text-[color:var(--text-tertiary)]">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Processing image…
+                  </div>
+                ) : referenceImage ? (
+                  <div className="inline-flex items-center gap-2 rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-subtle)] px-2.5 py-1.5">
+                    <img
+                      src={referenceImage}
+                      alt="Reference"
+                      className="h-8 w-8 rounded object-cover"
+                    />
+                    <span className="text-[12px] font-mono text-[color:var(--text-secondary)]">Reference image</span>
+                    <button
+                      type="button"
+                      onClick={() => setReferenceImage(null)}
+                      className="ml-1 rounded p-0.5 text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-elevated)] transition-colors"
+                      aria-label="Remove reference image"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleImageFile(file);
+                        e.target.value = "";
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[12px] font-mono text-[color:var(--text-tertiary)] hover:text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-subtle)] border border-dashed border-[color:var(--border-subtle)] hover:border-[color:var(--border-default)] transition-colors"
+                    >
+                      <ImagePlus className="h-3.5 w-3.5" />
+                      Add reference image
+                    </button>
+                  </>
+                )}
+              </div>
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <span className="text-mono-sm text-[color:var(--text-tertiary)] mr-1">Try:</span>
@@ -680,7 +786,6 @@ function ActionRow({
   compact?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
-  const [imagoHint, setImagoHint] = useState(false);
   const handleOpenInImago = async () => {
     if (!promptText) return;
     try {
@@ -688,7 +793,6 @@ function ActionRow({
     } catch {
       toast.error("Couldn't copy automatically — copy manually before pasting");
     }
-    setImagoHint(true);
     window.open(
       "https://chatgpt.com/g/g-69e7de729cb48191a6aa83ec3af8a6cb-imago",
       "_blank",
@@ -730,20 +834,18 @@ function ActionRow({
           </Button>
         )}
       </div>
-      {imagoHint && (
-        <div className="flex items-center gap-2 rounded-md bg-[color:var(--accent)]/8 border border-[color:var(--accent)]/20 px-3 py-2">
-          <Check className="h-3.5 w-3.5 shrink-0 text-[color:var(--accent)]" />
-          <p className="text-[12px] text-[color:var(--text-secondary)]">
-            Prompt copied to clipboard. Paste it in Imago{" "}
-            <span className="hidden sm:inline">
-              with{" "}
-              <kbd className="px-1 py-0.5 rounded bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[10px]">
-                {navigator.platform?.toUpperCase().includes("MAC") ? "⌘V" : "Ctrl+V"}
-              </kbd>
-            </span>
-            <span className="sm:hidden">by long-pressing the text field and tapping Paste</span>
-          </p>
-        </div>
+      {promptText && (
+        <p className="text-[11px] text-[color:var(--text-tertiary)]">
+          <span className="hidden sm:inline">
+            Opens Imago with your prompt copied. Paste with{" "}
+            <kbd className="px-1 py-0.5 rounded bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[10px]">
+              {navigator.platform?.toUpperCase().includes("MAC") ? "⌘V" : "Ctrl+V"}
+            </kbd>
+          </span>
+          <span className="sm:hidden">
+            Opens Imago with your prompt copied. Long-press the text field and tap Paste.
+          </span>
+        </p>
       )}
     </div>
   );

@@ -15,6 +15,7 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LaunchChecklistRouteImport } from './routes/launch-checklist'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as CritiqueRouteImport } from './routes/critique'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -51,6 +52,11 @@ const LibraryRoute = LibraryRouteImport.update({
 const LaunchChecklistRoute = LaunchChecklistRouteImport.update({
   id: '/launch-checklist',
   path: '/launch-checklist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CritiqueRoute = CritiqueRouteImport.update({
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/critique': typeof CritiqueRoute
+  '/gallery': typeof GalleryRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/critique': typeof CritiqueRoute
+  '/gallery': typeof GalleryRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/critique': typeof CritiqueRoute
+  '/gallery': typeof GalleryRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -142,6 +151,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/critique'
+    | '/gallery'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/critique'
+    | '/gallery'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/critique'
+    | '/gallery'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -188,6 +200,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   CritiqueRoute: typeof CritiqueRoute
+  GalleryRoute: typeof GalleryRoute
   LaunchChecklistRoute: typeof LaunchChecklistRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
@@ -242,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/launch-checklist'
       fullPath: '/launch-checklist'
       preLoaderRoute: typeof LaunchChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/critique': {
@@ -300,6 +320,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   CritiqueRoute: CritiqueRoute,
+  GalleryRoute: GalleryRoute,
   LaunchChecklistRoute: LaunchChecklistRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,

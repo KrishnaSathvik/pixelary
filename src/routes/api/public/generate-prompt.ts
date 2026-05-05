@@ -124,6 +124,7 @@ function formatExamplesBlock(examples: CuratedPrompt[]): string {
 
 interface RequestBody {
   userInput: string;
+  referenceImageUrl?: string;
   category?: string;
   mode?: string;
 }
@@ -144,7 +145,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           }
 
           const body = (await request.json()) as RequestBody;
-          const { userInput, category, mode = "default" } = body;
+          const { userInput, referenceImageUrl, category, mode = "default" } = body;
 
           if (!userInput || typeof userInput !== "string" || userInput.trim().length === 0) {
             return new Response(JSON.stringify({ error: "userInput is required" }), {
@@ -165,6 +166,20 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
               status: 400,
               headers: { "Content-Type": "application/json", ...corsHeaders },
             });
+          }
+
+          // Validate reference image (optional base64 data URL, max 2MB)
+          if (referenceImageUrl !== undefined && referenceImageUrl !== null) {
+            if (
+              typeof referenceImageUrl !== "string" ||
+              !referenceImageUrl.startsWith("data:image/") ||
+              referenceImageUrl.length > 2 * 1024 * 1024
+            ) {
+              return new Response(
+                JSON.stringify({ error: "Invalid reference image (must be a data:image/ URL under 2MB)" }),
+                { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+              );
+            }
           }
 
           // Validate category against allowlist (prevents prompt injection via category field).
@@ -248,6 +263,9 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           const examplesBlock = formatExamplesBlock(examples);
 
           const userMessage = [
+            referenceImageUrl
+              ? `REFERENCE IMAGE: A reference image is attached. Analyze its visual style, composition, color palette, lighting, mood, and any notable techniques. Incorporate these observations into the generated prompt so the output will match this aesthetic. Do NOT describe the image contents literally — extract the *style* and *feel*.`
+              : null,
             examplesBlock || null,
             effectiveCategory ? `Category hint: ${effectiveCategory}` : null,
             cinematicForced
@@ -339,6 +357,14 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
               };
 
               send("status", { message: "starting" });
+              // Build user message content: multimodal array when image present, plain string otherwise
+              const userContent = referenceImageUrl
+                ? [
+                    { type: "image_url" as const, image_url: { url: referenceImageUrl, detail: "low" as const } },
+                    { type: "text" as const, text: userMessage },
+                  ]
+                : userMessage;
+
               const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: {
@@ -349,7 +375,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
                   model: "gpt-5.4-mini",
                   messages: [
                     { role: "system", content: SYSTEM_PROMPT },
-                    { role: "user", content: userMessage },
+                    { role: "user", content: userContent },
                   ],
                   tools,
                   tool_choice: { type: "function", function: { name: "deliver_prompt" } },
