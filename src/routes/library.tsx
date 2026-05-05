@@ -143,7 +143,7 @@ function HomePage() {
     // Choose base list: full library or favorites-only
     let list: LibraryPrompt[] =
       view === "favorites"
-        ? prompts.filter((p) => favoriteIds.has(`${p.source}-${p.id}`))
+        ? prompts.filter((p: LibraryPrompt) => favoriteIds.has(`${p.source}-${p.id}`))
         : prompts;
 
     if (activeCategory !== "All") {
