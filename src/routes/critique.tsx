@@ -110,8 +110,8 @@ function CritiquePage() {
     }
     setLoading(true);
     setResult(null);
-    setCollapsed(false);
     setSavedInput(text);
+    setCollapsed(true);
 
     try {
       const res = await fetch(getEndpoint("/api/public/generate-prompt"), {
@@ -309,36 +309,38 @@ function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => 
         </div>
       )}
 
-      <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6 relative">
-        <div className="absolute top-3 right-3 flex items-center rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg)] p-0.5">
-          <button
-            type="button"
-            onClick={() => setView("text")}
-            aria-pressed={view === "text"}
-            className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
-              view === "text"
-                ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
-                : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
-            }`}
-          >
-            <FileText className="h-3 w-3" /> Text
-          </button>
-          <button
-            type="button"
-            onClick={() => setView("json")}
-            aria-pressed={view === "json"}
-            className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
-              view === "json"
-                ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
-                : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
-            }`}
-          >
-            <Code2 className="h-3 w-3" /> JSON
-          </button>
+      <div className="rounded-lg border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] p-6">
+        <div className="flex justify-end mb-4">
+          <div className="flex items-center rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg)] p-0.5">
+            <button
+              type="button"
+              onClick={() => setView("text")}
+              aria-pressed={view === "text"}
+              className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
+                view === "text"
+                  ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
+                  : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
+              }`}
+            >
+              <FileText className="h-3 w-3" /> Text
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("json")}
+              aria-pressed={view === "json"}
+              className={`inline-flex h-6 items-center gap-1 rounded px-2 text-[11px] font-mono transition-colors ${
+                view === "json"
+                  ? "bg-[color:var(--bg-subtle)] text-[color:var(--text-primary)]"
+                  : "text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)]"
+              }`}
+            >
+              <Code2 className="h-3 w-3" /> JSON
+            </button>
+          </div>
         </div>
 
         {view === "json" ? (
-          <pre className="mt-8 text-[13px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto text-[color:var(--text-primary)]">
+          <pre className="text-[13px] font-mono leading-[1.7] whitespace-pre-wrap overflow-x-auto text-[color:var(--text-primary)]">
             {JSON.stringify(result, null, 2)}
           </pre>
         ) : (

@@ -164,6 +164,8 @@ function AppPage() {
     if (seed) {
       setInput(seed);
       generate(seed);
+      // Strip the seed param so a re-render doesn't re-trigger generation
+      navigate({ to: "/app", search: {}, replace: true });
     } else if (!restore) {
       textareaRef.current?.focus();
     }

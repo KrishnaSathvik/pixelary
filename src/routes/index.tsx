@@ -10,6 +10,7 @@ import {
   Star,
   Clock,
   Trash2,
+  Wand2,
 } from "lucide-react";
 
 import { z } from "zod";
@@ -621,9 +622,17 @@ function PromptDetailDialog({
         </div>
 
         <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            to="/app"
+            search={{ seed: prompt.user_input || prompt.prompt }}
+            className="pill flex items-center gap-2 bg-[color:var(--accent)] text-[color:var(--bg-elevated)] hover:opacity-90"
+          >
+            <Wand2 className="h-3.5 w-3.5" />
+            Remix in generator
+          </Link>
           <button
             onClick={() => openInImago(prompt.prompt)}
-            className="pill flex items-center gap-2 bg-[color:var(--accent)] text-[color:var(--bg-elevated)] hover:opacity-90"
+            className="pill flex items-center gap-2 border border-[color:var(--border-subtle)] bg-[color:var(--bg-elevated)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-subtle)]"
           >
             Open in Imago
             <ExternalLink className="h-3.5 w-3.5" />

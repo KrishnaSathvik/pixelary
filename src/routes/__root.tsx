@@ -33,6 +33,36 @@ function NotFoundComponent() {
   );
 }
 
+const STRUCTURED_DATA = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Depikt",
+    url: "https://depikt.app",
+    description: DEFAULT_DESCRIPTION,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://depikt.app/?page=1&view=browse",
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Depikt",
+    url: "https://depikt.app/app",
+    applicationCategory: "DesignApplication",
+    operatingSystem: "Any",
+    description:
+      "AI image prompt generator that turns rough ideas into production-grade prompts for GPT Image 2, Midjourney, and other models.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  },
+];
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -77,6 +107,10 @@ export const Route = createRootRoute({
         href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap",
       },
     ],
+    scripts: STRUCTURED_DATA.map((d) => ({
+      type: "application/ld+json",
+      children: JSON.stringify(d),
+    })),
   }),
   shellComponent: RootShell,
   component: RootComponent,

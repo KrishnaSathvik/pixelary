@@ -107,7 +107,13 @@ const PLACEHOLDER_FILLS = {
     '"AI STRATEGY 2026"': '"AI STRATEGY 2026"',
   },
   "curated-founder-infographic": {
-    "Jensen Huang": "Jensen Huang",
+    "[founder name]": "Jensen Huang",
+    "[HEADLINE TEXT]": "THIS MAN BUILT THE AI ERA",
+    "[brand color]": "NVIDIA green",
+    "[title]": "Founder & CEO",
+    "[company]": "NVIDIA",
+    "[one-line description]": "Built the backbone of the AI revolution",
+    "[famous quote]": "The more you buy, the more you save.",
   },
   // ─── Batch 3 placeholder fills ──────────────────────────────────────────────
   "curated-travel-infographic-guide": {
@@ -179,6 +185,20 @@ const PLACEHOLDER_FILLS = {
   },
   "curated-future-timeline-guide": {
     "[insert date]": "August 26",
+  },
+  "curated-celebrity-real-life": {
+    "[celebrity 1]": "three famous comedians",
+    "[celebrity 2]": "",
+    "[celebrity 3]": "",
+  },
+  "curated-lol-midlane": {
+    "[character A]": "a wizard",
+    "[character B]": "a knight",
+  },
+  "curated-1980s-propaganda": {
+    "[person 1]": "three tech leaders",
+    "[person 2]": "the middle one",
+    "[person 3]": "",
   },
 };
 
