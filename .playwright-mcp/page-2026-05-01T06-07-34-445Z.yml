@@ -1,0 +1,120 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "Depikt Depikt" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img "Depikt" [ref=e7]
+          - generic [ref=e8]: Depikt
+        - navigation [ref=e9]:
+          - link "Library" [ref=e10] [cursor=pointer]:
+            - /url: /
+          - link "Generate" [ref=e11] [cursor=pointer]:
+            - /url: /app
+          - link "Critique" [ref=e12] [cursor=pointer]:
+            - /url: /critique
+          - link "Blog" [ref=e13] [cursor=pointer]:
+            - /url: /blog
+    - main [ref=e14]:
+      - generic [ref=e15]:
+        - paragraph [ref=e16]: Field notes
+        - heading "The Depikt Blog" [level=1] [ref=e17]
+        - paragraph [ref=e18]: Field-tested techniques for getting better AI images. Written by people who actually ship.
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - 'link "Examples · Apr 27, 2026 GPT Image 2 Prompt Examples: 12 Templates That Actually Work OpenAI''s GPT Image 2 launched on April 21, 2026 with reasoning-powered generation and dramatically improved text rendering. Here are 12 production-grade prompts across the categories that matter, with explanations of why each one works. Depikt Team · 8 min" [ref=e22] [cursor=pointer]':
+            - /url: /blog/gpt-image-2-prompt-examples
+            - generic [ref=e23]:
+              - generic [ref=e24]: Examples
+              - generic [ref=e25]: ·
+              - generic [ref=e26]: Apr 27, 2026
+            - 'heading "GPT Image 2 Prompt Examples: 12 Templates That Actually Work" [level=3] [ref=e27]'
+            - paragraph [ref=e28]: OpenAI's GPT Image 2 launched on April 21, 2026 with reasoning-powered generation and dramatically improved text rendering. Here are 12 production-grade prompts across the categories that matter, with explanations of why each one works.
+            - generic [ref=e29]:
+              - generic [ref=e30]: Depikt Team
+              - generic [ref=e31]: ·
+              - generic [ref=e32]: 8 min
+              - img [ref=e33]
+          - generic [ref=e35]:
+            - link "Tips · Apr 26, 2026 10 ChatGPT Image Prompt Tips for Production-Quality Results Most ChatGPT image prompt advice is recycled from older models. Here's what works specifically with GPT Image 2's reasoning architecture — practical techniques, not magic words. Depikt Team · 8 min" [ref=e36] [cursor=pointer]:
+              - /url: /blog/chatgpt-image-prompt-tips
+              - generic [ref=e37]:
+                - generic [ref=e38]: Tips
+                - generic [ref=e39]: ·
+                - generic [ref=e40]: Apr 26, 2026
+              - heading "10 ChatGPT Image Prompt Tips for Production-Quality Results" [level=3] [ref=e41]
+              - paragraph [ref=e42]: Most ChatGPT image prompt advice is recycled from older models. Here's what works specifically with GPT Image 2's reasoning architecture — practical techniques, not magic words.
+              - generic [ref=e43]:
+                - generic [ref=e44]: Depikt Team
+                - generic [ref=e45]: ·
+                - generic [ref=e46]: 8 min
+                - img [ref=e47]
+            - link "Framework · Apr 25, 2026 A 6-Layer Framework for Writing AI Image Prompts Most AI image prompts fail because they're missing structure, not detail. Here's a 6-layer framework that works as a starting point for any image type — useful as a checklist when your prompts are coming out generic. Depikt Team · 7 min" [ref=e49] [cursor=pointer]:
+              - /url: /blog/ai-image-prompt-framework
+              - generic [ref=e50]:
+                - generic [ref=e51]: Framework
+                - generic [ref=e52]: ·
+                - generic [ref=e53]: Apr 25, 2026
+              - heading "A 6-Layer Framework for Writing AI Image Prompts" [level=3] [ref=e54]
+              - paragraph [ref=e55]: Most AI image prompts fail because they're missing structure, not detail. Here's a 6-layer framework that works as a starting point for any image type — useful as a checklist when your prompts are coming out generic.
+              - generic [ref=e56]:
+                - generic [ref=e57]: Depikt Team
+                - generic [ref=e58]: ·
+                - generic [ref=e59]: 7 min
+                - img [ref=e60]
+            - link "How-to · Apr 23, 2026 How to Write AI Image Prompts That Render Text Correctly Text rendering used to be the biggest weakness of AI image generation. GPT Image 2 mostly fixed it — independent reviews report 95%+ accuracy. But getting reliable output still requires a specific approach. Depikt Team · 6 min" [ref=e62] [cursor=pointer]:
+              - /url: /blog/ai-image-prompts-with-text
+              - generic [ref=e63]:
+                - generic [ref=e64]: How-to
+                - generic [ref=e65]: ·
+                - generic [ref=e66]: Apr 23, 2026
+              - heading "How to Write AI Image Prompts That Render Text Correctly" [level=3] [ref=e67]
+              - paragraph [ref=e68]: Text rendering used to be the biggest weakness of AI image generation. GPT Image 2 mostly fixed it — independent reviews report 95%+ accuracy. But getting reliable output still requires a specific approach.
+              - generic [ref=e69]:
+                - generic [ref=e70]: Depikt Team
+                - generic [ref=e71]: ·
+                - generic [ref=e72]: 6 min
+                - img [ref=e73]
+            - 'link "Comparison · Apr 21, 2026 GPT Image 2 vs Nano Banana Pro vs Midjourney V8: 2026 Comparison Three models dominate AI image generation in April 2026: OpenAI''s GPT Image 2, Google''s Nano Banana Pro, and Midjourney V8. Each has a clear sweet spot. Here''s where each one actually wins, based on benchmarks and verified capabilities. Depikt Team · 9 min" [ref=e75] [cursor=pointer]':
+              - /url: /blog/gpt-image-2-vs-nano-banana-vs-midjourney
+              - generic [ref=e76]:
+                - generic [ref=e77]: Comparison
+                - generic [ref=e78]: ·
+                - generic [ref=e79]: Apr 21, 2026
+              - 'heading "GPT Image 2 vs Nano Banana Pro vs Midjourney V8: 2026 Comparison" [level=3] [ref=e80]'
+              - paragraph [ref=e81]: "Three models dominate AI image generation in April 2026: OpenAI's GPT Image 2, Google's Nano Banana Pro, and Midjourney V8. Each has a clear sweet spot. Here's where each one actually wins, based on benchmarks and verified capabilities."
+              - generic [ref=e82]:
+                - generic [ref=e83]: Depikt Team
+                - generic [ref=e84]: ·
+                - generic [ref=e85]: 9 min
+                - img [ref=e86]
+        - complementary [ref=e88]:
+          - generic [ref=e89]:
+            - paragraph [ref=e90]: Try Depikt
+            - heading "Generate prompts that follow every rule we write about." [level=3] [ref=e91]
+            - link "Open generator" [ref=e92] [cursor=pointer]:
+              - /url: /app
+              - button "Open generator" [ref=e93]:
+                - text: Open generator
+                - img
+          - generic [ref=e94]:
+            - paragraph [ref=e95]: Categories
+            - list [ref=e96]:
+              - listitem [ref=e97]:
+                - generic [ref=e98]: Examples
+                - generic [ref=e99]: "01"
+              - listitem [ref=e100]:
+                - generic [ref=e101]: Tips
+                - generic [ref=e102]: "01"
+              - listitem [ref=e103]:
+                - generic [ref=e104]: Framework
+                - generic [ref=e105]: "01"
+              - listitem [ref=e106]:
+                - generic [ref=e107]: How-to
+                - generic [ref=e108]: "01"
+              - listitem [ref=e109]:
+                - generic [ref=e110]: Comparison
+                - generic [ref=e111]: "01"
+    - contentinfo [ref=e112]:
+      - generic [ref=e113]: Depikt © 2026
+  - region "Notifications alt+T"

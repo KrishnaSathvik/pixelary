@@ -45,12 +45,14 @@ export const Route = createFileRoute("/critique")({
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Critique a Prompt — Depikt" },
       {
         name: "twitter:description",
         content:
           "Paste a prompt. Get a score, weaknesses, concrete improvements, and a rewritten prompt.",
       },
+      { name: "twitter:image", content: absoluteUrl("/og-default.png") },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/critique") }],
   }),

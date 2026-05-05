@@ -1,0 +1,37 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "Depikt Depikt" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img "Depikt" [ref=e7]
+          - generic [ref=e8]: Depikt
+        - navigation [ref=e9]:
+          - link "Library" [ref=e10] [cursor=pointer]:
+            - /url: /
+          - link "Generate" [ref=e11] [cursor=pointer]:
+            - /url: /app
+          - link "Critique" [ref=e12] [cursor=pointer]:
+            - /url: /critique
+          - link "Blog" [ref=e13] [cursor=pointer]:
+            - /url: /blog
+    - generic [ref=e15]:
+      - heading "What do you want to make?" [level=1] [ref=e16]
+      - generic [ref=e17]:
+        - generic [ref=e18]: Rough idea
+        - textbox "Rough idea" [active] [ref=e19]:
+          - /placeholder: e.g. cinematic shot of empty Tokyo street at dawn
+        - generic [ref=e20]:
+          - generic [ref=e21]: "Try:"
+          - button "poster" [ref=e22]
+          - button "app mockup" [ref=e23]
+          - button "infographic" [ref=e24]
+          - button "cinematic scene" [ref=e25]
+        - generic [ref=e26]:
+          - button "Generate prompt" [ref=e27]:
+            - img
+            - text: Generate prompt
+          - generic [ref=e28]:
+            - text: or press
+            - generic [ref=e29]: ⌘ Enter
+  - region "Notifications alt+T"

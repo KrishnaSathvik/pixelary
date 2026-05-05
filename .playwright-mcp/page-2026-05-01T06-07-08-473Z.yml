@@ -1,0 +1,121 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "Depikt Depikt" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img "Depikt" [ref=e7]
+          - generic [ref=e8]: Depikt
+        - navigation [ref=e9]:
+          - link "Library" [ref=e10] [cursor=pointer]:
+            - /url: /
+          - link "Generate" [ref=e11] [cursor=pointer]:
+            - /url: /app
+          - link "Critique" [ref=e12] [cursor=pointer]:
+            - /url: /critique
+          - link "Blog" [ref=e13] [cursor=pointer]:
+            - /url: /blog
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - heading "Production-grade prompts for GPT Image 2." [level=1] [ref=e16]
+        - paragraph [ref=e17]: Built from rough ideas. Or pick from 100+ ready ones.
+        - paragraph [ref=e18]:
+          - generic [ref=e19]: →
+          - text: One click opens any prompt directly in Imago.
+        - generic [ref=e20]:
+          - img
+          - textbox "Search prompts" [ref=e21]:
+            - /placeholder: Search by mood, subject, or style…
+      - generic [ref=e23]:
+        - button "All" [ref=e24]
+        - button "Posters" [ref=e25]
+        - button "Infographics" [ref=e26]
+        - button "UI Mockups" [ref=e27]
+        - button "Social Posts" [ref=e28]
+        - button "Cinematic" [ref=e29]
+        - button "Storyboards" [ref=e30]
+        - button "Interior/Food/Fashion" [ref=e31]
+        - button "Visual Summaries" [ref=e32]
+        - button "Image Edits" [ref=e33]
+        - button "Open-Ended Creative" [ref=e34]
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - paragraph [ref=e37]: 110 prompts
+        - link "Build your own" [ref=e38] [cursor=pointer]:
+          - /url: /app
+          - text: Build your own
+          - img [ref=e39]
+      - generic [ref=e41]:
+        - article [ref=e42] [cursor=pointer]:
+          - paragraph [ref=e44]: Interior/Food/Fashion
+          - heading "Basketball Court Direct Flash" [level=3] [ref=e45]
+          - paragraph [ref=e46]: 35mm color film photography with harsh direct on-camera flash, specular highlights on skin and clothing, strong catchlights in eyes, high contrast flash illumination, authentic film grain and color shift, high fashion fresh sporty editorial style, person in white tank top and white high-waisted basketball shorts, white knee-high sports socks, leaning pose against the basketball hoop pole on the outdoor court at dusk, harsh direct on-camera flash creating sharp specular highlights and strong catchlights, background with blurred basketball court and hoop under dusk sky, high contrast film color grading with natural flash look, extremely sharp yet soft skin rendering with authentic 35mm direct flash aesthetic, no plastic skin, no digital over-sharpening, no airbrushing, authentic 35mm direct flash film basketball court look --ar 9:16
+          - button "Open in Imago" [ref=e48]:
+            - text: Open in Imago
+            - img [ref=e49]
+        - article [ref=e53] [cursor=pointer]:
+          - paragraph [ref=e55]: Infographics
+          - heading "Fitness Training Infographic" [level=3] [ref=e56]
+          - paragraph [ref=e57]: "Generate a Chinese fitness infographic for [topic]. The graphic should be both professional and practical for a normal adult to use as a training reference. Unless otherwise specified, assume the audience is a healthy adult with no major injuries, the goal is muscle gain plus basic strength improvement, the level is beginner to intermediate, the setting is a normal gym, and the total session length should stay within 40 to 60 minutes. Choose the output format automatically based on the training topic: 1. If the topic is a muscle group or body part, such as chest, lats, biceps, abs, shoulders, or legs, generate a training-plan infographic for that body part. 2. If the topic is an exercise or skill goal, such as pull-up, push-up, dips, or squat, generate an exercise-unlock or progression-plan infographic. Use a clear, modern, professional, easy-to-read Chinese infographic style in vertical format. The visual design should be clean and suitable for social sharing or personal training reference. Do not write long paragraphs. Each module should use short concise phrases, and numerical information should be prominent. The infographic must include: A. Title area with main title and subtitle B. Training goal area C. Warm-up area D. Main training area with 4 to 6 core exercises E. Progression or unlock logic area F. Alternative exercises area G. Execution reminders area H. Recovery suggestions area I. Visual design requirements: modern, clean, professional, modular card layout. The final result should be a complete infographic rather than plain text paragraphs."
+          - button "Open in Imago" [ref=e59]:
+            - text: Open in Imago
+            - img [ref=e60]
+        - article [ref=e64] [cursor=pointer]:
+          - paragraph [ref=e66]: Infographics
+          - heading "Gaokao Exam Paper Replica" [level=3] [ref=e67]
+          - paragraph [ref=e68]: Generate an image of a 2026 Gaokao exam paper for [subject name]
+          - button "Open in Imago" [ref=e70]:
+            - text: Open in Imago
+            - img [ref=e71]
+        - article [ref=e75] [cursor=pointer]:
+          - paragraph [ref=e77]: Visual Summaries
+          - heading "Three Day Travel Guide Card" [level=3] [ref=e78]
+          - paragraph [ref=e79]: Generate a three-day travel guide image for [city]
+          - button "Open in Imago" [ref=e81]:
+            - text: Open in Imago
+            - img [ref=e82]
+        - article [ref=e86] [cursor=pointer]:
+          - paragraph [ref=e88]: Visual Summaries
+          - heading "Codex Chalkboard Article Visualization" [level=3] [ref=e89]
+          - paragraph [ref=e90]: A picture says a thousand words. GPT Image 2 creates them.
+          - button "Open in Imago" [ref=e92]:
+            - text: Open in Imago
+            - img [ref=e93]
+        - article [ref=e97] [cursor=pointer]:
+          - paragraph [ref=e99]: Interior/Food/Fashion
+          - heading "Personal Color Analysis Diagram" [level=3] [ref=e100]
+          - paragraph [ref=e101]: Using this portrait, create a diagram-first personal color analysis. Show which clothing colors suit the subject through visual comparison. Keep text minimal and avoid paragraphs.
+          - button "Open in Imago" [ref=e103]:
+            - text: Open in Imago
+            - img [ref=e104]
+        - article [ref=e108] [cursor=pointer]:
+          - paragraph [ref=e110]: Interior/Food/Fashion
+          - heading "Polo Shirt Color Analysis" [level=3] [ref=e111]
+          - paragraph [ref=e112]: Create a personal color analysis using this picture. Use polo clothing color comparisons to highlight which colors suit the subject best. Make it visual-first, with explanations and tips.
+          - button "Open in Imago" [ref=e114]:
+            - text: Open in Imago
+            - img [ref=e115]
+        - article [ref=e119] [cursor=pointer]:
+          - paragraph [ref=e121]: Interior/Food/Fashion
+          - heading "Hairstyle Comparison Analysis" [level=3] [ref=e122]
+          - paragraph [ref=e123]: Create a hairstyle analysis graphic using this picture. Show side-by-side hairstyle comparisons to highlight which hairstyles suit the subject best. Make it visual-first, with short labels only and details about the haircut.
+          - button "Open in Imago" [ref=e125]:
+            - text: Open in Imago
+            - img [ref=e126]
+        - article [ref=e130] [cursor=pointer]:
+          - paragraph [ref=e132]: Interior/Food/Fashion
+          - heading "Japanese Onsen Ryokan Editorial" [level=3] [ref=e133]
+          - paragraph [ref=e134]: 35mm film photography, warm vintage Japanese onsen ryokan aesthetic, soft ambient wooden lantern lighting mixed with gentle natural window light, subtle film grain, gentle color shift, high atmosphere editorial style, intimate medium shot, person in traditional white yukata, seated in a relaxed pose on the edge of a traditional wooden engawa veranda at a vintage onsen ryokan, warm wooden interior with paper sliding doors and distant steaming hot spring in soft focus, gentle rim lighting highlighting skin and fabric texture, authentic vintage film color grading with warm tones, extremely sharp yet soft skin rendering, natural hair strands, realistic fabric wrinkles and drape on the yukata, no plastic skin, no digital over-sharpening, no airbrushing, authentic 35mm film Japanese onsen ryokan atmosphere
+          - button "Open in Imago" [ref=e136]:
+            - text: Open in Imago
+            - img [ref=e137]
+      - navigation "Pagination" [ref=e141]:
+        - paragraph [ref=e142]: Page 1 of 13 · 110 prompts
+        - generic [ref=e143]:
+          - button "Previous page" [disabled] [ref=e144]:
+            - img [ref=e145]
+            - text: Prev
+          - button "Next page" [ref=e147]:
+            - text: Next
+            - img [ref=e148]
+  - region "Notifications alt+T"

@@ -32,7 +32,7 @@ interface AppSearch {
   ref?: string;
 }
 
-export const Route = createFileRoute("/app")({
+export const Route = createFileRoute("/generate")({
   validateSearch: (search: Record<string, unknown>): AppSearch => {
     const seed = search.seed;
     const restore = search.restore;
@@ -45,25 +45,27 @@ export const Route = createFileRoute("/app")({
   },
   head: () => ({
     meta: [
-      { title: "Generator — Depikt" },
+      { title: "AI Prompt Generator — Turn Ideas into Production-Grade Prompts | Depikt" },
       {
         name: "description",
         content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
       },
-      { property: "og:title", content: "Generator — Depikt" },
+      { property: "og:title", content: "AI Prompt Generator — Turn Ideas into Production-Grade Prompts | Depikt" },
       {
         property: "og:description",
         content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
-      { name: "twitter:title", content: "Generator — Depikt" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AI Prompt Generator — Turn Ideas into Production-Grade Prompts | Depikt" },
       {
         name: "twitter:description",
         content: "Turn a rough idea into a production-grade GPT Image 2 prompt in seconds.",
       },
+      { name: "twitter:image", content: absoluteUrl("/og-default.png") },
     ],
-    links: [{ rel: "canonical", href: absoluteUrl("/app") }],
+    links: [{ rel: "canonical", href: absoluteUrl("/generate") }],
   }),
   component: AppPage,
 });

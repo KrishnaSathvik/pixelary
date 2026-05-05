@@ -1,5 +1,6 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "depikt",
+  "version": "2.9.0",
   "private": true,
   "sideEffects": false,
   "type": "module",

@@ -27,6 +27,14 @@ export const Route = createFileRoute("/gallery")({
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Reference Gallery — Depikt" },
+      {
+        name: "twitter:description",
+        content:
+          "Browse reference images and use them to inspire AI-generated prompts.",
+      },
+      { name: "twitter:image", content: absoluteUrl("/og-default.png") },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/gallery") }],
   }),
@@ -39,7 +47,7 @@ function GalleryPage() {
 
   const handleUseAsReference = (filename: string) => {
     navigate({
-      to: "/app",
+      to: "/generate",
       search: { ref: `/gallery/${filename}` },
     });
   };

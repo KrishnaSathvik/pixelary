@@ -149,7 +149,7 @@ function BlogIndex() {
               <h3 className="mt-3 text-heading-sm">
                 Generate prompts that follow every rule we write about.
               </h3>
-              <Link to="/app" className="mt-5 inline-block">
+              <Link to="/generate" className="mt-5 inline-block">
                 <Button size="sm" className="gap-1.5">
                   Open generator
                   <ArrowRight className="h-3.5 w-3.5" />

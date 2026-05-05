@@ -190,7 +190,7 @@ function PostPage() {
               <p className="mt-2 text-body-sm text-white/70">
                 Paste a rough idea. Get back a structured prompt that ships.
               </p>
-              <Link to="/app" className="mt-5 inline-block">
+              <Link to="/generate" className="mt-5 inline-block">
                 <Button
                   size="default"
                   variant="secondary"

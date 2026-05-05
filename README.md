@@ -16,8 +16,9 @@ The app includes a curated prompt library, a live prompt generator, a prompt cri
 
 ## Main Routes
 
-- `/` — Library home page.
-- `/app` — Prompt generator.
+- `/` — Redirects to `/library`.
+- `/library` — Library home page.
+- `/generate` — Prompt generator.
 - `/critique` — Prompt critique tool.
 - `/blog` — Blog index.
 - `/blog/$slug` — Blog post template.
@@ -25,7 +26,7 @@ The app includes a curated prompt library, a live prompt generator, a prompt cri
 - `/sitemap.xml` — Sitemap.
 - `/robots.txt` — Robots file.
 
-Deprecated routes such as `/library`, `/examples`, `/login`, and `/signup` redirect to `/`.
+Deprecated routes such as `/app`, `/examples`, `/login`, and `/signup` redirect to `/library`.
 
 ## Tech Stack
 

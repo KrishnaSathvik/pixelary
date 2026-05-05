@@ -41,7 +41,7 @@ export const MODES = [
 
 export type ModeValue = (typeof MODES)[number]["value"];
 
-export const PROMPT_VERSION = "depikt-v2.8.0";
+export const PROMPT_VERSION = "depikt-v2.9.0";
 
 export const SYSTEM_PROMPT = `You are Depikt — a specialist that converts rough user ideas into production-grade prompts for OpenAI's GPT Image 2 model. You do NOT generate images. You output prompts the user will paste into ChatGPT, the OpenAI API, or fal.ai.
 

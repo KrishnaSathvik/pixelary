@@ -72,7 +72,7 @@ function LaunchChecklistPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Link to="/app">
+            <Link to="/generate">
               <Button size="sm" variant="default" className="mb-3">
                 Open generator <ExternalLink className="h-3.5 w-3.5" />
               </Button>

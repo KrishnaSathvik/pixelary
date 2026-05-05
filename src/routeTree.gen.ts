@@ -15,9 +15,9 @@ import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LaunchChecklistRouteImport } from './routes/launch-checklist'
+import { Route as GenerateRouteImport } from './routes/generate'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as CritiqueRouteImport } from './routes/critique'
-import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ExamplesChar123IdChar125RouteImport } from './routes/examples.{-$id}'
@@ -54,6 +54,11 @@ const LaunchChecklistRoute = LaunchChecklistRouteImport.update({
   path: '/launch-checklist',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GenerateRoute = GenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -62,11 +67,6 @@ const GalleryRoute = GalleryRouteImport.update({
 const CritiqueRoute = CritiqueRouteImport.update({
   id: '/critique',
   path: '/critique',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -98,9 +98,9 @@ const ApiPublicGeneratePromptRoute = ApiPublicGeneratePromptRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
   '/critique': typeof CritiqueRoute
   '/gallery': typeof GalleryRoute
+  '/generate': typeof GenerateRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -114,9 +114,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
   '/critique': typeof CritiqueRoute
   '/gallery': typeof GalleryRoute
+  '/generate': typeof GenerateRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -131,9 +131,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
   '/critique': typeof CritiqueRoute
   '/gallery': typeof GalleryRoute
+  '/generate': typeof GenerateRoute
   '/launch-checklist': typeof LaunchChecklistRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
@@ -149,9 +149,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/app'
     | '/critique'
     | '/gallery'
+    | '/generate'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -165,9 +165,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/app'
     | '/critique'
     | '/gallery'
+    | '/generate'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -181,9 +181,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/app'
     | '/critique'
     | '/gallery'
+    | '/generate'
     | '/launch-checklist'
     | '/library'
     | '/login'
@@ -198,9 +198,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRoute
   CritiqueRoute: typeof CritiqueRoute
   GalleryRoute: typeof GalleryRoute
+  GenerateRoute: typeof GenerateRoute
   LaunchChecklistRoute: typeof LaunchChecklistRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
@@ -257,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LaunchChecklistRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/generate': {
+      id: '/generate'
+      path: '/generate'
+      fullPath: '/generate'
+      preLoaderRoute: typeof GenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
@@ -269,13 +276,6 @@ declare module '@tanstack/react-router' {
       path: '/critique'
       fullPath: '/critique'
       preLoaderRoute: typeof CritiqueRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -318,9 +318,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRoute: AppRoute,
   CritiqueRoute: CritiqueRoute,
   GalleryRoute: GalleryRoute,
+  GenerateRoute: GenerateRoute,
   LaunchChecklistRoute: LaunchChecklistRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
@@ -335,3 +335,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

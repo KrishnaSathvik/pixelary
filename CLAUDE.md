@@ -17,7 +17,7 @@ When user sends new prompts, follow these steps in order:
 8. **User runs UPDATE SQL** in Supabase SQL Editor
 9. Sync TS file from DB: `node scripts/sync-curated-prompts.mjs`
 10. Restart dev server to clear SSR module-level cache (`_libraryCache`)
-11. Update prompt count in UI copy if needed (`src/routes/index.tsx`, `src/routes/__root.tsx`)
+11. Update prompt count in UI copy if needed (`src/routes/library.tsx`, `src/routes/__root.tsx`)
 
 ## Adding Gallery Images
 
@@ -33,7 +33,7 @@ When user sends new prompts, follow these steps in order:
 | `scripts/generate-thumbnails.mjs` | GPT Image 2 thumbnail generator + Supabase Storage uploader |
 | `scripts/sync-curated-prompts.mjs` | Pulls prompts from Supabase DB → writes TS file |
 | `src/lib/library.ts` | Fetches library from Supabase; has module-level `_libraryCache` |
-| `src/routes/index.tsx` | Library page; TanStack Router loader with 5min staleTime |
+| `src/routes/library.tsx` | Library page; TanStack Router loader with 5min staleTime |
 | `src/lib/depikt.ts` | System prompt for the AI image prompt generator |
 | `src/routes/api/public/generate-prompt.ts` | API route for prompt generation |
 
