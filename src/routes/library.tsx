@@ -103,7 +103,7 @@ function HomePage() {
   // Loader-provided data — always populated, never blocks paint after first load.
   const prompts = Route.useLoaderData();
   const { page, view } = Route.useSearch();
-  const navigate = useNavigate({ from: "/" });
+  const navigate = useNavigate({ from: "/library" });
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("All");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
