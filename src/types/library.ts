@@ -17,10 +17,7 @@ export interface LibraryPrompt {
   prompt: string;
   user_input?: string | null;
   why_it_works?: string | null;
-  variants?: string[];
   source: PromptSource;
-  source_creator?: string | null;
-  source_url?: string | null;
   tags?: string[];
   thumbnail_url?: string | null;
   created_at?: string;

@@ -1,5 +1,39 @@
 # Pixelary/Depikt — Claude Code Instructions
 
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm install` | Install dependencies |
+| `npm run dev` | Start dev server (Vite) |
+| `npm run build` | Production build (Cloudflare Workers) |
+| `npm run lint` | ESLint check |
+| `npm run format` | Prettier format |
+
+No test framework configured.
+
+## Tech Stack
+
+TanStack Start (React 19) + Vite 7 + Tailwind CSS 4 + Radix UI (shadcn pattern)
+Deployed to Cloudflare Workers. Supabase for DB + Storage. OpenAI for generation.
+Local state: Dexie IndexedDB (favorites, history). No test framework.
+
+## Architecture
+
+```
+src/
+  routes/         # TanStack file-based routing (library, generate, gallery, critique, blog)
+  components/     # React components (ui/ = shadcn/Radix primitives)
+  lib/            # Utilities, contexts, DB, SSE, image processing
+  data/           # Auto-generated curated-prompts.ts, gallery-images.ts
+  integrations/   # Supabase client (auto-generated)
+  hooks/          # Custom React hooks
+  types/          # TypeScript type definitions
+scripts/          # Thumbnail generation, DB sync, batch helpers
+supabase/         # Migration files, batch SQL scripts
+public/gallery/   # Gallery images served statically
+```
+
 ## Adding New Prompts (Batch Workflow)
 
 When user sends new prompts, follow these steps in order:
@@ -44,6 +78,13 @@ When user sends new prompts, follow these steps in order:
 - No service role key in `.env`
 - Storage uploads work with anon key, but `thumbnail_url` DB updates do not
 
+## Code Style
+
+- Path alias: `@/*` → `./src/*`
+- Prettier: double quotes, semicolons, trailing commas, 100 char width
+- ESLint: flat config (v9), unused vars allowed (`@typescript-eslint/no-unused-vars: off`)
+- `cn()` from `@/lib/utils` for className merging (clsx + tailwind-merge)
+
 ## Navigation
 
 - Desktop: centered nav links in header
@@ -56,8 +97,11 @@ When user sends new prompts, follow these steps in order:
 - Close button: 32px circular `bg-black/60` for mobile visibility
 - Library cards: always-visible "View prompt" indicator (no hover-only)
 
-## Dev Server
+## Gotchas
 
-- Start: `npm run dev` or `npx vite dev --port 8001`
-- After DB changes, restart server to clear SSR `_libraryCache`
-- Use incognito to bypass TanStack Router's client-side staleTime cache
+- **Vite config**: `@lovable.dev/vite-tanstack-config` provides base config — do NOT add plugins manually (tanstackStart, viteReact, tailwindcss, cloudflare, etc. already included)
+- **Rate limiting**: In-memory, per-instance — not distributed across Workers
+- **Auth UI removed**: Login/signup routes redirect home. Auth plumbing (context, Supabase auth) kept for Phase 2
+- **Local data**: Favorites and history stored in IndexedDB via Dexie (not server-side)
+- **Image preprocessing**: Client resizes to max 1024px, JPEG 0.8 quality, 2MB base64 cap
+- **SSR cache**: After DB changes, restart dev server to clear `_libraryCache`. Use incognito to bypass TanStack Router's client-side staleTime cache

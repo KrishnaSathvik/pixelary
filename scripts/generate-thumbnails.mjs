@@ -200,6 +200,62 @@ const PLACEHOLDER_FILLS = {
     "[person 2]": "the middle one",
     "[person 3]": "",
   },
+  // ─── Batch 6 placeholder fills ──────────────────────────────────────────────
+  "curated-blueprint-landmark-infographic": {
+    "[LANDMARK]": "the Colosseum in Rome",
+  },
+  "curated-expressive-motion-study": {
+    "[SUBJECT]": "A ballet dancer mid-leap",
+    "[COLOR1]": "crimson red",
+    "[COLOR2]": "deep teal",
+  },
+  "curated-anime-streetwear-poster-system": {
+    "{character_name}": "Gojo Satoru",
+    "{franchise}": "Jujutsu Kaisen",
+    "{aspect_ratio}": "3:4",
+  },
+  "curated-architectural-minimalist-poster": {
+    "[Building Name]": "the Guggenheim Museum Bilbao",
+  },
+  "curated-historical-illustrated-poster": {
+    "[HISTORICAL EVENT]": "Napoleon's March on Moscow, 1812",
+    "[battle / march / revolution / turning point]": "the Grande Armée crossing the Neman River",
+    "[EVENT TITLE]": "THE RUSSIAN CAMPAIGN",
+    "[SUBTITLE + DATE]": "Napoleon's Grande Armée — June 1812",
+  },
+  "curated-national-identity-poster": {
+    "[COUNTRY]": "Japan",
+  },
+  "curated-anime-character-poster": {
+    "{character_name}": "Levi Ackerman",
+    "{franchise}": "Attack on Titan",
+    "{aspect_ratio}": "3:4",
+  },
+  "curated-encyclopedia-infographic": {
+    "{ TOPIC }": "Honeybees",
+  },
+  "curated-recipe-infographic": {
+    "[FOOD/DISH]": "Margherita Pizza",
+  },
+  "curated-cake-infographic": {
+    "[WRITE YOUR COUNTRY]": "France",
+    "[WRITE CAKE 1]": "Mille-Feuille",
+    "[WRITE CAKE 2]": "Paris-Brest",
+    "[WRITE CAKE 3]": "Tarte Tatin",
+    "[WRITE CAKE 4]": "Opéra Cake",
+    "[WRITE CAKE 5]": "Saint-Honoré",
+    "[WRITE CAKE 6]": "Fraisier",
+    "[OPTIONAL MORE…]": "",
+  },
+  "curated-brand-moodboard-system": {
+    "[BRAND NAME]": "Patagonia",
+  },
+  "curated-notion-style-illustration": {
+    "[subject]": "young woman",
+    "[outfit]": "oversized sweater and jeans",
+    "[doing action]": "reading a book at a café",
+    "[facial expression]": "calm and content",
+  },
 };
 
 // ─── Full prompt overrides (copyright-sensitive or brand-heavy prompts) ──────
@@ -222,6 +278,32 @@ const PROMPT_OVERRIDES = {
     "A highly detailed realistic photograph of a TIME magazine cover, red border, white background. Top right corner text reads 'APRIL 29 / MAY 6, 2024'. Large bold text at the top: 'THE MOST INFLUENTIAL COMPANIES' above big red 'TIME' and black '100'. Main subject is a close-up portrait of an elegant young woman with sleek dark brown hair parted in the middle and pulled back into a tight low bun, flawless glowing skin, subtle makeup with glossy nude lips and defined eyebrows. She is looking slightly to the left with a confident expression. A large glossy deep red Anthurium flower is positioned near her neck and shoulder. She is wearing a white feathery fluffy garment. On the left side in bold text: 'HOW SHE BUILT HER EMPIRE'. Below it a vertical list of company names: APPLE, NVIDIA, MICROSOFT, AMAZON, TIKTOK, DISNEY, NETFLIX, UNITEDHEALTH + 90 MORE. Bottom right corner has 'http://time.com'. Professional studio lighting, clean editorial style, high resolution, sharp details, iconic TIME magazine cover composition.",
   "curated-luxury-skincare-ad":
     "Create a high-end luxury skincare advertisement. A young woman with radiant, glassy, and naturally glowing skin with soft highlights is holding a premium vitamin C face serum bottle close to her cheek. Only use the bottle, no box. Background should be elegant silky satin fabric (Dior-style) with smooth folds, in a rich champagne-olive tone, softly lit with golden highlights and gentle shadows to create depth and luxury. Outfit should be a silky satin dress matching the background tones, slightly reflective, premium fabric texture. Lighting: soft diffused front light + subtle golden rim light on hair + gentle glow on skin. DSLR quality, shallow depth of field. Add minimal premium typography on the left side: '10% Vitamin C' (large, elegant serif), 'Face Serum' (smaller), 'Triple Glow +++' (refined thin style). Add 3-4 minimal benefit points with small luxury icons. Text and icons in subtle gold/cream tone. Composition: clean, balanced, cinematic, ultra-realistic, premium skincare ad.",
+  // ─── Batch 6 overrides (IP/brand-heavy prompts) ─────────────────────────────
+  "curated-luxury-beauty-campaign-grid":
+    "Ultra-realistic luxury beauty campaign, cinematic 6-image grid system (3x2), high-end cosmetic editorial. Campaign title: GLAZED DESIRE. All 6 frames feature the same luxury lip gloss product — transparent glossy pink lip oil, silver chrome cap, consistent across all frames. Grid rhythm: TOP ROW: model close-up → macro lip detail → product hero shot. BOTTOM ROW: texture close-up → model portrait → lip detail. Soft blush pink, milky nude, pearl white palette. Soft luxury daylight studio lighting, 85mm beauty lens, shallow depth of field. Female beauty model with hydrated glowing skin, minimal makeup. Ultra-realistic wet gloss textures, visible lip texture, realistic skin pores. Minimal pink-white studio background. Premium editorial beauty photography aesthetic.",
+  "curated-naruto-propaganda-poster":
+    "Ultra-premium propaganda poster, A4 vertical composition, anime ninja hero theme. Top section: large iconic silhouette of a ninja hero with spiky hair, headband, determined eyes. Inside silhouette: double exposure narrative collage with warm-to-cool gradient (orange, red, deep blue), layered action scenes, village skyline, energy patterns, symbolic scrolls and wind. Bottom section: full-body ninja in orange cloak, forward-leaning stance, forming an energy sphere. Vertical energy stream connecting both sections. Left: faint ally silhouettes. Right: abstract enemy presence. Eastern ink-wash + modern anime fusion style. Glowing oranges, electric blues, deep blacks, gold highlights. Epic cinematic layered storytelling poster.",
+  "curated-rengoku-anime-poster":
+    "Masterpiece anime character poster, cinematic side-profile portrait, elegant vertical Japanese poster design. Character facing left in calm heroic pose, sharp golden-orange eyes, thick flame-shaped eyebrows, long layered hair flowing with fiery yellow, orange, and crimson red flame tips. Wearing a detailed black uniform with white cape with flame-pattern edges, katana at waist. Warm golden cinematic lighting, minimal clean warm ivory background. Typography: large bold serif text in deep burnt red, Japanese kanji, small poetic text blocks. Watercolor-anime hybrid painting style, ultra detailed brushwork, soft paper grain texture, 8k masterpiece quality. Close-up side profile, chest-up framing.",
+  "curated-food-brand-identity-poster":
+    "Premium vertical 4:5 brand identity system poster for a Japanese food brand, featuring clean modern Japanese editorial layout with elegant typography, warm cinematic restaurant lighting, soy sauce textures, ramen steam, ceramic bowls, noodles, and wooden chopsticks. Brand header with tagline and descriptors Authentic / Warm / Iconic. Sophisticated color palette of soy sauce brown, cream white, warm red, noodle yellow, charcoal black displayed as modern swatches with HEX codes. Japanese-inspired typography, cinematic ramen photography, glossy gradients, culinary mood-board visuals. Brand applications: soy sauce bottle, noodle cup, website hero, mobile food app UI, social media posts, restaurant billboard. Japanese-style UI design system with food-themed icons.",
+  "curated-breaking-bad-grid":
+    "High-contrast cinematic graphic design poster, 2x6 vertical grid of twelve distinct title-card panels showcasing gritty crime drama characters. Urban Grunge aesthetic, distressed textures, film grain, bold typography masking effects. Each panel features a massive extra-bold sans-serif name (WALT, JESSE, SAUL, GUS, MIKE, HANK, etc.) with character portrait visible only inside the filled letterforms using clipping/masking effect. Smaller credit text like AS THE CHEMIST, THE LAWYER, THE FIXER. Gritty realistic portraits, high-contrast dramatic lighting with green chemical glow, neon cyan, magenta accents. Weathered concrete, rusted metal backgrounds. Heavy ink splatters, paint drips, scan lines, grain. Dark green, toxic lime, monochrome grey, charcoal palette.",
+  "curated-solo-leveling-poster":
+    "Promotional anime poster, vertical 4:5 composition (1080x1350). Hierarchy structure: top section features a very large head with shadowed face silhouette, glowing blue-violet eyes, dark hair, forming a strong instantly recognizable iconic silhouette. Dark atmospheric background with purple energy wisps. Bottom section shows smaller full-body figure in dark armor. Cinematic anime style, dark color palette with electric blue and violet accents.",
+  "curated-bts-brand-identity":
+    "Premium brand identity system poster for a global music group. Vertical 4:5 format. Soft lavender to deep purple gradient background. Multi-layered grid, dense and clean. Violet rule lines. Brand statement at top. Identity descriptors: ARTISTIC / EMOTIONAL / GLOBAL. Colors: Royal Purple #5A2D82, Deep Violet #6A0DAD, Lavender #C8A2C8, White, Soft Lilac, Silver Gray. Large color blocks with HEX codes. Display headline in white. Purple sans-serif subhead. 4-level typography hierarchy. Applications: album cover mockup, website hero with purple CTA, mobile music player UI, social posts, concert billboard. 8 line icons in purple 1.5px strokes: music note, lightstick, heart, globe, stage, mic, star, wings. Patterns: gradient waves, geometric tiling. Glassmorphism panels, subtle grain. Agency-quality poster.",
+  "curated-gohan-beast-poster":
+    "Ultra-detailed anime illustration of a powerful male warrior in beast transformation, standing in dominant full-body pose, low-angle cinematic perspective, muscular physique, torn purple gi outfit with red sash, glowing red eyes, sharp facial features with battle damage, extremely spiky silver hair, intense aura of purple energy flames, floating debris and particles. Background: large circular arcane energy ring with glowing symbols centered behind character like a halo, bright violet light rays, lightning streaks. Anime + semi-realistic fusion style, cinematic lighting, high contrast, volumetric glow, 8K resolution, perfectly centered poster composition.",
+  "curated-intimate-pov-portrait":
+    "Hyper-realistic photography, 8K ultra-HD, top-down first-person perspective portrait. A young Chinese woman lying on a wooden floor, black messy hair with strands across her face, expressive dark eyes gazing up toward the camera, wearing an ornate red velvet off-the-shoulder traditional garment with golden shoulder ornaments and golden hoop earrings. Soft warm low-light atmosphere, shallow depth of field, blurred background, soft shadows. Cinematic portrait, realistic skin textures, editorial fashion photography style.",
+  "curated-tropical-beach-portrait":
+    "A young Indian woman with long voluminous wavy brown hair with caramel highlights, hair dramatically blowing in the wind. She is standing on a tropical beach, turning slightly to the side while looking over her shoulder with a confident expression. She wears a sage green summer outfit with white trim details and an oversized white linen shirt draped loosely over her shoulders. Turquoise ocean water and white sand in the background, tropical palm trees, cloudy overcast sky. Windy atmosphere, natural soft daylight, realistic skin texture, cinematic composition, high resolution, 8k fashion photography style.",
+  // ─── Batch 6b overrides ───────────────────────────────────────────────────
+  "curated-mirror-selfie-evening-gown":
+    "An elegant woman sitting on a velvet ottoman in front of an ornate gold-framed mirror, taking a refined mirror selfie. She wears a deep red high-slit evening gown with silky fabric pooling around her. Soft morning light filters through sheer curtains, casting a dreamy glow over the minimalist modern bedroom. A cup of coffee sits beside her on the wooden floor. Her hand elegantly holds her phone, dark eyes locked onto the reflection with quiet confidence. Cinematic portrait, editorial fashion photography, 8K, shallow depth of field.",
+  "curated-luxury-bathroom-fashion":
+    "A beautiful Indian woman with medium-tan skin, sharp attractive face, full lips with red lipstick, defined eyebrows, confident expression, dark brown hair with soft waves falling over her shoulders, standing in a luxurious modern bathroom. She wears a white satin slip dress with thin spaghetti straps and ruched detailing. One hand resting on her hip. Slightly angled body, looking at viewer with head tilted. Background: glass shower cabin with chrome fixtures, white marble walls with subtle gray veins, bright soft lighting with ceiling spotlights. Photorealistic, 8K, sharp focus, cinematic lighting, luxury fashion editorial.",
 };
 
 // ─── Prompts to skip (need input image) ─────────────────────────────────────
@@ -275,6 +357,11 @@ const SKIP_IDS = new Set([
   "curated-doodle-chibi-aesthetic",
   "curated-netflix-homepage-hero",
   "curated-character-breakdown-knolling",
+  // ─── Batch 6 skips (image-edit or need input image) ───────────────────
+  "curated-dual-split-techwear",
+  "curated-doodle-overlay-cartoon",
+  "curated-fantasy-popup-book",
+  "curated-double-exposure-travel",
 ]);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

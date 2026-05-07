@@ -14,7 +14,7 @@ async function fetchCurated(): Promise<LibraryPrompt[]> {
   const { data, error } = await supabase
     .from('curated_prompts')
     .select(
-      'id, title, category, user_input, prompt, why_it_works, variants, source, source_creator, source_url, tags, thumbnail_url, created_at'
+      'id, title, category, user_input, prompt, why_it_works, source, tags, thumbnail_url, created_at'
     )
     .order('created_at', { ascending: false });
 
@@ -37,7 +37,7 @@ async function fetchUserPrompts(): Promise<LibraryPrompt[]> {
   const { data, error } = await supabase
     .from('prompts')
     .select(
-      'id, title, category, input_text, output_prompt, why_it_works, variants, is_public, user_id, tags, created_at'
+      'id, title, category, input_text, output_prompt, why_it_works, is_public, user_id, tags, created_at'
     )
     .order('created_at', { ascending: false });
 
@@ -57,10 +57,7 @@ async function fetchUserPrompts(): Promise<LibraryPrompt[]> {
       prompt: r.output_prompt,
       user_input: r.input_text,
       why_it_works: r.why_it_works,
-      variants: r.variants ?? [],
       source: 'user',
-      source_creator: null,
-      source_url: null,
       tags: r.tags ?? [],
       created_at: r.created_at,
       user_id: r.user_id,
@@ -72,6 +69,25 @@ function deriveTitle(input: string | null | undefined, id: string): string {
   if (!input) return id.slice(0, 8);
   return input.slice(0, 60) + (input.length > 60 ? '…' : '');
 }
+
+/**
+ * Hand-picked prompts that appear first on page 1 (in this order).
+ * Chosen for visual impact and category diversity.
+ */
+const FEATURED_IDS: string[] = [
+  'curated-expressive-motion-study',
+  'curated-anime-streetwear-poster-system',
+  'curated-ai-casual-selfie',
+  'curated-architectural-minimalist-poster',
+  'curated-retro-mars-tennis',
+  'curated-double-exposure-editorial',
+  'curated-watercolor-cafe-illustration',
+  'curated-historical-illustrated-poster',
+  'curated-rengoku-anime-poster',
+  'curated-national-identity-poster',
+  'curated-food-brand-identity-poster',
+  'curated-anime-character-poster',
+];
 
 /**
  * Module-level cache. Library content is curated and changes rarely, so we
@@ -113,16 +129,23 @@ export async function fetchLibrary(): Promise<LibraryPrompt[]> {
       isAuthed ? fetchUserPrompts() : Promise.resolve([] as LibraryPrompt[]),
     ]);
 
-    // Display order: thumbnails first (newest-first within each group),
-    // then no-thumbnail cards at the end.
+    // Display order: featured first (in curated order), then remaining
+    // thumbnails newest-first, then no-thumbnail cards at the end.
     const byDateDesc = (a: LibraryPrompt, b: LibraryPrompt) =>
       (b.created_at ?? '').localeCompare(a.created_at ?? '');
 
     const all = [...curated, ...user];
-    const withThumb = all.filter((p) => !!p.thumbnail_url).sort(byDateDesc);
-    const withoutThumb = all.filter((p) => !p.thumbnail_url).sort(byDateDesc);
+    const featuredSet = new Set(FEATURED_IDS);
+    const featured: LibraryPrompt[] = [];
+    for (const id of FEATURED_IDS) {
+      const p = all.find((x) => x.id === id);
+      if (p) featured.push(p);
+    }
+    const rest = all.filter((p) => !featuredSet.has(p.id));
+    const withThumb = rest.filter((p) => !!p.thumbnail_url).sort(byDateDesc);
+    const withoutThumb = rest.filter((p) => !p.thumbnail_url).sort(byDateDesc);
 
-    const merged = [...withThumb, ...withoutThumb];
+    const merged = [...featured, ...withThumb, ...withoutThumb];
     _libraryCache = merged;
     return merged;
   })();

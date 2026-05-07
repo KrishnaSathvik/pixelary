@@ -47,32 +47,32 @@ export const Route = createFileRoute("/library")({
   gcTime: 30 * 60 * 1000,
   head: () => ({
     meta: [
-      { title: "Prompt Library — Browse 350+ Curated AI Image Prompts | Depikt" },
+      { title: "Prompt Library — Browse 400+ Curated AI Image Prompts | Depikt" },
       {
         name: "description",
         content:
-          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 350+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
+          "Turn any rough idea into a production-grade AI image prompt in seconds. Browse 400+ curated prompts for posters, infographics, UI mockups, cinematic scenes, and more.",
       },
       {
         property: "og:title",
-        content: "Prompt Library — Browse 350+ Curated AI Image Prompts | Depikt",
+        content: "Prompt Library — Browse 400+ Curated AI Image Prompts | Depikt",
       },
       {
         property: "og:description",
         content:
-          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 350+ ready-to-use prompts across 10 categories.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 400+ ready-to-use prompts across 10 categories.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absoluteUrl("/og-default.png") },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Prompt Library — Browse 350+ Curated AI Image Prompts | Depikt",
+        content: "Prompt Library — Browse 400+ Curated AI Image Prompts | Depikt",
       },
       {
         name: "twitter:description",
         content:
-          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 350+ ready-to-use prompts across 10 categories.",
+          "Turn any rough idea into a polished AI image prompt in seconds. Or browse 400+ ready-to-use prompts across 10 categories.",
       },
       { name: "twitter:image", content: absoluteUrl("/og-default.png") },
     ],
@@ -187,17 +187,17 @@ function HomePage() {
         subline is supporting, Imago is a feature mention, not a pitch.
       */}
       <section className="border-b border-[color:var(--border-subtle)]">
-        <div className="mx-auto max-w-[1400px] px-6 pt-10 pb-5 md:pt-14 md:pb-6">
+        <div className="mx-auto max-w-[1400px] px-6 pt-6 pb-3 md:pt-14 md:pb-6">
           <h1 className="text-display-md text-[color:var(--text-primary)]">
             Curated prompt library for GPT Image 2.
           </h1>
-          <p className="mt-3 max-w-3xl text-body-lg text-[color:var(--text-secondary)]">
-            350+ sample prompts collected from across the web. Pick one that fits your
+          <p className="mt-2 hidden max-w-3xl text-body-lg text-[color:var(--text-secondary)] md:mt-3 md:block">
+            400+ sample prompts collected from across the web. Pick one that fits your
             vision, or use the Generator to craft your own from a rough idea.
           </p>
 
           {/* View tabs */}
-          <div className="mt-7 flex items-center gap-6 border-b border-[color:var(--border-subtle)]">
+          <div className="mt-4 flex items-center gap-6 border-b border-[color:var(--border-subtle)] md:mt-7">
             <ViewTabButton active={view === "browse"} onClick={() => setView("browse")}>
               Browse
             </ViewTabButton>
@@ -213,7 +213,7 @@ function HomePage() {
 
           {/* Search — only for browse and favorites */}
           {view !== "history" && (
-            <div className="relative mt-5 max-w-2xl">
+            <div className="relative mt-3 max-w-2xl md:mt-5">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-tertiary)]" />
               <input
                 type="text"
@@ -229,7 +229,7 @@ function HomePage() {
 
         {/* Category chips — only for browse and favorites */}
         {view !== "history" && (
-          <div className="mx-auto max-w-[1400px] px-6 pb-5">
+          <div className="mx-auto max-w-[1400px] px-6 pb-3 md:pb-5">
             <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {CATEGORIES.map((c) => (
                 <button
@@ -253,18 +253,18 @@ function HomePage() {
       {view === "history" ? (
         <HistoryView entries={historyEntries} />
       ) : (
-        <section className="mx-auto max-w-[1400px] px-6 py-8">
+        <section className="mx-auto max-w-[1400px] px-6 py-5 md:py-8">
           {/* Grid header */}
-          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="mb-3 flex items-center justify-between gap-4 md:mb-5">
             <p className="text-[11px] text-[color:var(--text-tertiary)]">
               Images are sample outputs — your results will vary.
             </p>
             <Link
               to="/generate"
-              className="inline-flex shrink-0 items-center gap-1 text-body-sm text-[color:var(--text-secondary)] underline-offset-4 hover:text-[color:var(--text-primary)] hover:underline"
+              className="pill inline-flex shrink-0 items-center gap-1.5 bg-[color:var(--accent)] text-[color:var(--bg-elevated)] hover:opacity-90"
             >
+              <Wand2 className="h-3.5 w-3.5" />
               Build your own
-              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
@@ -647,6 +647,17 @@ function PromptDetailDialog({
             Copy
           </button>
         </div>
+        <p className="mt-2 text-[11px] text-[color:var(--text-tertiary)]">
+          <span className="hidden sm:inline">
+            Opens Imago with your prompt copied. Paste with{" "}
+            <kbd className="px-1 py-0.5 rounded bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[10px]">
+              ⌘V
+            </kbd>
+          </span>
+          <span className="sm:hidden">
+            Opens Imago with your prompt copied. Long-press the text field and tap Paste.
+          </span>
+        </p>
 
         {prompt.why_it_works && (
           <div className="mt-8 border-t border-[color:var(--border-subtle)] pt-6">
@@ -655,38 +666,6 @@ function PromptDetailDialog({
           </div>
         )}
 
-        {prompt.variants && prompt.variants.length > 0 && (
-          <div className="mt-6 border-t border-[color:var(--border-subtle)] pt-6">
-            <p className="eyebrow mb-3 text-[color:var(--text-tertiary)]">Variants</p>
-            <ul className="space-y-2">
-              {prompt.variants.map((v: string, i: number) => (
-                <li key={i} className="text-body-md text-[color:var(--text-secondary)]">
-                  {v}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {prompt.source_creator && (
-          <div className="mt-8 border-t border-[color:var(--border-subtle)] pt-4">
-            <p className="text-mono-sm text-[color:var(--text-quaternary)]">
-              Originally shared by{" "}
-              {prompt.source_url ? (
-                <a
-                  href={prompt.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] hover:underline"
-                >
-                  {prompt.source_creator}
-                </a>
-              ) : (
-                <span className="text-[color:var(--text-tertiary)]">{prompt.source_creator}</span>
-              )}
-            </p>
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );
