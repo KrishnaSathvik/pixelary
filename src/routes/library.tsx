@@ -290,7 +290,7 @@ function HomePage() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px">
                 {pageItems.map((p: LibraryPrompt) => (
                   <PromptCard
                     key={`${p.source}-${p.id}`}
@@ -451,7 +451,7 @@ function PromptCard({
   return (
     <article
       onClick={onOpen}
-      className="group relative flex cursor-pointer flex-col bg-[color:var(--bg-elevated)] transition-shadow hover:shadow-md-card"
+      className="group relative flex cursor-pointer flex-col bg-[color:var(--bg-elevated)] border border-[color:var(--border-subtle)] transition-shadow hover:shadow-md-card"
     >
       {/* Star icon */}
       <button
@@ -544,11 +544,11 @@ function HistoryView({ entries }: { entries: import("@/lib/db").HistoryRecord[] 
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-px bg-[color:var(--border-subtle)] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px">
         {entries.map((entry) => (
           <article
             key={entry.id}
-            className="group relative flex cursor-pointer flex-col gap-3 bg-[color:var(--bg-elevated)] p-6 transition-shadow hover:shadow-md-card"
+            className="group relative flex cursor-pointer flex-col gap-3 bg-[color:var(--bg-elevated)] border border-[color:var(--border-subtle)] p-6 transition-shadow hover:shadow-md-card"
             onClick={() => handleRestore(entry)}
           >
             <div className="flex items-center gap-2">
