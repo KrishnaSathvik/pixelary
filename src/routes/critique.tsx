@@ -6,11 +6,11 @@ import {
   ChevronRight,
   Code2,
   Copy,
+  ExternalLink,
   FileText,
   Loader2,
   Plus,
   ScanSearch,
-  Wand2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -279,7 +279,6 @@ function CollapsedInput({ text, onExpand }: { text: string; onExpand: () => void
 function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => void }) {
   const [view, setView] = useState<"text" | "json">("text");
   const [rewrittenCopied, setRewrittenCopied] = useState(false);
-  const navigate = useNavigate();
   const score = typeof result.score === "number" ? result.score : null;
   const scoreColor =
     score === null
@@ -298,9 +297,18 @@ function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => 
     setTimeout(() => setRewrittenCopied(false), 2000);
   };
 
-  const handleUseRewritten = () => {
+  const handleOpenInImago = async () => {
     if (!result.rewritten_prompt) return;
-    navigate({ to: "/app", search: { seed: result.rewritten_prompt } });
+    try {
+      await navigator.clipboard.writeText(result.rewritten_prompt);
+    } catch {
+      toast.error("Couldn't copy automatically — copy manually before pasting");
+    }
+    window.open(
+      "https://chatgpt.com/g/g-69e7de729cb48191a6aa83ec3af8a6cb-imago",
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
@@ -409,10 +417,16 @@ function CritiqueView({ result, onNew }: { result: CritiqueResult; onNew: () => 
             {result.rewritten_prompt}
           </pre>
           <div className="mt-4">
-            <Button onClick={handleUseRewritten} size="sm" className="gap-2">
-              <Wand2 className="h-3.5 w-3.5" />
-              Use this prompt
+            <Button onClick={handleOpenInImago} size="sm" className="gap-2">
+              <ExternalLink className="h-3.5 w-3.5" />
+              Open in Imago
             </Button>
+            <p className="mt-1.5 text-[11px] text-[color:var(--text-tertiary)]">
+              Opens Imago with your prompt copied. Paste with{" "}
+              <kbd className="px-1 py-0.5 rounded bg-[color:var(--bg-subtle)] border border-[color:var(--border-subtle)] font-mono text-[10px]">
+                {navigator.platform?.toUpperCase().includes("MAC") ? "⌘V" : "Ctrl+V"}
+              </kbd>
+            </p>
           </div>
         </div>
       )}

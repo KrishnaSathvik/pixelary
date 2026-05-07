@@ -28,6 +28,8 @@ import { resizeImageToBase64, urlToBase64 } from "@/lib/image-utils";
 
 interface AppSearch {
   seed?: string;
+  prefill?: string;
+  remixRef?: string;
   restore?: string;
   ref?: string;
 }
@@ -35,10 +37,13 @@ interface AppSearch {
 export const Route = createFileRoute("/generate")({
   validateSearch: (search: Record<string, unknown>): AppSearch => {
     const seed = search.seed;
+    const prefill = search.prefill;
     const restore = search.restore;
     const ref = search.ref;
     return {
       seed: typeof seed === "string" && seed.length > 0 && seed.length <= 4000 ? seed : undefined,
+      prefill: typeof prefill === "string" && prefill.length > 0 && prefill.length <= 4000 ? prefill : undefined,
+      remixRef: typeof search.remixRef === "string" && search.remixRef.length > 0 && search.remixRef.length <= 8000 ? search.remixRef : undefined,
       restore: typeof restore === "string" && restore.length > 0 ? restore : undefined,
       ref: typeof ref === "string" && ref.startsWith("/gallery/") ? ref : undefined,
     };
@@ -112,7 +117,8 @@ function AppPage() {
   const [moreLoading, setMoreLoading] = useState(false);
   const [moreVariants, setMoreVariants] = useState<string[] | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { seed, restore, ref } = Route.useSearch();
+  const { seed, prefill, remixRef, restore, ref } = Route.useSearch();
+  const [remixReference, setRemixReference] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleImageFile = async (file: File) => {
@@ -144,7 +150,7 @@ function AppPage() {
         setInputCollapsed(true);
       }
       // Strip the restore param so a refresh doesn't replay it
-      navigate({ to: "/app", search: {}, replace: true });
+      navigate({ to: "/generate", search: {}, replace: true });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restore]);
@@ -157,17 +163,31 @@ function AppPage() {
       .then((dataUrl) => setReferenceImage(dataUrl))
       .catch(() => toast.error("Failed to load reference image"))
       .finally(() => setImageLoading(false));
-    navigate({ to: "/app", search: {}, replace: true });
+    navigate({ to: "/generate", search: {}, replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
+
+  // Prefill from query param (library remix — just fills textarea, no auto-generate)
+  useEffect(() => {
+    if (prefill) {
+      setInput(prefill);
+      if (remixRef) setRemixReference(remixRef);
+      navigate({ to: "/generate", search: {}, replace: true });
+      setTimeout(() => textareaRef.current?.focus(), 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefill]);
 
   // Seed from query param (auto-generates)
   useEffect(() => {
     if (seed) {
       setInput(seed);
-      generate(seed);
-      // Strip the seed param so a re-render doesn't re-trigger generation
-      navigate({ to: "/app", search: {}, replace: true });
+      setSavedRoughIdea(seed);
+      setInputCollapsed(true);
+      // Strip the seed param first, then generate — avoids mid-stream re-render
+      navigate({ to: "/generate", search: {}, replace: true });
+      // Defer generate to next tick so the navigation settles before streaming starts
+      setTimeout(() => generateFromSeed(seed), 0);
     } else if (!restore) {
       textareaRef.current?.focus();
     }
@@ -180,6 +200,59 @@ function AppPage() {
     const m = host.match(/^id-preview--([0-9a-f-]+)\.lovable\.app$/i);
     if (m) return `https://project--${m[1]}-dev.lovable.app${path}`;
     return path;
+  };
+
+  const generateFromSeed = async (seedInput: string) => {
+    setLoading(true);
+    setStreaming(false);
+    setResult(null);
+    setMoreVariants(null);
+
+    try {
+      const res = await fetch(getEndpoint("/api/public/generate-prompt"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+        body: JSON.stringify({ userInput: seedInput, referenceImageUrl: undefined, category: "auto", mode: "default" }),
+      });
+
+      if (!res.ok || !res.body) {
+        let msg = "Failed to generate";
+        try {
+          const data = await res.json();
+          msg = data?.error || msg;
+        } catch {
+          /* ignore */
+        }
+        toast.error(msg);
+        return;
+      }
+
+      const finalResult = await streamPrompt(
+        res,
+        (partial) => setResult(partial),
+        () => {
+          setLoading(false);
+          setStreaming(true);
+        },
+      );
+      if (finalResult) {
+        setResult(finalResult);
+        setStreaming(false);
+        addHistoryEntry({
+          kind: "generate",
+          roughIdea: seedInput,
+          result: finalResult as Record<string, unknown>,
+        });
+      } else {
+        toast.error("Generation ended before a final result arrived. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Network error. Try again.");
+    } finally {
+      setLoading(false);
+      setStreaming(false);
+    }
   };
 
   const generate = async (overrideInput?: string) => {
@@ -199,7 +272,7 @@ function AppPage() {
       const res = await fetch(getEndpoint("/api/public/generate-prompt"), {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
-        body: JSON.stringify({ userInput, referenceImageUrl: referenceImage || undefined, category: "auto", mode: "default" }),
+        body: JSON.stringify({ userInput, referenceImageUrl: referenceImage || undefined, remixRef: remixReference || undefined, category: "auto", mode: "default" }),
       });
 
       if (!res.ok || !res.body) {
@@ -285,6 +358,7 @@ function AppPage() {
     setMoreVariants(null);
     setSavedRoughIdea("");
     setReferenceImage(null);
+    setRemixReference(null);
     setInputCollapsed(false);
     setTimeout(() => {
       textareaRef.current?.focus();

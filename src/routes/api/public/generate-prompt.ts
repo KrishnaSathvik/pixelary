@@ -125,6 +125,7 @@ function formatExamplesBlock(examples: CuratedPrompt[]): string {
 interface RequestBody {
   userInput: string;
   referenceImageUrl?: string;
+  remixRef?: string;
   category?: string;
   mode?: string;
 }
@@ -145,7 +146,7 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           }
 
           const body = (await request.json()) as RequestBody;
-          const { userInput, referenceImageUrl, category, mode = "default" } = body;
+          const { userInput, referenceImageUrl, remixRef, category, mode = "default" } = body;
 
           if (!userInput || typeof userInput !== "string" || userInput.trim().length === 0) {
             return new Response(JSON.stringify({ error: "userInput is required" }), {
@@ -259,12 +260,30 @@ export const Route = createFileRoute("/api/public/generate-prompt")({
           }
 
           // Select category-matched reference examples from the curated library.
-          const examples = getExamplesForCategory(effectiveCategory, 4);
+          // Skip examples when remixing — the remix reference IS the template,
+          // and curated examples would pull the model toward the standard format.
+          const validRemixRef =
+            remixRef && typeof remixRef === "string" && remixRef.length <= 8000
+              ? remixRef
+              : null;
+          const examples = validRemixRef ? [] : getExamplesForCategory(effectiveCategory, 4);
           const examplesBlock = formatExamplesBlock(examples);
 
           const userMessage = [
             referenceImageUrl
               ? `REFERENCE IMAGE: A reference image is attached. Follow the REFERENCE IMAGE instructions in your system prompt.`
+              : null,
+            validRemixRef
+              ? `REMIX REFERENCE — The user is remixing an existing prompt from the library. Study the reference prompt below and use it as a STYLE GUIDE — match its tone, structure, and approach — but generate a NEW prompt for the user's idea.
+
+REFERENCE PROMPT:
+${validRemixRef}
+
+REMIX RULES:
+1. STYLE MATCH: Write in the same format as the reference — if conversational, stay conversational. If structured with constraints, use constraints. If it uses camera specs, use camera specs. If it doesn't, don't add them.
+2. FRESH CONTENT: Generate a complete, ready-to-use prompt for the user's idea. Never copy the reference verbatim. Never output placeholder brackets like [SUBJECT] or [COLOR] — fill everything in with concrete details.
+3. SAME DENSITY: Match the reference's approximate length and level of detail.
+4. OVERRIDE: When the reference's style conflicts with your default templates (Step 2) or self-check rules (Step 3), follow the reference's style. The reference IS the quality standard for this remix.`
               : null,
             examplesBlock || null,
             effectiveCategory ? `Category hint: ${effectiveCategory}` : null,

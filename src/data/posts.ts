@@ -165,7 +165,7 @@ MATCH: Original lighting direction and intensity on subject (rim from camera-rig
 
 Don't just copy them verbatim. Use them as templates: find the example closest to your use case, swap out the subject specifics for your own, keep the structural skeleton (camera specs, lighting language, aspect ratio), and iterate by changing one variable at a time.
 
-Or paste your rough idea into [Depikt](/app) and let it generate the structured prompt for you.
+Or paste your rough idea into [Depikt](/generate) and let it generate the structured prompt for you.
 `,
   },
   {
@@ -280,7 +280,7 @@ When iterating, keep everything constant except one element — light direction,
 
 ## The faster path
 
-If running through this checklist on every prompt sounds like work, [Depikt](/app) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
+If running through this checklist on every prompt sounds like work, [Depikt](/generate) automates these techniques. Paste a rough idea, get back a structured prompt that has already applied each technique.
 `,
   },
   {
@@ -405,7 +405,7 @@ For everything else — photoreal, cinematic, character art, interiors, food, fa
 
 ## Use the framework or use Depikt
 
-You can apply this manually on every prompt. Or you can paste your rough idea into [Depikt](/app) and get a structured 6-layer prompt back in seconds. Same framework, automated.
+You can apply this manually on every prompt. Or you can paste your rough idea into [Depikt](/generate) and get a structured 6-layer prompt back in seconds. Same framework, automated.
 `,
   },
   {
@@ -491,7 +491,7 @@ Three text elements, each with its own font weight, color, and placement. Hex co
 
 ## The shortcut
 
-Manually applying this protocol on every prompt is tedious. [Depikt](/app) bakes the entire text-rendering protocol into every poster, social graphic, and typography-heavy prompt it generates. Paste your rough idea, get back a prompt with quotes, placements, weights, and the verbatim trigger already in place.
+Manually applying this protocol on every prompt is tedious. [Depikt](/generate) bakes the entire text-rendering protocol into every poster, social graphic, and typography-heavy prompt it generates. Paste your rough idea, get back a prompt with quotes, placements, weights, and the verbatim trigger already in place.
 `,
   },
   {
@@ -638,7 +638,7 @@ If you're picking just one in April 2026:
 - **Use Midjourney V8** when aesthetic quality is the entire point and you're not constrained by text rendering needs
 - **Use Nano Banana Pro** when you need character consistency across a series or precise edits
 
-[Depikt](/app) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
+[Depikt](/generate) generates prompts optimized specifically for GPT Image 2's reasoning style. If you're using GPT Image 2 as your primary model — which is the right default for most production teams in April 2026 — that's the leverage point.
 
 ## Sources
 
@@ -905,7 +905,7 @@ AI image models produce better output when they're satisfying specific, concrete
 
 ## Skip the mistakes
 
-[Depikt](/app) applies these fixes automatically. Paste a rough idea — even one that makes every mistake on this list — and get back a structured prompt that avoids all seven. It's the fastest way to stop wasting generations.
+[Depikt](/generate) applies these fixes automatically. Paste a rough idea — even one that makes every mistake on this list — and get back a structured prompt that avoids all seven. It's the fastest way to stop wasting generations.
 `,
   },
 ];

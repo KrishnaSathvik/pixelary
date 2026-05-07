@@ -510,7 +510,7 @@ function HistoryView({ entries }: { entries: import("@/lib/db").HistoryRecord[] 
     if (entry.kind === "critique") {
       navigate({ to: "/critique", search: { restore: entry.id } });
     } else {
-      navigate({ to: "/app", search: { restore: entry.id } });
+      navigate({ to: "/generate", search: { restore: entry.id } });
     }
   };
 
@@ -626,7 +626,7 @@ function PromptDetailDialog({
         <div className="mt-4 flex flex-wrap gap-3">
           <Link
             to="/generate"
-            search={{ seed: prompt.user_input || prompt.prompt }}
+            search={{ prefill: prompt.user_input || prompt.prompt, remixRef: prompt.prompt }}
             className="pill flex items-center gap-2 bg-[color:var(--accent)] text-[color:var(--bg-elevated)] hover:opacity-90"
           >
             <Wand2 className="h-3.5 w-3.5" />

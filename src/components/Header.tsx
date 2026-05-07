@@ -4,8 +4,8 @@ import logo from "@/assets/logo.png";
 const NAV_ITEMS = [
   { to: "/library" as const, label: "Library", exact: true },
   { to: "/generate" as const, label: "Generate" },
-  { to: "/gallery" as const, label: "Gallery" },
   { to: "/critique" as const, label: "Critique" },
+  { to: "/gallery" as const, label: "Gallery" },
   { to: "/blog" as const, label: "Blog" },
 ];
 

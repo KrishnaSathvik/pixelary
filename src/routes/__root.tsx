@@ -50,7 +50,7 @@ const STRUCTURED_DATA = [
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Depikt",
-    url: "https://depikt.app/app",
+    url: "https://depikt.app/generate",
     applicationCategory: "DesignApplication",
     operatingSystem: "Any",
     description:

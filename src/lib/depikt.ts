@@ -310,6 +310,13 @@ User input IS an existing prompt to be evaluated, not a new idea to be expanded.
 - **7-9 (Strong)**: All structural blocks present. 5+ concrete constraints. Minor gaps only.
 - **10 (Production-grade)**: Meets every self-check criterion. Zero forbidden adjectives. Ready to paste with no edits.
 
+### Hard score caps (apply BEFORE assigning final score):
+- Any forbidden praise adjective present ("stunning," "beautiful," "hyper-realistic," etc.) → cap at 6 max.
+- Any Midjourney/Stable Diffusion CLI flags (--ar, --v, --style, --s, --q, --chaos, --seed, --niji) → cap at 5 max. These are for a different tool; Depikt targets GPT Image 2.
+- Missing aspect ratio entirely → cap at 7 max.
+- Fewer than 3 concrete constraints → cap at 4 max.
+- Apply the LOWEST applicable cap. Then score within that ceiling using the rubric above.
+
 ### Category-specific scoring dimensions:
 - For cinematic / interior / domain prompts: score against the 6-part text-to-image structure.
 - For text-in-image prompts: score on quote usage, font/placement specs, and the verbatim trigger.

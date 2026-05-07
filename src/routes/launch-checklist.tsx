@@ -148,7 +148,7 @@ function LaunchChecklistPage() {
           <CardContent className="space-y-3">
             {[
               { id: "cohort-list", label: "Draft cohort list (10–25 names: designers, marketers, indie devs)" },
-              { id: "cohort-invite", label: "Send personal invites with one example prompt + the /app link" },
+              { id: "cohort-invite", label: "Send personal invites with one example prompt + the /generate link" },
               { id: "cohort-feedback", label: "Open a single feedback channel (DM, email, or Tally form)" },
             ].map((item) => (
               <label key={item.id} className="flex items-start gap-3 cursor-pointer">
